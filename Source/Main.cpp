@@ -1,8 +1,11 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
+#include "Math\Math.h"
 
 #include <iostream>
 
+using namespace Engine;
+using namespace Math;
 
 static const int WIDTH = 1280;
 static const int HEIGHT = 720;
@@ -30,17 +33,17 @@ int main() {
 	if (glewInit() != GLEW_OK)
 		std::cout << "Error" << std::endl;
 
+
 	while (!glfwWindowShouldClose(window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS) {
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glBegin(GL_TRIANGLES);
-		glVertex2f(-0.5f, 0.f);
-		glVertex2f(0.f, 1.f);
-		glVertex2f(0.5f, 0.f);
-		glVertex2f(-0.5f, 0.f);
-		glVertex2f(0.f, 1.f);
-		glVertex2f(0.5f, 0.f);
+		float p = 0.25;
+		glBegin(GL_QUADS);
+		glVertex2f(p, p);
+		glVertex2f(p, -p);
+		glVertex2f(-p, -p);
+		glVertex2f(-p, p);
 		glEnd();
 		glfwSwapBuffers(window);
 
