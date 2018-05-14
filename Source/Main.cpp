@@ -1,7 +1,7 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include "Math\Math.h"
-#include "Graphics\Window.h"
+#include "Graphics\Graphics.h"
 
 #include <iostream>
 #include <chrono>
@@ -42,16 +42,29 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
+	float positions[] = {
+		0.25, 0.25,
+		0.25, -0.25,
+		-0.25, -0.25,
+		-0.25, 0.25
+	};
+
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	VertexBuffer vbo(positions, sizeof(positions) * sizeof(float));
+	IndexBuffer ibo(indices, 6);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (const void*) 0);
+	Shader shader("Resources/Shaders/Vertex.shader", "Resources/Shaders/Fragment.shader");
+	
 
 	while (!window.isClosed() && !window.isKeyPressed(GLFW_KEY_ESCAPE)) {
 
 		float p = 0.25;
-		glBegin(GL_QUADS);
-		glVertex2f(p, p);
-		glVertex2f(p, -p);
-		glVertex2f(-p, -p);
-		glVertex2f(-p, p);
-		glEnd();
+		glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_INT, nullptr);
 		window.update();
 	}
 	glfwTerminate();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GL\glew.h"
+#include <GL\glew.h>
 
 namespace Engine {
 	namespace Graphics {
@@ -14,6 +14,7 @@ namespace Engine {
 			
 		public:
 			VertexBuffer();
+			// Size in bytes
 			VertexBuffer(const void* data, size_t size);
 			~VertexBuffer();
 
@@ -22,7 +23,7 @@ namespace Engine {
 			void bind() const;
 			// Unbinds this buffer
 			void unBind() const;
-			inline const GLuint getID() const { return id; }
+			inline GLuint getID() const { return id; }
 		};
 	}
 }
