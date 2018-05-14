@@ -3,6 +3,8 @@
 #include "Math\Math.h"
 
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 using namespace Engine;
 using namespace Math;
@@ -10,10 +12,41 @@ using namespace Math;
 static const int WIDTH = 1280;
 static const int HEIGHT = 720;
 
-template<typename T>
-inline void print(T type) {
-	std::cout << type << std::endl;
+
+
+struct Timer {
+
+	std::chrono::time_point<std::chrono::steady_clock> start;
+
+	Timer() {
+		 start = std::chrono::high_resolution_clock::now();
+	}
+
+	~Timer() {
+		auto end = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<float> duration = end - start;
+		std::cout << duration.count() << " ms" << std::endl;
+	}
+};
+
+
+void testOne() {
+	Timer t;
+	Vec3 a(1.f, 0.f, 0.f);
+	for (int i = 0; i < 1000000; i++) {
+		Mat4 m = Mat4::rotation(45.f, a);
+	}
+	std::cout << "ONE ----------" << std::endl;
 }
+
+void testTwo() {
+	Timer t;
+	for (int i = 0; i < 1000000; i++) {
+		Mat4 m = Mat4::rotateX(45.f);
+	}
+	std::cout << "TWO ----------" << std::endl;
+}
+
 
 int main() {
 	GLFWwindow* window;
@@ -33,7 +66,8 @@ int main() {
 	if (glewInit() != GLEW_OK)
 		std::cout << "Error" << std::endl;
 
-
+	std::thread a(testOne);
+	std::thread b(testTwo);
 	while (!glfwWindowShouldClose(window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS) {
 
 		glClear(GL_COLOR_BUFFER_BIT);
