@@ -61,6 +61,18 @@ namespace Engine {
 			return columns[index];
 		}
 
+		bool Mat4::operator==(const Mat4& mat) const {
+			for (int i = 0; i < 16; i++) {
+				if (data[i] != mat.data[i])
+					return false;
+			}
+			return true;
+		}
+
+		bool Mat4::operator!=(const Mat4& mat) const {
+			return !((*this) == mat);
+		}
+
 		Mat4 Mat4::translation(const Vec3& translation) {
 			Mat4 result(1.f);
 			result[3].x = translation.x;
@@ -134,10 +146,39 @@ namespace Engine {
 			return result;
 		}
 
+		Mat4 Mat4::rotation(const Vec3& angles, const Vec3& axes) {
+			Mat4 result(1.f);
+			float radX = toRadians(angles.x);
+			float radY = toRadians(angles.y);
+			float radZ = toRadians(angles.z);
+			Vec2 x(axes.x * cos(radX), axes.x * sin(radX));
+			Vec2 y(axes.y * cos(radY), axes.y * sin(radY));
+			Vec2 z(axes.z * cos(radZ), axes.z * sin(radZ));
+			result[0].x = y.x * z.x;
+			result[0].y = y.x * z.y;
+			result[0].z = -y.x;
+			result[1].x = (z.x * x.y * y.y) - (y.x * z.y);
+			result[1].y = (x.x * z.x) + (x.y * y.y * z.y);
+			result[1].z = y.x * x.y;
+			result[2].x = (x.x * z.x * y.y) + (x.y * z.y);
+			result[2].y = (x.x * y.y * z.y) - (z.x * x.y);
+			result[2].z = x.x * y.x;
+			return result;
+		}
+
 		
 
 		float toRadians(float angle) {
 			return angle * M_PI / 180.f;
+		}
+
+		std::ostream& operator<<(std::ostream& os, const Mat4& mat) {
+			for (int i = 0; i < 16; i++) {
+				if (i % 4 == 0 && i != 0)
+					os << '\n';
+				os << mat.data[i] << ' ';
+			}
+			return os;
 		}
 	}
 }
