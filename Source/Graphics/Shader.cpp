@@ -12,6 +12,7 @@ namespace Engine {
 			std::string fragmentSource = Utils::readFile(fragmentPath);
 			id = createProgram(vertexSource, fragmentSource);
 			bind();
+			
 		}
 
 		Shader::~Shader() {
@@ -32,6 +33,7 @@ namespace Engine {
 			GLuint fragment = compileShader(GL_FRAGMENT_SHADER, fragmentSource);
 			glAttachShader(program, vertex);
 			glAttachShader(program, fragment);
+			glLinkProgram(program);
 			glValidateProgram(program);
 			glDeleteShader(vertex);
 			glDeleteShader(fragment);
@@ -39,22 +41,34 @@ namespace Engine {
 		}
 
 		GLuint Shader::compileShader(GLuint type, const std::string& source) {
-			GLuint id = glCreateShader(type);
+			GLuint shaderID = glCreateShader(type);
 			const char* src = source.c_str();
-			glShaderSource(id, 1, &src, nullptr);
-			glCompileShader(id);
+			glShaderSource(shaderID, 1, &src, nullptr);
+			glCompileShader(shaderID);
 			int status;
-			glGetShaderiv(id, GL_COMPILE_STATUS, &status);
+			glGetShaderiv(shaderID, GL_COMPILE_STATUS, &status);
 			if (status == GL_FALSE) {
 				int length;
-				glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+				glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &length);
 				char* error = new char[length + 1];
-				glGetShaderInfoLog(id, length + 1, &length, error);
+				glGetShaderInfoLog(shaderID, length + 1, &length, error);
 				std::cout << "Compilation failed : " << (type == GL_FRAGMENT_SHADER ? "Fragment " : "Shader ") << "shader" << std::endl;
 				std::cout << error << std::endl;
 				return 0;
 			}
-			return id;
+			return shaderID;
+		}
+
+		void Shader::setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) {
+			GLint location = getUniformLocation(name);
+			if (location == -1)
+				std::cout << "Uniform : " << name << ", location is -1" << std::endl;
+			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix.data[0]);
+		}
+
+		GLint Shader::getUniformLocation(const std::string& name) const {
+			GLint location = glGetUniformLocation(id, name.c_str());
+			return location;
 		}
 	}
 }

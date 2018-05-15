@@ -3,6 +3,8 @@
 #include <GL\glew.h>
 #include <string>
 
+#include "Math\Mat4.h"
+
 
 
 
@@ -22,11 +24,15 @@ namespace Engine {
 			void bind() const;
 			void unBind() const;
 
+			void setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix);
+
 		private:
 			// Compiles a shader and returnes its id, returns 0 if compilation failed
 			static GLuint compileShader(GLuint type, const std::string& source);
 			// Creates a program with the two shaders attached, and returns its id
 			static GLuint createProgram(const std::string& vertexSource, const std::string& fragmentSource);
+			// Returns the location in memory of the given uniform
+			GLint getUniformLocation(const std::string& name) const;
 		};
 	}
 }

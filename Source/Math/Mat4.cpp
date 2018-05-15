@@ -17,7 +17,7 @@ namespace Engine {
 		}
 
 		Mat4::Mat4(float mainDiagonal) {
-			for (int i = 0; i < 16; i++) 
+			for (int i = 0; i < 16; i++)
 				data[i] = 0.f;
 			for (int i = 0; i < 16; i += 5)
 				data[i] = mainDiagonal;
@@ -89,7 +89,7 @@ namespace Engine {
 			return result;
 		}
 
-		Mat4 Mat4::rotateX(float angle) {
+		Mat4 Mat4::rotationX(float angle) {
 			Mat4 result(1.f);
 			float rad = toRadians(angle);
 			float c = cos(rad);
@@ -101,7 +101,7 @@ namespace Engine {
 			return result;
 		}
 
-		Mat4 Mat4::rotateY(float angle) {
+		Mat4 Mat4::rotationY(float angle) {
 			Mat4 result(1.f);
 			float rad = toRadians(angle);
 			float c = cos(rad);
@@ -113,7 +113,7 @@ namespace Engine {
 			return result;
 		}
 
-		Mat4 Mat4::rotateZ(float angle) {
+		Mat4 Mat4::rotationZ(float angle) {
 			Mat4 result(1.f);
 			float rad = toRadians(angle);
 			float c = cos(rad);
@@ -126,43 +126,28 @@ namespace Engine {
 		}
 
 
-		Mat4 Mat4::rotation(float angle, const Vec3& axes) {
+
+
+		Mat4 Mat4::orthographic(float left, float right, float bottom, float top, float near, float far) {
 			Mat4 result(1.f);
-			float rad = toRadians(angle);
-			float c = cos(rad);
-			float s = sin(rad);
-			Vec2 x(axes.x * c, axes.x * s);
-			Vec2 y(axes.y * c, axes.y * s);
-			Vec2 z(axes.z * c, axes.z * s);
-			result[0].x = y.x * z.x;
-			result[0].y = y.x * z.y;
-			result[0].z = -y.x;
-			result[1].x = (z.x * x.y * y.y) - (y.x * z.y);
-			result[1].y = (x.x * z.x) + (x.y * y.y * z.y);
-			result[1].z = y.x * x.y;
-			result[2].x = (x.x * z.x * y.y) + (x.y * z.y);
-			result[2].y = (x.x * y.y * z.y) - (z.x * x.y);
-			result[2].z = x.x * y.x;
+			result[0].x = 2 / (right - left);
+			result[1].y = 2 / (top - bottom);
+			result[2].z = -2 / (far - near);
+			result[3].x = (right + left) / (right - left) * -1;
+			result[3].y = (top + bottom) / (top - bottom) * -1;
+			result[3].z = (far + near) / (far - near) * -1;
 			return result;
 		}
 
-		Mat4 Mat4::rotation(const Vec3& angles, const Vec3& axes) {
-			Mat4 result(1.f);
-			float radX = toRadians(angles.x);
-			float radY = toRadians(angles.y);
-			float radZ = toRadians(angles.z);
-			Vec2 x(axes.x * cos(radX), axes.x * sin(radX));
-			Vec2 y(axes.y * cos(radY), axes.y * sin(radY));
-			Vec2 z(axes.z * cos(radZ), axes.z * sin(radZ));
-			result[0].x = y.x * z.x;
-			result[0].y = y.x * z.y;
-			result[0].z = -y.x;
-			result[1].x = (z.x * x.y * y.y) - (y.x * z.y);
-			result[1].y = (x.x * z.x) + (x.y * y.y * z.y);
-			result[1].z = y.x * x.y;
-			result[2].x = (x.x * z.x * y.y) + (x.y * z.y);
-			result[2].y = (x.x * y.y * z.y) - (z.x * x.y);
-			result[2].z = x.x * y.x;
+		Mat4 Mat4::perspective(float aspectRatio, float fieldOfView, float near, float far) {
+			Mat4 result;
+			float radians = toRadians(fieldOfView);
+			float t = tan(radians / 2);
+			result[0].x = 1 / (aspectRatio * t);
+			result[1].y = 1 / t;
+			result[2].z = (far + near) * (far - near) * -1;
+			result[2].w = -1;
+			result[3].z = (2 * far * near) / (far - near);
 			return result;
 		}
 

@@ -25,7 +25,7 @@ namespace Engine {
 		}
 
 		void IndexBuffer::unBind() const {
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 	}
 }

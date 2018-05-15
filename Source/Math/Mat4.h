@@ -30,24 +30,21 @@ namespace Engine {
 			bool operator==(const Mat4& mat) const;
 			bool operator!=(const Mat4& mat) const;
 
+
 			// Generates a translation matrix, according to the translation vector
 			static Mat4 translation(const Vec3& translation);
 			// Generates a scale matrix, according to the scale vector
 			static Mat4 scale(const Vec3& scale);
 			// Generates a rotation matrix around the X axis (angle in degrees)
-			static Mat4 rotateX(float angle);
+			static Mat4 rotationX(float angle);
 			// Generates a rotation matrix around the Y axis (angle in degrees)
-			static Mat4 rotateY(float angle);
+			static Mat4 rotationY(float angle);
 			// Generates a rotation matrix around the Z axis (angle in degrees)
-			static Mat4 rotateZ(float angle);
-			// Generates a rotation matrix, around the axes given in the axes vector
-			// Each axes is added to the rotation if the corresponding axes variable 
-			// is set to 1 (Order is Z * Y * X)
-			static Mat4 rotation(float angle, const Vec3& axes);
-			// Generates a rotation matrix, around the axes given in the axes vector
-			// Each axes is added to the rotation if the corresponding axes variable 
-			// is set to 1 (Order is Z * Y * X)
-			static Mat4 rotation(const Vec3& angles, const Vec3& axes);
+			static Mat4 rotationZ(float angle);
+			// Generates an orthographic matrix, according to the given parameters
+			static Mat4 orthographic(float left, float right, float bottom, float top, float near, float far);
+			// Generates a perspective matrix, according to the given parameters
+			static Mat4 perspective(float aspectRation, float fieldOfView, float near, float far);
 
 		private:
 			friend std::ostream& operator<<(std::ostream& os, const Mat4& mat);
