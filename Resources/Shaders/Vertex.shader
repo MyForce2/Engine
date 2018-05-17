@@ -2,6 +2,12 @@
 
 layout(location = 0) in vec4 position;
 
+uniform mat4 u_View;
+uniform mat4 u_Projection;
+uniform mat4 u_Model;
+
 void main() {
-	gl_Position = position;
+	mat4 mvp = u_Projection * u_View * u_Model;
+	vec4 pos = mvp * position;
+	gl_Position = pos;
 }

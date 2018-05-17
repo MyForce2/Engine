@@ -24,6 +24,8 @@ namespace Engine {
 			void bind() const;
 			void unBind() const;
 
+			// All methods to set uniforms
+
 			void setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix);
 
 		private:

@@ -1,0 +1,28 @@
+#pragma once
+
+#include <GL\glew.h>
+#include "VertexBuffer.h"
+#include "VBLayout.h"
+
+namespace Engine {
+	namespace Graphics {
+		/*
+		A class used to represent a vertex array
+		*/
+		class VertexArray {
+		private:
+			GLuint id;
+			// The amount of enabled attributes
+			unsigned int amountOfAttributes;
+
+		public:
+			VertexArray();
+			~VertexArray();
+
+			void bind() const;
+			void unBind() const;
+
+			void addBuffer(const VertexBuffer& vbo, const VBLayout& layout);
+		};
+	}
+}

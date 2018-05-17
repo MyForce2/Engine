@@ -19,5 +19,17 @@ namespace Engine {
 				data += line + '\n';
 			return data;
 		}
+
+		void readFile(const std::string& path, std::string& data) {
+			std::fstream reader;
+			reader.open(path.c_str());
+			if (!reader) {
+				std::cout << "Failed to open file : " << path << std::endl;
+				return;
+			}
+			std::string line;
+			while (std::getline(reader, line))
+				data += line + '\n';
+		}
 	}
 }

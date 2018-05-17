@@ -11,6 +11,7 @@ namespace Engine {
 		class IndexBuffer {
 		private:
 			GLuint id;
+			// The amount of indices
 			unsigned int count;
 
 		public:
@@ -18,7 +19,9 @@ namespace Engine {
 			IndexBuffer(const unsigned int* data, size_t size);
 			~IndexBuffer();
 
+			// Binds this buffer
 			void bind() const;
+			// Unbinds this buffer
 			void unBind() const;
 
 			inline GLuint getID() const { return id; };

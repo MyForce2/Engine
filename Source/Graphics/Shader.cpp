@@ -17,6 +17,7 @@ namespace Engine {
 
 		Shader::~Shader() {
 			glDeleteProgram(id);
+			unBind();
 		}
 
 		void Shader::bind() const {

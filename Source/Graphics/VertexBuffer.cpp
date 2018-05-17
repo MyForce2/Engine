@@ -17,6 +17,7 @@ namespace Engine {
 
 		VertexBuffer::~VertexBuffer() {
 			glDeleteBuffers(1, &id);
+			unBind();
 		}
 
 		void VertexBuffer::bind() const {
