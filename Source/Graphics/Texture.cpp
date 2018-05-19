@@ -47,6 +47,7 @@ namespace Engine {
 
 		Texture::~Texture() {
 			glDeleteTextures(1, &id);
+			unBind();
 		}
 
 		void Texture::setSlot(unsigned int slot) const {

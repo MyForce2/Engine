@@ -7,13 +7,13 @@ namespace Engine {
 
 		IndexBuffer::IndexBuffer() : count(0U) {
 			glGenBuffers(1, &id);
-			bind();
 		}
 
 		IndexBuffer::IndexBuffer(const unsigned int* data, size_t size) : count(size) {
 			glGenBuffers(1, &id);
 			bind();
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
+			unBind();
 		}
 
 		IndexBuffer::~IndexBuffer() {

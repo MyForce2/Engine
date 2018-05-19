@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Math\Mat4.h"
-
+#include "UniformBuffer.h"
 
 
 
@@ -14,7 +14,7 @@ namespace Engine {
 		Manages a shader object
 		*/
 		class Shader {
-		private:
+		public:
 			GLuint id;
 
 		public:
@@ -29,6 +29,8 @@ namespace Engine {
 			void setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) const;
 			void setUniform1i(const std::string& name, int val) const;
 
+			// Binds a uniform buffer to the specified index (blockBinding = index)
+			void bindUniformBuffer(const UniformBuffer& ubo, const std::string& name, GLuint blockBinding) const;
 		private:
 			// Compiles a shader and returnes its id, returns 0 if compilation failed
 			static GLuint compileShader(GLuint type, const std::string& source);

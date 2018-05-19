@@ -7,7 +7,6 @@ namespace Engine {
 
 		VertexArray::VertexArray() : amountOfAttributes(0U) {
 			glGenVertexArrays(1, &id);
-			bind();
 		}
 
 		VertexArray::~VertexArray() {
@@ -24,6 +23,7 @@ namespace Engine {
 		}
 
 		void VertexArray::addBuffer(const VertexBuffer& vbo, const VBLayout& layout) {
+			bind();
 			vbo.bind();
 			Utils::LinkedList<VBElement> elements = layout.getElements();
 			int i = 0;

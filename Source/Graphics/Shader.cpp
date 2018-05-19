@@ -60,6 +60,13 @@ namespace Engine {
 			return shaderID;
 		}
 
+		GLint Shader::getUniformLocation(const std::string& name) const {
+			GLint location = glGetUniformLocation(id, name.c_str());
+			if (location == -1)
+				std::cout << "Uniform : " << name << ", location is -1" << std::endl;
+			return location;
+		}
+
 		void Shader::setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) const {
 			GLint location = getUniformLocation(name);
 			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix.data[0]);
@@ -70,11 +77,10 @@ namespace Engine {
 			glUniform1i(location, val);
 		}
 
-		GLint Shader::getUniformLocation(const std::string& name) const {
-			GLint location = glGetUniformLocation(id, name.c_str());
-			if (location == -1)
-				std::cout << "Uniform : " << name << ", location is -1" << std::endl;
-			return location;
+		void Shader::bindUniformBuffer(const UniformBuffer& ubo, const std::string& name, GLuint blockBinding) const {
+			GLuint blockIndex = glGetUniformBlockIndex(id, name.c_str());
+			glBindBufferBase(GL_UNIFORM_BUFFER, blockBinding, ubo.getID());
+			glUniformBlockBinding(id, blockIndex, blockBinding);
 		}
 	}
 }

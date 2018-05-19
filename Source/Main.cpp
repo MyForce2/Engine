@@ -39,6 +39,12 @@ void test(Mat4& model, float angle, float tUnit) {
 }
 
 
+struct CameraData {
+	Mat4 view;
+	Mat4 projection;
+	Mat4 model;
+};
+
 
 
 int main() {
@@ -87,9 +93,10 @@ int main() {
 	Mat4 view(1.f);
 
 	test(model, 45.f, 550.f);
-	shader.setUniformMatrix4fv("u_Projection", projection);
-	shader.setUniformMatrix4fv("u_Model", model);
-	shader.setUniformMatrix4fv("u_View", view);
+	GLuint ubo = 0;
+	CameraData data = { view, projection, view };
+	UniformBuffer buffer(&data, sizeof(CameraData));
+	shader.bindUniformBuffer(buffer, "camera_data", 0);
 
 	vao.bind();
 	ibo.bind();
@@ -98,9 +105,6 @@ int main() {
 
 	float perSec = 180.f;
 	while (!window.isClosed() && !window.isKeyPressed(GLFW_KEY_ESCAPE)) {
-		shader.setUniformMatrix4fv("u_Model", model);
-		glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_INT, nullptr);
-		shader.setUniformMatrix4fv("u_Model", Mat4(1.f));
 		glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_INT, nullptr);
 
 		window.update();
