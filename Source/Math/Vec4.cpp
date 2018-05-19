@@ -27,40 +27,64 @@ namespace Engine {
 
 		}
 
+		Vec4 Vec4::operator+(float value) const {
+			return Vec4(x + value, y + value, z + value, w + value);
+		}
+
+		Vec4 Vec4::operator-(float value) const {
+			return Vec4(x - value, y - value, z - value, w - value);
+		}
+
+		Vec4 Vec4::operator*(float value) const {
+			return Vec4(x * value, y * value, z * value, w * value);
+		}
+
+		Vec4 Vec4::operator/(float value) const {
+			return Vec4(x / value, y / value, z / value, w / value);
+		}
+
+		void Vec4::operator+=(float value) {
+			x += value;
+			y += value;
+			z += value;
+			w += value;
+		}
+
+		void Vec4::operator-=(float value) {
+			x -= value;
+			y -= value;
+			z -= value;
+			w -= value;
+		}
+
+		void Vec4::operator*=(float value) {
+			x *= value;
+			y *= value;
+			z *= value;
+			w *= value;
+		}
+
+		void Vec4::operator/=(float value) {
+			x /= value;
+			y /= value;
+			z /= value;
+			w /= value;
+		}
+
 		Vec4 Vec4::operator+(const Vec4& vec) const {
-			Vec4 result;
-			result.x = x + vec.x;
-			result.y = y + vec.y;
-			result.z = z + vec.z;
-			result.w = w + vec.w;
-			return result;
+			return Vec4(x + vec.x, y + vec.y, z + vec.z, w + vec.w);
 		}
 
 		Vec4 Vec4::operator-(const Vec4& vec) const {
-			Vec4 result;
-			result.x = x - vec.x;
-			result.y = y - vec.y;
-			result.z = z - vec.z;
-			result.w = w - vec.w;
-			return result;
+			return Vec4(x - vec.x, y - vec.y, z - vec.z, w - vec.w);
 		}
 
 		Vec4 Vec4::operator*(const Vec4& vec) const {
-			Vec4 result;
-			result.x = x * vec.x;
-			result.y = y * vec.y;
-			result.z = z * vec.z;
-			result.w = w * vec.w;
-			return result;
+			return Vec4(x * vec.x, y * vec.y, z * vec.z, w * vec.w);
 		}
 
 		Vec4 Vec4::operator/(const Vec4& vec) const {
-			Vec4 result;
-			result.x = x / vec.x;
-			result.y = y / vec.y;
-			result.z = z / vec.z;
-			result.w = w / vec.w;
-			return result;
+			return Vec4(x / vec.x, y / vec.y, z / vec.z, w / vec.w);
 		}
 
 		void Vec4::operator+=(const Vec4& vec) {

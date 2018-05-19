@@ -28,36 +28,60 @@ namespace Engine {
 
 		}
 
+		Vec3 Vec3::operator+(float value) const {
+			return Vec3(x + value, y + value, z + value);
+		}
+
+		Vec3 Vec3::operator-(float value) const {
+			return Vec3(x - value, y - value, z - value);
+		}
+
+		Vec3 Vec3::operator*(float value) const {
+			return Vec3(x * value, y * value, z * value);
+		}
+
+		Vec3 Vec3::operator/(float value) const {
+			return Vec3(x / value, y / value, z / value);
+		}
+
+		void Vec3::operator+=(float value) {
+			x += value;
+			y += value;
+			z += value;
+		}
+
+		void Vec3::operator-=(float value) {
+			x -= value;
+			y -= value;
+			z -= value;
+		}
+
+		void Vec3::operator*=(float value) {
+			x *= value;
+			y *= value;
+			z *= value;
+		}
+
+		void Vec3::operator/=(float value) {
+			x /= value;
+			y /= value;
+			z /= value;
+		}
+
 		Vec3 Vec3::operator+(const Vec3& vec) const {
-			Vec3 result;
-			result.x = x + vec.x;
-			result.y = y + vec.y;
-			result.z = z + vec.z;
-			return result;
+			return Vec3(x + vec.x, y + vec.y, z + vec.z);
 		}
 
 		Vec3 Vec3::operator-(const Vec3& vec) const {
-			Vec3 result;
-			result.x = x - vec.x;
-			result.y = y - vec.y;
-			result.z = z - vec.z;
-			return result;
+			return Vec3(x - vec.x, y - vec.y, z - vec.z);
 		}
 
 		Vec3 Vec3::operator*(const Vec3& vec) const {
-			Vec3 result;
-			result.x = x * vec.x;
-			result.y = y * vec.y;
-			result.z = z * vec.z;
-			return result;
+			return Vec3(x * vec.x, y * vec.y, z * vec.z);
 		}
 
 		Vec3 Vec3::operator/(const Vec3& vec) const {
-			Vec3 result;
-			result.x = x / vec.x;
-			result.y = y / vec.y;
-			result.z = z / vec.z;
-			return result;
+			return Vec3(x / vec.x, y / vec.y, z / vec.z);
 		}
 
 		void Vec3::operator+=(const Vec3& vec)  {

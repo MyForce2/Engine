@@ -27,32 +27,56 @@ namespace Engine {
 
 		}
 
+		Vec2 Vec2::operator+(float value) const {
+			return Vec2(x + value, y + value);
+		}
+
+		Vec2 Vec2::operator-(float value) const {
+			return Vec2(x - value, y - value);
+		}
+
+		Vec2 Vec2::operator*(float value) const {
+			return Vec2(x * value, y * value);
+		}
+
+		Vec2 Vec2::operator/(float value) const {
+			return Vec2(x / value, y / value);
+		}
+
+		void Vec2::operator+=(float value) {
+			x += value;
+			y += value;
+		}
+
+		void Vec2::operator-=(float value) {
+			x -= value;
+			y -= value;
+		}
+
+		void Vec2::operator*=(float value) {
+			x *= value;
+			y *= value;
+		}
+
+		void Vec2::operator/=(float value) {
+			x /= value;
+			y /= value;
+		}
+
 		Vec2 Vec2::operator+(const Vec2& vec) const {
-			Vec2 result;
-			result.x = x + vec.x;
-			result.y = y + vec.y;
-			return result;
+			return Vec2(x + vec.x, y + vec.y);
 		}
 
 		Vec2 Vec2::operator-(const Vec2& vec) const {
-			Vec2 result;
-			result.x = x - vec.x;
-			result.y = y - vec.y;
-			return result;
+			return Vec2(x - vec.x, y - vec.y);
 		}
 
 		Vec2 Vec2::operator*(const Vec2& vec) const {
-			Vec2 result;
-			result.x = x * vec.x;
-			result.y = y * vec.y;
-			return result;
+			return Vec2(x * vec.x, y * vec.y);
 		}
 
 		Vec2 Vec2::operator/(const Vec2& vec) const {
-			Vec2 result;
-			result.x = x / vec.x;
-			result.y = y / vec.y;
-			return result;
+			return Vec2(x / vec.x, y / vec.y);
 		}
 
 		void Vec2::operator+=(const Vec2& vec) {

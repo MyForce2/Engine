@@ -19,6 +19,16 @@ namespace Engine {
 			~Vec3();
 			
 
+			Vec3 operator+(float value) const;
+			Vec3 operator-(float value) const;
+			Vec3 operator*(float value) const;
+			Vec3 operator/(float value) const;
+
+			void operator+=(float value);
+			void operator-=(float value);
+			void operator*=(float value);
+			void operator/=(float value);
+
 			Vec3 operator+(const Vec3& vec) const;
 			Vec3 operator-(const Vec3& vec) const;
 			Vec3 operator*(const Vec3& vec) const;

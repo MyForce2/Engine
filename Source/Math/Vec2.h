@@ -18,6 +18,15 @@ namespace Engine {
 			Vec2(const Vec2& vec);
 			~Vec2();
 
+			Vec2 operator+(float value) const;
+			Vec2 operator-(float value) const;
+			Vec2 operator*(float value) const;
+			Vec2 operator/(float value) const;
+
+			void operator+=(float value);
+			void operator-=(float value);
+			void operator*=(float value);
+			void operator/=(float value);
 
 			Vec2 operator+(const Vec2& vec) const;
 			Vec2 operator-(const Vec2& vec) const;

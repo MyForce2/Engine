@@ -17,6 +17,16 @@ namespace Engine {
 			Vec4(const Vec4& vec);
 			~Vec4();
 
+			Vec4 operator+(float value) const;
+			Vec4 operator-(float value) const;
+			Vec4 operator*(float value) const;
+			Vec4 operator/(float value) const;
+
+			void operator+=(float value);
+			void operator-=(float value);
+			void operator*=(float value);
+			void operator/=(float value);
+
 			Vec4 operator+(const Vec4& vec) const;
 			Vec4 operator-(const Vec4& vec) const;
 			Vec4 operator*(const Vec4& vec) const;
