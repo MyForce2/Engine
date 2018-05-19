@@ -26,7 +26,8 @@ namespace Engine {
 
 			// All methods to set uniforms
 
-			void setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix);
+			void setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) const;
+			void setUniform1i(const std::string& name, int val) const;
 
 		private:
 			// Compiles a shader and returnes its id, returns 0 if compilation failed

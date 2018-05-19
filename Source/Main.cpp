@@ -55,6 +55,13 @@ int main() {
 		500.f, 600.f
 	};
 
+	float texCoords[] = {
+		1.f, 1.f,
+		1.f, 0.f,
+		0.f, 0.f,
+		0.f, 1.f
+	};
+
 	unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0
@@ -64,10 +71,14 @@ int main() {
 	VBLayout layout;
 	layout.addElement(2, GL_FLOAT);
 	VertexBuffer vbo(positions, sizeof(positions));
+	VertexBuffer tex(texCoords, sizeof(texCoords));
 	vao.addBuffer(vbo, layout);
+	vao.addBuffer(tex, layout);
 	IndexBuffer ibo(indices, 6);
+	Texture texture("Resources/Textures/Texture.png");
 	Shader shader("Resources/Shaders/Vertex.shader", "Resources/Shaders/Fragment.shader");
-
+	texture.setSlot();
+	shader.setUniform1i("u_TextureSlot", 0);
 
 	float w = (float) WIDTH;
 	float h = (float) HEIGHT;
@@ -79,6 +90,10 @@ int main() {
 	shader.setUniformMatrix4fv("u_Projection", projection);
 	shader.setUniformMatrix4fv("u_Model", model);
 	shader.setUniformMatrix4fv("u_View", view);
+
+	vao.bind();
+	ibo.bind();
+	shader.bind();
 
 
 	float perSec = 180.f;

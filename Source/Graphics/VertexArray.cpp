@@ -24,6 +24,7 @@ namespace Engine {
 		}
 
 		void VertexArray::addBuffer(const VertexBuffer& vbo, const VBLayout& layout) {
+			vbo.bind();
 			Utils::LinkedList<VBElement> elements = layout.getElements();
 			int i = 0;
 			unsigned int off = 0U;

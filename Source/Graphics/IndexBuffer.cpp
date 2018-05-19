@@ -18,6 +18,7 @@ namespace Engine {
 
 		IndexBuffer::~IndexBuffer() {
 			glDeleteBuffers(1, &id);
+			unBind();
 		}
 
 		void IndexBuffer::bind() const {
