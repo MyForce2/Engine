@@ -3,14 +3,12 @@
 layout(location = 0) in vec4 position;
 layout(location = 1) in vec2 texPos;
 
-layout(std140) uniform camera_data {
-	mat4 view;
-	mat4 projection;
-	mat4 model;
-};
+
 
 out vec2 v_TexCoord;
-
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 
 void main() {

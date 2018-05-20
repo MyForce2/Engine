@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <GLFW\glfw3.h>
 
 #include "Math\Vec2.h"
 
@@ -25,6 +26,7 @@ namespace Engine {
 			void update();
 
 			inline const Math::Vec2& getMousePosition() const { return  mousePosition; }
+			inline const Math::Vec2 getSize() const { return Math::Vec2(width, height); }
 			
 		private:
 			void updateMousePosition();
