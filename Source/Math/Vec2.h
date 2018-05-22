@@ -18,6 +18,18 @@ namespace Engine {
 			Vec2(const Vec2& vec);
 			~Vec2();
 
+			// Returns the length of this vector
+			float length() const;
+			// Normalizes this vector
+			void normalize();
+			// Returns a normalized version of this vector
+			Vec2 normalized() const;
+			// Returns the dot product of this vector and the given vector
+			float dot(const Vec2& vec) const;
+
+
+			// Operators
+
 			Vec2 operator+(float value) const;
 			Vec2 operator-(float value) const;
 			Vec2 operator*(float value) const;

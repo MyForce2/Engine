@@ -17,8 +17,20 @@ namespace Engine {
 			Vec3(float x, float y, float z);
 			Vec3(const Vec3& vec);
 			~Vec3();
-			
 
+			// Returns the length of this vector
+			float length() const;
+			// Normalizes this vector
+			void normalize();
+			// Returns a normalized version of this vector
+			Vec3 normalized() const;
+			// Returns the cross product of this vector and the given vector
+			Vec3 cross(const Vec3& vec) const;
+			// Returns the dot product of this vector and the given vector
+			float dot(const Vec3& vec) const;
+
+			// Operators
+			
 			Vec3 operator+(float value) const;
 			Vec3 operator-(float value) const;
 			Vec3 operator*(float value) const;

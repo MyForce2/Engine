@@ -27,6 +27,27 @@ namespace Engine {
 
 		}
 
+		float Vec2::length() const {
+			float sum = std::pow(x, 2) + std::pow(y, 2);
+			return std::sqrt(sum);
+		}
+
+		void Vec2::normalize() {
+			float vecLength = length();
+			x /= vecLength;
+			y /= vecLength;
+		}
+
+		Vec2 Vec2::normalized() const {
+			float vecLength = length();
+			return Vec2(x / vecLength, y / vecLength);
+		}
+
+		float Vec2::dot(const Vec2& vec) const {
+			Vec2 multiplied = (*this) * vec;
+			return multiplied.x + multiplied.y;
+		}
+
 		Vec2 Vec2::operator+(float value) const {
 			return Vec2(x + value, y + value);
 		}
