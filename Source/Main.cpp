@@ -4,6 +4,8 @@
 #include "Graphics\Graphics.h"
 #include "Utils\Clock.h"
 #include "Graphics\Camera2D.h"
+#include "Graphics\Camera.h"
+
 
 #include <iostream>
 #include <chrono>
@@ -18,6 +20,8 @@ using std::chrono::duration;
 static const int WIDTH = 1280;
 static const int HEIGHT = 720;
 static const float ANGLE_PER_MSEC = 60.f;
+
+static const int COLOR_BUFFER_SIZE = 8 * 3;
 
 
 
@@ -47,25 +51,17 @@ void test(Mat4& model, float time, float tUnit) {
 	model = Mat4::translation(trans) * model;
 }
 
-
-struct CameraData {
-	Mat4 view;
-	Mat4 projection;
-};
-
-
-void handleMove(const Window& window, Camera2D& camera, float time) {
-	float speed = 250.f * time;
-	if (window.isKeyPressed(GLFW_KEY_A)) 
-		camera.move(Vec3(speed, 0.f, 0.f));
-	if (window.isKeyPressed(GLFW_KEY_D))
-		camera.move(Vec3(-speed, 0.f, 0.f));
-	if (window.isKeyPressed(GLFW_KEY_S))
-		camera.move(Vec3(0.f, speed, 0.f));
-	if (window.isKeyPressed(GLFW_KEY_W))
-		camera.move(Vec3(0.f, -speed, 0.f));
+float* generateColorBuffer() {
+	float* buffer = new float[COLOR_BUFFER_SIZE]();
+	srand(time(NULL));
+	for (int i = 0; i < COLOR_BUFFER_SIZE; i += 4) {
+		buffer[i] = (float) (rand() % 256);
+		buffer[i + 1] = (float) (rand() % 256);
+		buffer[i + 2] = (float) (rand() % 256);
+		buffer[i + 3] = 1.f;
+	}
+	return buffer;
 }
-
 
 
 
@@ -75,63 +71,76 @@ int main() {
 		std::cout << "Error" << std::endl;
 		return EXIT_FAILURE;
 	}
-	double start = glfwGetTime();
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	float positions[] = {
-		800.f, 800.f,
-		800.f, 400.f,
-		400.f, 400.f,
-		400.f, 800.f
+		0.5f, 0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, 0.5f, -0.5f,
+		0.5f, 0.5f, 0.5,
+		0.5f, -0.5f, 0.5,
+		-0.5f, -0.5f, 0.5,
+		-0.5f, 0.5f, 0.5
 	};
 
-	float texCoords[] = {
-		1.f, 1.f,
-		1.f, 0.f,
-		0.f, 0.f,
-		0.f, 1.f
-	};
+
 
 	unsigned int indices[] = {
 		0, 1, 2,
-		2, 3, 0
+		0, 3, 2,
+		0, 1, 5,
+		0, 4, 5,
+		0, 3, 4,
+		3, 7, 4,
+		1, 2, 5,
+		5, 6, 2,
+		3, 2, 6,
+		3, 7, 6,
 	};
+
+	float colorBuffer[8 * 3];
+	srand(time(nullptr));
+	for (int i = 0; i < 8 * 3; i++) {
+		float val = rand() % 256;
+		val /= 256;
+		colorBuffer[i] = val;
+	}
 
 	VertexArray vao;
 	VBLayout layout;
-	layout.addElement(2, GL_FLOAT);
+	layout.addElement(3, GL_FLOAT);
 	VertexBuffer vbo(positions, sizeof(positions));
-	VertexBuffer tex(texCoords, sizeof(texCoords));
+	VertexBuffer colors(colorBuffer, sizeof(float) * COLOR_BUFFER_SIZE);
 	vao.addBuffer(vbo, layout);
-	vao.addBuffer(tex, layout);
-	IndexBuffer ibo(indices, 6);
-	Texture texture("Resources/Textures/Texture.png");
+	vao.addBuffer(colors, layout);
+	vao.bind();
+	IndexBuffer ibo(indices, sizeof(indices) / sizeof(unsigned int));
 	Shader shader("Resources/Shaders/Vertex.shader", "Resources/Shaders/Fragment.shader");
-	texture.setSlot();
-	shader.setUniform1i("u_TextureSlot", 0);
-
+	Mat4 matrix(1.f);
 	float w = (float) WIDTH;
 	float h = (float) HEIGHT;
-	Mat4 model(1.f);
-
-
-	Camera2D camera(window);
-	shader.setUniformMatrix4fv("view", camera.getView());
+	Camera c;
+	c.setPosition(Vec3(4, 2, 3));
+	c.setViewingDirection(Vec3(0, 0, 0));
+	Mat4 view = c.generateViewMatrix();
+	Mat4 model = Mat4::scale(Vec3(3.f));
+	Mat4 projection = Mat4::perspective(w / h, 90.f, -1.f, 1.f);
+	shader.setUniformMatrix4fv("view", view);
 	shader.setUniformMatrix4fv("model", model);
-	shader.setUniformMatrix4fv("projection", camera.getProjection());
-	vao.bind();
-	ibo.bind();
-	shader.bind();
+	shader.setUniformMatrix4fv("projection", projection);
+
 	
-	Utils::Clock clock;
-	Utils::Clock camClock;
+
+
+	ibo.bind();
+	vao.bind();
+	shader.bind();
+
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
 		glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_INT, nullptr);
-		test(model, clock.getTimePassed(), 600.f);
-		clock.reset();
-		handleMove(window, camera, camClock.getTimePassed());
-		camClock.reset();
-		shader.setUniformMatrix4fv("model", model);
-		shader.setUniformMatrix4fv("view", camera.getView());
 		window.update();
 	}
 	glfwTerminate();

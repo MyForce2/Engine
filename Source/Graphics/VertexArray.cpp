@@ -36,6 +36,7 @@ namespace Engine {
 				i++;
 			}
 			amountOfAttributes += i;
+			unBind();
 		}
 	}
 }

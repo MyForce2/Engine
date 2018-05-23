@@ -158,10 +158,11 @@ namespace Engine {
 		}
 
 		std::ostream& operator<<(std::ostream& os, const Mat4& mat) {
-			for (int i = 0; i < 16; i++) {
-				if (i % 4 == 0 && i != 0)
-					os << '\n';
-				os << mat.data[i] << ' ';
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 4; j++) {
+					os << mat.data[j * 4 + i] << ' ';
+				}
+				os << '\n';
 			}
 			return os;
 		}
