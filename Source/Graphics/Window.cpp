@@ -4,17 +4,18 @@
 #include <iostream>
 
 #include "Window.h"
+#include "Utils\Log.h"
 
 namespace Engine {
 	namespace Graphics {
 
 		Window::Window(const std::string& title, int height, int width) : title(title), height(height), width(width) {
 			if (!glfwInit())
-				std::cout << "Failed to init" << std::endl;
+				Utils::logError("Failed to init glfw");
 			glfwWindowHint(GLFW_SAMPLES, 4);
 			windowHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 			if (!windowHandle) {
-				std::cout << "Failed to create window" << std::endl;
+				Utils::logError("Failed to create window");
 			}
 			glfwMakeContextCurrent(windowHandle);
 			glfwSwapInterval(0);

@@ -291,6 +291,15 @@ namespace Engine {
 				}
 			}
 
+			void clear() {
+				Node<Type>* iter = first;
+				while (iter->next != nullptr) {
+					iter = iter->next;
+					delete iter->prev;
+				}
+				delete iter;
+				first = nullptr;
+			}
 
 			bool contains(Type& value) const {
 				Node<Type>* iter = first;

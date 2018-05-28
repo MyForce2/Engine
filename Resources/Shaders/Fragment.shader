@@ -8,6 +8,6 @@ in vec2 texCoord;
 uniform sampler2D texSlot;
 
 void main() {
-	color = texture(texSlot, texCoord);
-	//color = fragColor;
+	//color = texture(texSlot, texCoord);
+	color = fragColor;
 }

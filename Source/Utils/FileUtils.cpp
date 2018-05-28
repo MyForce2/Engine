@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "FileUtils.h"
+#include "Log.h"
 
 namespace Engine {
 	namespace Utils {
@@ -11,7 +12,7 @@ namespace Engine {
 			std::string data = "";
 			reader.open(path.c_str());
 			if (!reader) {
-				std::cout << "Failed to open file : " << path << std::endl;
+				logError("Failed to load file :" + path);
 				return "";
 			}
 			std::string line;
@@ -24,7 +25,7 @@ namespace Engine {
 			std::fstream reader;
 			reader.open(path.c_str());
 			if (!reader) {
-				std::cout << "Failed to open file : " << path << std::endl;
+				logError("Failed to load file : " + path);
 				return;
 			}
 			std::string line;

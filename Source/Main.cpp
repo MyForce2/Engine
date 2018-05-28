@@ -3,8 +3,6 @@
 #include "Math\Math.h"
 #include "Graphics\Graphics.h"
 #include "Utils\Clock.h"
-#include "Graphics\Camera2D.h"
-#include "Graphics\Camera.h"
 
 
 #include <iostream>
@@ -59,7 +57,7 @@ void test(Mat4& model, float time, float tUnit) {
 }
 
 void handleInput(const Window& window, Camera* camera, float time) {
-	float cameraSpeed = 10.f * time;
+	float cameraSpeed = 6.f * time;
 	Vec3 pos = camera->getPosition();
 	Vec3 direction = camera->getViewingDirection();
 	if (window.isKeyPressed(GLFW_KEY_S)) {
@@ -74,6 +72,9 @@ void handleInput(const Window& window, Camera* camera, float time) {
 	if (window.isKeyPressed(GLFW_KEY_D)) {
 		pos += direction.cross(Vec3(0, 1, 0)).normalized() * cameraSpeed;
 	}
+	if (window.isKeyPressed(GLFW_KEY_SPACE)) {
+		pos += Vec3(0, 1, 0) * cameraSpeed;
+	}
 	camera->setPosition(pos);
 }
 
@@ -85,7 +86,7 @@ int main() {
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+	//glEnable(GL_CULL_FACE);
 
 	float positionsTex[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -181,7 +182,7 @@ int main() {
 	float w = float(WIDTH);
 	float h = float(HEIGHT);
 	Camera c;
-	c.setPosition(Vec3(0, 0, 3));
+	c.setPosition(Vec3(30, 0, 30));
 	c.setViewingDirection(Vec3(0, 0, -1.f));
 	Mat4 view = c.generateViewMatrix();
 	Mat4 model(1.f);
@@ -202,18 +203,22 @@ int main() {
 	shader.bind();
 	window.setMousePosition(window.getSize() / 2);
 
+
+
 	Utils::Clock clock;
-	Utils::Clock rotationClock;
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
-		glDrawArrays(GL_TRIANGLES, 0, 36);
 		handleInput(window, &c, clock.getTimePassed());
 		clock.reset();
-		//test(model, rotationClock.getTimePassed(), 0.f);
-		rotationClock.reset();
 		c.updateViewDirection(window);
-		colors.setData(colorBuffer, 108);
-		shader.setUniformMatrix4fv("model", model);
 		shader.setUniformMatrix4fv("view", c.generateViewMatrix());
+		for (int x = 0; x < 5; x++) {
+			for (int y = 0; y < 5; y++) {
+				for (int z = 0; z < 5; z++) {
+					shader.setUniformMatrix4fv("model", Mat4::translation(Vec3(x, y, z)));
+					glDrawArrays(GL_TRIANGLES, 0, 36);
+				}
+			}
+		}
 		window.update();
 	}
 	glfwTerminate();

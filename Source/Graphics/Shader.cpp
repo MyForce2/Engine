@@ -2,12 +2,13 @@
 
 #include "Shader.h"
 #include "Utils\FileUtils.h"
+#include "Utils\Log.h"
 
 namespace Engine {
 	namespace Graphics {
 
 
-		Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
+		Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) : locationCache() {
 			std::string vertexSource = Utils::readFile(vertexPath);
 			std::string fragmentSource = Utils::readFile(fragmentPath);
 			id = createProgram(vertexSource, fragmentSource);
@@ -53,26 +54,36 @@ namespace Engine {
 				glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &length);
 				char* error = new char[length + 1];
 				glGetShaderInfoLog(shaderID, length + 1, &length, error);
-				std::cout << "Compilation failed : " << (type == GL_FRAGMENT_SHADER ? "Fragment " : "Vertex ") << "shader" << std::endl;
+				std::string typeString = type == GL_FRAGMENT_SHADER ? "Fragment " : "Vertex ";
+				Utils::logError("Compilation failed : " + typeString + "shader");
 				std::cout << error << std::endl;
 				return 0;
 			}
 			return shaderID;
 		}
 
-		GLint Shader::getUniformLocation(const std::string& name) const {
+		GLint Shader::getUniformLocation(const std::string& name) {
+			//if (locationCache.find(name) != locationCache.end()) {
+			//	return locationCache.at(name);
+			//} else {
+			//	GLint location = glGetUniformLocation(id, name.c_str());
+			//	locationCache[name] = location;
+			//	if (location == -1)
+			//		Utils::logWarning("Unifrom : " + name + ", location is -1");
+			//	return location;
+			//}
 			GLint location = glGetUniformLocation(id, name.c_str());
 			if (location == -1)
-				std::cout << "Uniform : " << name << ", location is -1" << std::endl;
+				Utils::logWarning("Unifrom : " + name + ", location is -1");
 			return location;
 		}
 
-		void Shader::setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) const {
+		void Shader::setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) {
 			GLint location = getUniformLocation(name);
 			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix.data[0]);
 		}
 
-		void Shader::setUniform1i(const std::string& name, int val) const {
+		void Shader::setUniform1i(const std::string& name, int val) {
 			GLint location = getUniformLocation(name);
 			glUniform1i(location, val);
 		}
