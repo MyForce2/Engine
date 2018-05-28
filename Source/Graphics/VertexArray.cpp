@@ -28,6 +28,7 @@ namespace Engine {
 			Utils::LinkedList<VBElement> elements = layout.getElements();
 			int i = 0;
 			unsigned int off = 0U;
+			printf("%d\n", layout.getStride());
 			for (VBElement& element : elements) {
 				glEnableVertexAttribArray(i + amountOfAttributes);
 				GLint size = VBElement::getSizeOfElement(element.type);

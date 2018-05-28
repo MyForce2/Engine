@@ -23,6 +23,8 @@ namespace Engine {
 			void bind() const;
 			// Unbinds this buffer
 			void unBind() const;
+			// Refill this buffer with new data
+			void setData(const void* data, size_t size);
 			inline GLuint getID() const { return id; }
 		};
 	}

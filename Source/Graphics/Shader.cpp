@@ -53,7 +53,7 @@ namespace Engine {
 				glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &length);
 				char* error = new char[length + 1];
 				glGetShaderInfoLog(shaderID, length + 1, &length, error);
-				std::cout << "Compilation failed : " << (type == GL_FRAGMENT_SHADER ? "Fragment " : "Shader ") << "shader" << std::endl;
+				std::cout << "Compilation failed : " << (type == GL_FRAGMENT_SHADER ? "Fragment " : "Vertex ") << "shader" << std::endl;
 				std::cout << error << std::endl;
 				return 0;
 			}

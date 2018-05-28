@@ -19,7 +19,7 @@ using std::chrono::duration;
 
 static const int WIDTH = 1280;
 static const int HEIGHT = 720;
-static const float ANGLE_PER_MSEC = 60.f;
+static const float ANGLE_PER_SEC = 120.f;
 
 static const int COLOR_BUFFER_SIZE = 8 * 3;
 
@@ -40,30 +40,42 @@ struct Timer {
 	}
 };
 
-
+void fillColorBuffer(float* buffer) {
+	srand(time(NULL));
+	for (int i = 0; i < 36 * 3; i++) {
+		float val = rand() % 256;
+		val /= 256;
+		buffer[i] = val;
+	}
+}
 
 
 void test(Mat4& model, float time, float tUnit) {
 	Vec3 trans = Vec3(tUnit, tUnit, 0.f);
-	float angle = time * ANGLE_PER_MSEC;
+	float angle = time * ANGLE_PER_SEC;
 	model = Mat4::translation(trans * -1) * model;
 	model = Mat4::rotationZ(angle) * model;
 	model = Mat4::translation(trans) * model;
 }
 
-float* generateColorBuffer() {
-	float* buffer = new float[COLOR_BUFFER_SIZE]();
-	srand(time(NULL));
-	for (int i = 0; i < COLOR_BUFFER_SIZE; i += 4) {
-		buffer[i] = (float) (rand() % 256);
-		buffer[i + 1] = (float) (rand() % 256);
-		buffer[i + 2] = (float) (rand() % 256);
-		buffer[i + 3] = 1.f;
+void handleInput(const Window& window, Camera* camera, float time) {
+	float cameraSpeed = 10.f * time;
+	Vec3 pos = camera->getPosition();
+	Vec3 direction = camera->getViewingDirection();
+	if (window.isKeyPressed(GLFW_KEY_S)) {
+		pos -= direction * cameraSpeed;
 	}
-	return buffer;
+	if (window.isKeyPressed(GLFW_KEY_W)) {
+		pos += direction * cameraSpeed;
+	}
+	if (window.isKeyPressed(GLFW_KEY_A)) {
+		pos -= direction.cross(Vec3(0, 1, 0)).normalized() * cameraSpeed;
+	}
+	if (window.isKeyPressed(GLFW_KEY_D)) {
+		pos += direction.cross(Vec3(0, 1, 0)).normalized() * cameraSpeed;
+	}
+	camera->setPosition(pos);
 }
-
-
 
 int main() {
 	Window window("Engine", HEIGHT, WIDTH);
@@ -74,6 +86,50 @@ int main() {
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+
+	float positionsTex[] = {
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
 
 	float positions[] = {
 		0.5f, 0.5f, -0.5f,
@@ -86,61 +142,78 @@ int main() {
 		-0.5f, 0.5f, 0.5
 	};
 
-
-
 	unsigned int indices[] = {
 		0, 1, 2,
 		0, 3, 2,
 		0, 1, 5,
 		0, 4, 5,
 		0, 3, 4,
-		3, 7, 4,
+		4, 7, 3,
+		4, 5, 6,
+		4, 7, 6,
+		7, 3, 2,
+		7, 6, 2,
 		1, 2, 5,
-		5, 6, 2,
-		3, 2, 6,
-		3, 7, 6,
+		6, 5, 2
 	};
 
-	float colorBuffer[8 * 3];
+	float colorBuffer[36 * 3];
 	srand(time(nullptr));
-	for (int i = 0; i < 8 * 3; i++) {
+	for (int i = 0; i < 36 * 3; i++) {
 		float val = rand() % 256;
 		val /= 256;
 		colorBuffer[i] = val;
 	}
 
 	VertexArray vao;
-	VBLayout layout;
-	layout.addElement(3, GL_FLOAT);
-	VertexBuffer vbo(positions, sizeof(positions));
-	VertexBuffer colors(colorBuffer, sizeof(float) * COLOR_BUFFER_SIZE);
-	vao.addBuffer(vbo, layout);
-	vao.addBuffer(colors, layout);
+	VBLayout colorLayout;
+	VBLayout verticesLayout;
+	colorLayout.addElement(3, GL_FLOAT);
+	verticesLayout.addElement(3, GL_FLOAT);
+	verticesLayout.addElement(2, GL_FLOAT);
+	VertexBuffer colors(colorBuffer, sizeof(colorBuffer));
+	VertexBuffer posTex(positionsTex, sizeof(positionsTex));
+	vao.addBuffer(posTex, verticesLayout);
+	vao.addBuffer(colors, colorLayout);
 	vao.bind();
-	IndexBuffer ibo(indices, sizeof(indices) / sizeof(unsigned int));
 	Shader shader("Resources/Shaders/Vertex.shader", "Resources/Shaders/Fragment.shader");
 	Mat4 matrix(1.f);
-	float w = (float) WIDTH;
-	float h = (float) HEIGHT;
+	float w = float(WIDTH);
+	float h = float(HEIGHT);
 	Camera c;
-	c.setPosition(Vec3(4, 2, 3));
-	c.setViewingDirection(Vec3(0, 0, 0));
+	c.setPosition(Vec3(0, 0, 3));
+	c.setViewingDirection(Vec3(0, 0, -1.f));
 	Mat4 view = c.generateViewMatrix();
-	Mat4 model = Mat4::scale(Vec3(3.f));
-	Mat4 projection = Mat4::perspective(w / h, 90.f, -1.f, 1.f);
+	Mat4 model(1.f);
+	float near = 0.1f;
+	float far = 100.f;
+	float fov = 45.f;
+	Mat4 projection = Mat4::perspective(w / h, fov, 0.1, 100.f);
+	Texture t("Resources/Textures/Texture.png");
+	t.setSlot();
 	shader.setUniformMatrix4fv("view", view);
 	shader.setUniformMatrix4fv("model", model);
 	shader.setUniformMatrix4fv("projection", projection);
-
+	shader.setUniform1i("texSlot", 0);
 	
+	std::cout << (c.getViewingDirection().cross(Vec3(0, 1, 0).normalized())) << std::endl;
 
-
-	ibo.bind();
 	vao.bind();
 	shader.bind();
+	window.setMousePosition(window.getSize() / 2);
 
+	Utils::Clock clock;
+	Utils::Clock rotationClock;
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
-		glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		handleInput(window, &c, clock.getTimePassed());
+		clock.reset();
+		//test(model, rotationClock.getTimePassed(), 0.f);
+		rotationClock.reset();
+		c.updateViewDirection(window);
+		colors.setData(colorBuffer, 108);
+		shader.setUniformMatrix4fv("model", model);
+		shader.setUniformMatrix4fv("view", c.generateViewMatrix());
 		window.update();
 	}
 	glfwTerminate();

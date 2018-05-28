@@ -1,9 +1,11 @@
 #version 330 core
 
 layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 vertexColor;
+layout(location = 1) in vec2 uvCoords;
+layout(location = 2) in vec4 color;
 
 out vec4 fragColor;
+out vec2 texCoord;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -14,5 +16,6 @@ void main() {
 	mat4 mvp = projection * view * model;
 	vec4 pos = mvp * position;
 	gl_Position = pos;
-	fragColor = vertexColor;
+	fragColor = color;
+	texCoord = uvCoords;
 }

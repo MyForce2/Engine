@@ -18,7 +18,8 @@ namespace Engine {
 			}
 			glfwMakeContextCurrent(windowHandle);
 			glfwSwapInterval(0);
-			updateMousePosition();
+			glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			setMousePosition(getSize() / 2);
 		}
 
 		Window::~Window() {
@@ -40,15 +41,17 @@ namespace Engine {
 		void Window::update() {
 			glfwSwapBuffers(windowHandle);
 			glfwPollEvents();
-			updateMousePosition();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
-		void Window::updateMousePosition() {
+		Math::Vec2 Window::getMousePosition() const {
 			double x, y;
 			glfwGetCursorPos(windowHandle, &x, &y);
-			mousePosition.x = (float) x;
-			mousePosition.y = (float) y;
+			return Math::Vec2(x, y);
+		}
+
+		void Window::setMousePosition(const Math::Vec2& pos) const {
+			glfwSetCursorPos(windowHandle, pos.x, pos.y);
 		}
 	}
 }

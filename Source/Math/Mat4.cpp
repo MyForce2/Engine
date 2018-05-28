@@ -145,9 +145,9 @@ namespace Engine {
 			float t = tan(radians / 2);
 			result[0].x = 1 / (aspectRatio * t);
 			result[1].y = 1 / t;
-			result[2].z = (far + near) * (far - near) * -1;
+			result[2].z = -(far + near) / (far - near);
 			result[2].w = -1;
-			result[3].z = (2 * far * near) / (far - near);
+			result[3].z = -(2 * far * near) / (far - near);
 			return result;
 		}
 

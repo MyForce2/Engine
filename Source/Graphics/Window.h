@@ -12,7 +12,6 @@ namespace Engine {
 		private:
 			int height, width;
 			std::string title;
-			Math::Vec2 mousePosition;
 			GLFWwindow* windowHandle;
 
 		public:
@@ -23,13 +22,14 @@ namespace Engine {
 			bool isKeyPressed(int key) const;
 			bool isKeyReleased(int key) const;
 
+			
+
 			void update();
 
-			inline const Math::Vec2& getMousePosition() const { return  mousePosition; }
+			Math::Vec2 getMousePosition() const;
+			void setMousePosition(const Math::Vec2& pos) const;
 			inline const Math::Vec2 getSize() const { return Math::Vec2(width, height); }
 			
-		private:
-			void updateMousePosition();
 		};
 	}
 }
