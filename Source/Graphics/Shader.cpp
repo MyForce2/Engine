@@ -8,9 +8,10 @@ namespace Engine {
 	namespace Graphics {
 
 
-		Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) : locationCache() {
-			std::string vertexSource = Utils::readFile(vertexPath);
-			std::string fragmentSource = Utils::readFile(fragmentPath);
+		Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
+			std::string vertexSource, fragmentSource;
+			Utils::readFile(vertexPath, vertexSource);
+			Utils::readFile(fragmentPath, fragmentSource);
 			id = createProgram(vertexSource, fragmentSource);
 			bind();
 			
@@ -62,30 +63,31 @@ namespace Engine {
 			return shaderID;
 		}
 
-		GLint Shader::getUniformLocation(const std::string& name) {
-			//if (locationCache.find(name) != locationCache.end()) {
-			//	return locationCache.at(name);
-			//} else {
-			//	GLint location = glGetUniformLocation(id, name.c_str());
-			//	locationCache[name] = location;
-			//	if (location == -1)
-			//		Utils::logWarning("Unifrom : " + name + ", location is -1");
-			//	return location;
-			//}
+		GLint Shader::getUniformLocation(const std::string& name) const {
 			GLint location = glGetUniformLocation(id, name.c_str());
 			if (location == -1)
 				Utils::logWarning("Unifrom : " + name + ", location is -1");
 			return location;
 		}
 
-		void Shader::setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) {
+		void Shader::setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) const {
 			GLint location = getUniformLocation(name);
 			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix.data[0]);
 		}
 
-		void Shader::setUniform1i(const std::string& name, int val) {
+		void Shader::setUniform1i(const std::string& name, int val) const {
 			GLint location = getUniformLocation(name);
 			glUniform1i(location, val);
+		}
+
+		void Shader::setUniform2f(const std::string& name, const Math::Vec2& vec) const {
+			GLint location = getUniformLocation(name);
+			glUniform2f(location, vec.x, vec.y);
+		}
+
+		void Shader::setUniform3f(const std::string& name, const Math::Vec3& vec) const {
+			GLint location = getUniformLocation(name);
+			glUniform3f(location, vec.x, vec.y, vec.z);
 		}
 
 		void Shader::bindUniformBuffer(const UniformBuffer& ubo, const std::string& name, GLuint blockBinding) const {

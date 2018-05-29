@@ -3,7 +3,6 @@
 #include "Math\Mat4.h"
 #include "Math\Vec2.h"
 #include "Math\Vec3.h"
-#include "Utils\Clock.h"
 #include "Window.h"
 
 namespace Engine {

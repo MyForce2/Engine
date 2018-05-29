@@ -25,18 +25,17 @@ namespace Engine {
 		void VertexArray::addBuffer(const VertexBuffer& vbo, const VBLayout& layout) {
 			bind();
 			vbo.bind();
-			Utils::LinkedList<VBElement> elements = layout.getElements();
-			int i = 0;
+			std::vector<VBElement> elements = layout.getElements();
+			size_t size = elements.size();
 			unsigned int off = 0U;
-			printf("%d\n", layout.getStride());
-			for (VBElement& element : elements) {
+			for (int i = 0; i < size; i++) {
 				glEnableVertexAttribArray(i + amountOfAttributes);
-				GLint size = VBElement::getSizeOfElement(element.type);
+				const VBElement& element = elements[i];
+				GLint elementSize = VBElement::getSizeOfElement(element.type);
 				glVertexAttribPointer(i + amountOfAttributes, element.amount, element.type, GL_FALSE, layout.getStride(), (const void*) off);
-				off += element.amount * size;
-				i++;
+				off += element.amount * elementSize;
 			}
-			amountOfAttributes += i;
+			amountOfAttributes += size;
 			unBind();
 		}
 	}

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "Vec4.h"
 
 namespace Engine {
@@ -25,6 +23,24 @@ namespace Engine {
 
 		Vec4::~Vec4() {
 
+		}
+
+		float Vec4::length() const {
+			float sum = std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2) + std::pow(w, 2);
+			return std::sqrt(sum);
+		}
+
+		void Vec4::normalize() {
+			float vecLength = length();
+			x /= vecLength;
+			y /= vecLength;
+			z /= vecLength;
+			w /= vecLength;
+		}
+
+		Vec4 Vec4::normalized() const {
+			float vecLength = length();
+			return Vec4(x / vecLength, y / vecLength, z / vecLength, w / vecLength);
 		}
 
 		Vec4 Vec4::operator+(float value) const {
@@ -124,8 +140,8 @@ namespace Engine {
 		}
 
 		std::ostream& operator<<(std::ostream& os, const Vec4& vec) {
-			os << "(" << std::to_string(vec.x) << ", " << std::to_string(vec.y) << ", ";
-			os << std::to_string(vec.z) << ", " << std::to_string(vec.w) << ")";
+			os << "(" << vec.x << ", " << vec.y << ", ";
+			os << vec.z << ", " << vec.w << ")";
 			return os;
 		}
 	}

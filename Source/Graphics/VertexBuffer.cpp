@@ -12,7 +12,7 @@ namespace Engine {
 		VertexBuffer::VertexBuffer(const void* data, size_t size) {
 			glGenBuffers(1, &id);
 			bind();
-			glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 			unBind();
 		}
 

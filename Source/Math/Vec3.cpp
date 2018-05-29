@@ -1,7 +1,6 @@
 #pragma once
 
 
-#include <string>
 
 #include "Vec3.h"
 
@@ -147,8 +146,8 @@ namespace Engine {
 		}
 
 		std::ostream& operator<<(std::ostream& os, const Vec3& vec) {
-			os << "(" << std::to_string(vec.x) << ", " << std::to_string(vec.y) << ", ";
-			os << std::to_string(vec.z) << ")";
+			os << "(" << vec.x << ", " << vec.y << ", ";
+			os << vec.z << ")";
 			return os;
 		}
 

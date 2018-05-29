@@ -48,7 +48,7 @@ namespace Engine {
 		Math::Vec2 Window::getMousePosition() const {
 			double x, y;
 			glfwGetCursorPos(windowHandle, &x, &y);
-			return Math::Vec2(x, y);
+			return Math::Vec2(float(x), float(y));
 		}
 
 		void Window::setMousePosition(const Math::Vec2& pos) const {

@@ -28,7 +28,7 @@ namespace Engine {
 
 			Math::Vec2 getMousePosition() const;
 			void setMousePosition(const Math::Vec2& pos) const;
-			inline const Math::Vec2 getSize() const { return Math::Vec2(width, height); }
+			inline const Math::Vec2 getSize() const { return Math::Vec2(float(width), float(height)); }
 			
 		};
 	}

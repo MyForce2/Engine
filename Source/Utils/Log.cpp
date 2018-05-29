@@ -1,6 +1,8 @@
 
 #include "Log.h"
 
+#include <iostream>
+
 namespace Engine {
 	namespace Utils {
 

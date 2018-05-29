@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "VBElement.h"
-#include "Utils\LinkedList.h"
 #include "VertexBuffer.h"
 
 namespace Engine {
@@ -15,7 +14,7 @@ namespace Engine {
 		class VBLayout {
 		private:
 			// A list of all of the elements 
-			Utils::LinkedList<VBElement> elements;
+			std::vector<VBElement> elements;
 			// The amount of bytes per generic components in this layout
 			GLsizei stride;
 
@@ -26,7 +25,7 @@ namespace Engine {
 			// Adds an element to this layout
 			void addElement(size_t amount, GLenum type);
 
-			inline const Utils::LinkedList<VBElement>& getElements() const { return elements; };
+			inline const std::vector<VBElement>& getElements() const { return elements; };
 			inline GLsizei getStride() const { return stride; };
 
 		};

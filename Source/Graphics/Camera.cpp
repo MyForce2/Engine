@@ -5,6 +5,7 @@ namespace Engine {
 	namespace Graphics {
 
 		using namespace Math;
+		const float Camera::sensitivity = 0.05f;
 
 		Camera::Camera() : upDirection(0, 1, 0), yaw(-90.f), pitch(0.f) {
 
@@ -22,7 +23,7 @@ namespace Engine {
 			this->viewingDirection = direction;
 		}
 
-		Mat4 Camera::generateViewMatrix() {
+		Mat4 Camera::generateViewMatrix() const {
 			Mat4 view(1.f);
 			Vec3 x, y, z;
 			Vec3 v = position + viewingDirection;
@@ -52,8 +53,9 @@ namespace Engine {
 			Vec2 center = window.getSize() / 2;
 			Vec2 mousePos = window.getMousePosition();
 			Vec2 offset(mousePos.x - center.x, center.y - mousePos.y);
-			float sense = 0.05f;
-			offset *= sense;
+			if (offset == Vec2(0, 0))
+				return;
+			offset *= sensitivity;
 			yaw += offset.x;
 			pitch += offset.y;
 			if (pitch > 89.f)

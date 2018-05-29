@@ -2,6 +2,8 @@
 
 #include "UniformBuffer.h"
 
+#include <memory>
+
 namespace Engine {
 	namespace Graphics {
 

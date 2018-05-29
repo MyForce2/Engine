@@ -9,6 +9,7 @@
 #include <chrono>
 #include <thread>
 
+
 using namespace Engine;
 using namespace Math;
 using namespace Graphics;
@@ -41,7 +42,7 @@ struct Timer {
 void fillColorBuffer(float* buffer) {
 	srand(time(NULL));
 	for (int i = 0; i < 36 * 3; i++) {
-		float val = rand() % 256;
+		float val = float(rand() % 256);
 		val /= 256;
 		buffer[i] = val;
 	}
@@ -161,7 +162,7 @@ int main() {
 	float colorBuffer[36 * 3];
 	srand(time(nullptr));
 	for (int i = 0; i < 36 * 3; i++) {
-		float val = rand() % 256;
+		float val = float(rand() % 256);
 		val /= 256;
 		colorBuffer[i] = val;
 	}
@@ -189,7 +190,7 @@ int main() {
 	float near = 0.1f;
 	float far = 100.f;
 	float fov = 45.f;
-	Mat4 projection = Mat4::perspective(w / h, fov, 0.1, 100.f);
+	Mat4 projection = Mat4::perspective(w / h, fov, 0.1f, 100.f);
 	Texture t("Resources/Textures/Texture.png");
 	t.setSlot();
 	shader.setUniformMatrix4fv("view", view);
@@ -203,7 +204,7 @@ int main() {
 	shader.bind();
 	window.setMousePosition(window.getSize() / 2);
 
-
+	int lim = 10;
 
 	Utils::Clock clock;
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
@@ -211,10 +212,10 @@ int main() {
 		clock.reset();
 		c.updateViewDirection(window);
 		shader.setUniformMatrix4fv("view", c.generateViewMatrix());
-		for (int x = 0; x < 5; x++) {
-			for (int y = 0; y < 5; y++) {
-				for (int z = 0; z < 5; z++) {
-					shader.setUniformMatrix4fv("model", Mat4::translation(Vec3(x, y, z)));
+		for (int x = 0; x < lim; x++) {
+			for (int y = 0; y < lim; y++) {
+				for (int z = 0; z < lim; z++) {
+					shader.setUniformMatrix4fv("model", Mat4::translation(Vec3(float(x), float(y), float(z))));
 					glDrawArrays(GL_TRIANGLES, 0, 36);
 				}
 			}

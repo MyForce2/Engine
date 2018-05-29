@@ -3,9 +3,9 @@
 #include <GL\glew.h>
 #include <string>
 
+#include "Math\Vec2.h"
 #include "Math\Mat4.h"
 #include "UniformBuffer.h"
-#include <unordered_map>
 
 
 
@@ -17,19 +17,22 @@ namespace Engine {
 		class Shader {
 		public:
 			GLuint id;
-			std::unordered_map<std::string, GLint> locationCache;
 
 		public:
 			Shader(const std::string& vertexPath, const std::string& fragmentPath);
 			~Shader();
 
+			// Sets this shader as the active program (Bound shader)
 			void bind() const;
+			// Sets the active shader to 0 (Bound shader)
 			void unBind() const;
 
 			// All methods to set uniforms
 
-			void setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix);
-			void setUniform1i(const std::string& name, int val);
+			void setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) const;
+			void setUniform1i(const std::string& name, int val) const;
+			void setUniform2f(const std::string& name, const Math::Vec2& vec) const;
+			void setUniform3f(const std::string& name, const Math::Vec3& vec) const;
 
 			// Binds a uniform buffer to the specified index (blockBinding = index)
 			void bindUniformBuffer(const UniformBuffer& ubo, const std::string& name, GLuint blockBinding) const;
@@ -39,7 +42,7 @@ namespace Engine {
 			// Creates a program with the two shaders attached, and returns its id
 			static GLuint createProgram(const std::string& vertexSource, const std::string& fragmentSource);
 			// Returns the location in memory of the given uniform
-			GLint getUniformLocation(const std::string& name);
+			GLint getUniformLocation(const std::string& name) const;
 		};
 	}
 }

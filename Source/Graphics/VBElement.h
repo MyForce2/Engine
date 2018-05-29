@@ -11,7 +11,7 @@ namespace Engine {
 			// The OpenGL type of this element
 			GLenum type;
 
-			// Gets the size (in bytes) of a OpenGL type
+			// Gets the size (in bytes) of an OpenGL type
 			inline static constexpr GLuint getSizeOfElement(GLenum type) {
 				switch (type) {
 				case GL_FLOAT:

@@ -17,6 +17,10 @@ namespace Engine {
 			Vec4(const Vec4& vec);
 			~Vec4();
 
+			float length() const;
+			void normalize();
+			Vec4 normalized() const;
+
 			Vec4 operator+(float value) const;
 			Vec4 operator-(float value) const;
 			Vec4 operator*(float value) const;

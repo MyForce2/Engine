@@ -2,7 +2,7 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <string>
+#include <iostream>
 
 
 #include "Mat4.h"
@@ -92,8 +92,8 @@ namespace Engine {
 		Mat4 Mat4::rotationX(float angle) {
 			Mat4 result(1.f);
 			float rad = toRadians(angle);
-			float c = cos(rad);
-			float s = sin(rad);
+			float c = std::cos(rad);
+			float s = std::sin(rad);
 			result[1].y = c;
 			result[1].z = s;
 			result[2].y = -s;
@@ -104,8 +104,8 @@ namespace Engine {
 		Mat4 Mat4::rotationY(float angle) {
 			Mat4 result(1.f);
 			float rad = toRadians(angle);
-			float c = cos(rad);
-			float s = sin(rad);
+			float c = std::cos(rad);
+			float s = std::sin(rad);
 			result[0].x = c;
 			result[0].z = -s;
 			result[2].x = s;
@@ -116,8 +116,8 @@ namespace Engine {
 		Mat4 Mat4::rotationZ(float angle) {
 			Mat4 result(1.f);
 			float rad = toRadians(angle);
-			float c = cos(rad);
-			float s = sin(rad);
+			float c = std::cos(rad);
+			float s = std::sin(rad);
 			result[0].x = c;
 			result[0].y = s;
 			result[1].x = -s;
@@ -142,7 +142,7 @@ namespace Engine {
 		Mat4 Mat4::perspective(float aspectRatio, float fieldOfView, float near, float far) {
 			Mat4 result;
 			float radians = toRadians(fieldOfView);
-			float t = tan(radians / 2);
+			float t = std::tan(radians / 2);
 			result[0].x = 1 / (aspectRatio * t);
 			result[1].y = 1 / t;
 			result[2].z = -(far + near) / (far - near);

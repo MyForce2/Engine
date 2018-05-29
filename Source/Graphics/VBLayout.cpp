@@ -15,7 +15,7 @@ namespace Engine {
 
 		void VBLayout::addElement(size_t amount, GLenum type) {
 			VBElement element = { amount, type };
-			elements.addLast(element);
+			elements.push_back(element);
 			stride += amount * VBElement::getSizeOfElement(element.type);
 		}
 	}
