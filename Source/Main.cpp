@@ -3,6 +3,7 @@
 #include "Math\Math.h"
 #include "Graphics\Graphics.h"
 #include "Utils\Clock.h"
+#include "Utils\Log.h"
 
 
 #include <iostream>
@@ -82,12 +83,14 @@ void handleInput(const Window& window, Camera* camera, float time) {
 int main() {
 	Window window("Engine", HEIGHT, WIDTH);
 	if (glewInit() != GLEW_OK) {
-		std::cout << "Error" << std::endl;
+		Utils::logError("Failed to init glew, terminating");
 		return EXIT_FAILURE;
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
+	Vec3 clearColor(0.f / 256.f, 191.f / 256.f, 255.f / 256.f);
+	glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
+	std::cout << glGetString(GL_VERSION) << std::endl;
 
 	float positionsTex[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -197,14 +200,12 @@ int main() {
 	shader.setUniformMatrix4fv("model", model);
 	shader.setUniformMatrix4fv("projection", projection);
 	shader.setUniform1i("texSlot", 0);
-	
-	std::cout << (c.getViewingDirection().cross(Vec3(0, 1, 0).normalized())) << std::endl;
 
 	vao.bind();
 	shader.bind();
 	window.setMousePosition(window.getSize() / 2);
 
-	int lim = 10;
+	int lim = 5;
 
 	Utils::Clock clock;
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
