@@ -10,6 +10,8 @@
 #include <chrono>
 #include <thread>
 
+#define BLOCKS true
+
 
 using namespace Engine;
 using namespace Math;
@@ -76,6 +78,9 @@ void handleInput(const Window& window, Camera* camera, float time) {
 	}
 	if (window.isKeyPressed(GLFW_KEY_SPACE)) {
 		pos += Vec3(0, 1, 0) * cameraSpeed;
+	}
+	if (window.isKeyPressed(GLFW_KEY_R)) {
+		pos -= Vec3(0, 1, 0) * cameraSpeed;
 	}
 	camera->setPosition(pos);
 }
@@ -186,7 +191,7 @@ int main() {
 	float w = float(WIDTH);
 	float h = float(HEIGHT);
 	Camera c;
-	c.setPosition(Vec3(30, 0, 30));
+	c.setPosition(Vec3(15, 0, 15));
 	c.setViewingDirection(Vec3(0, 0, -1.f));
 	Mat4 view = c.generateViewMatrix();
 	Mat4 model(1.f);
@@ -200,12 +205,14 @@ int main() {
 	shader.setUniformMatrix4fv("model", model);
 	shader.setUniformMatrix4fv("projection", projection);
 	shader.setUniform1i("texSlot", 0);
+	shader.setUniform3f("lightColor", clearColor);
+
 
 	vao.bind();
 	shader.bind();
 	window.setMousePosition(window.getSize() / 2);
 
-	int lim = 5;
+	int lim = 15;
 
 	Utils::Clock clock;
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
@@ -213,14 +220,18 @@ int main() {
 		clock.reset();
 		c.updateViewDirection(window);
 		shader.setUniformMatrix4fv("view", c.generateViewMatrix());
-		for (int x = 0; x < lim; x++) {
-			for (int y = 0; y < lim; y++) {
-				for (int z = 0; z < lim; z++) {
-					shader.setUniformMatrix4fv("model", Mat4::translation(Vec3(float(x), float(y), float(z))));
-					glDrawArrays(GL_TRIANGLES, 0, 36);
+#if BLOCKS 
+		for (int x = 0; x < lim; x += 2) {
+			for (int y = 0; y < lim; y += 2) {
+				for (int z = 0; z < lim; z += 2) {
+						shader.setUniformMatrix4fv("model", Mat4::translation(Vec3(float(x), float(y), float(z))));
+						glDrawArrays(GL_TRIANGLES, 0, 36);
 				}
 			}
 		}
+#else
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+#endif
 		window.update();
 	}
 	glfwTerminate();

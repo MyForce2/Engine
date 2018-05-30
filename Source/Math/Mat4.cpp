@@ -46,6 +46,20 @@ namespace Engine {
 			return result;
 		}
 
+		Vec4 Mat4::operator*(const Vec4& vec) const {
+			Vec4 result;
+			float* vecData = (float*) (&vec);
+			float* resultData = (float*) (&result);
+			for (int i = 0; i < 4; i++) {
+				float sum = 0.f;
+				for (int j = 0; j < 4; j++) {
+					sum += data[j * 4 + i] * vecData[j];
+				}
+				resultData[i] = sum;
+			}
+			return result;
+		}
+
 
 		void Mat4::operator*=(const Mat4& mat) {
 			Mat4 result = (*this) * mat;

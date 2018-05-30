@@ -6,8 +6,12 @@ in vec4 fragColor;
 in vec2 texCoord;
 
 uniform sampler2D texSlot;
+uniform vec3 lightColor;
 
 void main() {
 	//color = texture(texSlot, texCoord);
-	color = fragColor;
+	float ambientStrength = 0.4f;
+	vec3 ambient = ambientStrength * lightColor;
+	vec3 result = ambient * fragColor.xyz;
+	color = vec4(result, 1.0);
 }

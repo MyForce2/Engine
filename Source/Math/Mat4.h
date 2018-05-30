@@ -22,7 +22,9 @@ namespace Engine {
 			~Mat4();
 
 			Mat4 operator*(const Mat4& mat) const;
+			Vec4 operator*(const Vec4& mat) const;
 			void operator*=(const Mat4& mat);
+			void operator*=(const Vec4& mat);
 
 			Vec4& operator[](size_t index);
 			Vec4 operator[](size_t index) const;
