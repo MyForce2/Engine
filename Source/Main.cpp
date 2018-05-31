@@ -32,7 +32,7 @@ struct Timer {
 	std::chrono::time_point<std::chrono::steady_clock> start;
 
 	Timer() {
-		 start = std::chrono::high_resolution_clock::now();
+		start = std::chrono::high_resolution_clock::now();
 	}
 
 	~Timer() {
@@ -93,52 +93,56 @@ int main() {
 	}
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 	Vec3 clearColor(0.f / 256.f, 191.f / 256.f, 255.f / 256.f);
 	glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
 	float positionsTex[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+		0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		
+		// Front face
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		// Left face
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+		// Right face
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+		0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
+		// Bottom face
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+		0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+		// Top face
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left
 	};
 
 	float positions[] = {
@@ -175,6 +179,24 @@ int main() {
 		colorBuffer[i] = val;
 	}
 
+	int lim = 60;
+	int distance = 1;
+
+	int objAmount = lim * lim * lim;
+
+	Mat4* translationsBuffer = new Mat4[objAmount];
+	int index = 0;
+	for (int x = 0; x < lim; x += distance) {
+		for (int y = 0; y < lim; y += distance) {
+			for (int z = 0; z < lim; z += distance) {
+				Vec3 translation(x, y, z);
+				translationsBuffer[index] = Mat4::translation(translation);
+				index++;
+			}
+		}
+	}
+
+
 	VertexArray vao;
 	VBLayout colorLayout;
 	VBLayout verticesLayout;
@@ -183,27 +205,25 @@ int main() {
 	verticesLayout.addElement(2, GL_FLOAT);
 	VertexBuffer colors(colorBuffer, sizeof(colorBuffer));
 	VertexBuffer posTex(positionsTex, sizeof(positionsTex));
+	VertexBuffer translations(translationsBuffer, objAmount * sizeof(Mat4));
 	vao.addBuffer(posTex, verticesLayout);
 	vao.addBuffer(colors, colorLayout);
+	vao.addMatrixBuffer(translations);
 	vao.bind();
 	Shader shader("Resources/Shaders/Vertex.shader", "Resources/Shaders/Fragment.shader");
 	Mat4 matrix(1.f);
 	float w = float(WIDTH);
 	float h = float(HEIGHT);
-	Camera c;
-	c.setPosition(Vec3(15, 0, 15));
+	Camera c(window, 0.1f, 100.f);
+	c.setPosition(Vec3(100, 0, 15));
 	c.setViewingDirection(Vec3(0, 0, -1.f));
-	Mat4 view = c.generateViewMatrix();
+	c.update(window);
 	Mat4 model(1.f);
-	float near = 0.1f;
-	float far = 100.f;
-	float fov = 45.f;
-	Mat4 projection = Mat4::perspective(w / h, fov, 0.1f, 100.f);
 	Texture t("Resources/Textures/Texture.png");
 	t.setSlot();
-	shader.setUniformMatrix4fv("view", view);
+	shader.setUniformMatrix4fv("view", c.getViewMatrix());
 	shader.setUniformMatrix4fv("model", model);
-	shader.setUniformMatrix4fv("projection", projection);
+	shader.setUniformMatrix4fv("projection", c.getProjectionMatrix());
 	shader.setUniform1i("texSlot", 0);
 	shader.setUniform3f("lightColor", clearColor);
 
@@ -212,23 +232,20 @@ int main() {
 	shader.bind();
 	window.setMousePosition(window.getSize() / 2);
 
-	int lim = 15;
+
 
 	Utils::Clock clock;
+
+	
+	int max = lim * lim * lim;
+
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
 		handleInput(window, &c, clock.getTimePassed());
 		clock.reset();
-		c.updateViewDirection(window);
-		shader.setUniformMatrix4fv("view", c.generateViewMatrix());
+		c.update(window);
+		shader.setUniformMatrix4fv("view", c.getViewMatrix());
 #if BLOCKS 
-		for (int x = 0; x < lim; x += 2) {
-			for (int y = 0; y < lim; y += 2) {
-				for (int z = 0; z < lim; z += 2) {
-						shader.setUniformMatrix4fv("model", Mat4::translation(Vec3(float(x), float(y), float(z))));
-						glDrawArrays(GL_TRIANGLES, 0, 36);
-				}
-			}
-		}
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, max);
 #else
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 #endif

@@ -9,9 +9,9 @@ uniform sampler2D texSlot;
 uniform vec3 lightColor;
 
 void main() {
-	//color = texture(texSlot, texCoord);
+	//vec4 texColor = texture(texSlot, texCoord);
 	float ambientStrength = 0.4f;
 	vec3 ambient = ambientStrength * lightColor;
 	vec3 result = ambient * fragColor.xyz;
-	color = vec4(result, 1.0);
+	color = fragColor;
 }

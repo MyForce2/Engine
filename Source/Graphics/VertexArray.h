@@ -23,6 +23,7 @@ namespace Engine {
 			void unBind() const;
 
 			void addBuffer(const VertexBuffer& vbo, const VBLayout& layout);
+			void addMatrixBuffer(const VertexBuffer& vbo);
 		};
 	}
 }

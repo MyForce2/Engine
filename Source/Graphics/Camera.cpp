@@ -7,8 +7,9 @@ namespace Engine {
 		using namespace Math;
 		const float Camera::sensitivity = 0.05f;
 
-		Camera::Camera() : upDirection(0, 1, 0), yaw(-90.f), pitch(0.f) {
-
+		Camera::Camera(const Window& window, float near, float far) : upDirection(0, 1, 0), yaw(0.f), pitch(0.f), windowSize(window.getSize()), near(near), far(far) {
+			projection = Mat4::perspective(windowSize.x / windowSize.y, 45.f, near, far);
+			view = generateViewMatrix();
 		}
 
 		Camera::~Camera() {
@@ -21,6 +22,15 @@ namespace Engine {
 
 		void Camera::setViewingDirection(const Vec3& direction) {
 			this->viewingDirection = direction;
+		}
+
+		void Camera::update(const Window& window) {
+			view = generateViewMatrix();
+			viewingDirection = generateViewDirection(window);
+			if (windowSize != window.getSize()) {
+				windowSize = window.getSize();
+				projection = Mat4::perspective(windowSize.x / windowSize.y, 45.f, near, far);
+			}
 		}
 
 		Mat4 Camera::generateViewMatrix() const {
@@ -49,12 +59,12 @@ namespace Engine {
 			return view;
 		}
 
-		void Camera::updateViewDirection(const Window& window) {
+		Math::Vec3 Camera::generateViewDirection(const Window& window) {
 			Vec2 center = window.getSize() / 2;
 			Vec2 mousePos = window.getMousePosition();
 			Vec2 offset(mousePos.x - center.x, center.y - mousePos.y);
 			if (offset == Vec2(0, 0))
-				return;
+				return viewingDirection;
 			offset *= sensitivity;
 			yaw += offset.x;
 			pitch += offset.y;
@@ -69,8 +79,8 @@ namespace Engine {
 			newView.y = std::sin(pitchRad);
 			newView.z = std::sin(yawRad) * std::cos(pitchRad);
 			newView.normalize();
-			viewingDirection = newView;
 			window.setMousePosition(center);
+			return newView;
 		}
 	}
 }

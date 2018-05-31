@@ -66,7 +66,7 @@ namespace Engine {
 		GLint Shader::getUniformLocation(const std::string& name) const {
 			GLint location = glGetUniformLocation(id, name.c_str());
 			if (location == -1)
-				Utils::logWarning("Unifrom : " + name + ", location is -1");
+				Utils::logWarning("Uniform : " + name + ", location is -1");
 			return location;
 		}
 

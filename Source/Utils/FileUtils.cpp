@@ -1,5 +1,6 @@
 
 #include <fstream>
+#include <iostream>
 
 #include "FileUtils.h"
 #include "Log.h"
@@ -7,30 +8,27 @@
 namespace Engine {
 	namespace Utils {
 
+		using namespace std;
+
 		std::string readFile(const std::string& path) {
-			std::fstream reader;
-			std::string data = "";
-			reader.open(path.c_str());
+			ifstream reader;
+			reader.open(path);
 			if (!reader) {
-				logError("Failed to load file :" + path);
+				logError("Failed to open file : " + path);
 				return "";
 			}
-			std::string line;
-			while (std::getline(reader, line))
-				data += line + '\n';
-			return data;
+			reader.seekg(0, ios::end);
+			int size = reader.tellg();
+			char* buffer = new char[size + 1]();
+			reader.seekg(ios::beg);
+			reader.read(buffer, size);
+			std::string text(buffer);
+			delete[] buffer;
+			return text;
 		}
 
 		void readFile(const std::string& path, std::string& data) {
-			std::fstream reader;
-			reader.open(path.c_str());
-			if (!reader) {
-				logError("Failed to load file : " + path);
-				return;
-			}
-			std::string line;
-			while (std::getline(reader, line))
-				data += line + '\n';
+			data = readFile(path);
 		}
 	}
 }
