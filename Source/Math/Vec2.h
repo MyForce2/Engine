@@ -26,6 +26,8 @@ namespace Engine {
 			Vec2 normalized() const;
 			// Returns the dot product of this vector and the given vector
 			float dot(const Vec2& vec) const;
+			// Returns the distance between this vector and the given vector
+			float distance(const Vec2& vec) const;
 
 
 			// Operators

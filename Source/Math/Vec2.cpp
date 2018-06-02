@@ -46,6 +46,10 @@ namespace Engine {
 			return multiplied.x + multiplied.y;
 		}
 
+		float Vec2::distance(const Vec2& vec) const {
+			return Vec2(x - vec.x, y - vec.y).length();
+		}
+
 		Vec2 Vec2::operator+(float value) const {
 			return Vec2(x + value, y + value);
 		}

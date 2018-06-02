@@ -28,6 +28,8 @@ namespace Engine {
 			Vec3 cross(const Vec3& vec) const;
 			// Returns the dot product of this vector and the given vector
 			float dot(const Vec3& vec) const;
+			// Returns the distance between this vector and the given vector
+			float distance(const Vec3& vec) const;
 
 			// Operators
 			

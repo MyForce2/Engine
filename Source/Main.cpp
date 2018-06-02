@@ -19,8 +19,8 @@ using namespace Graphics;
 using std::chrono::high_resolution_clock;
 using std::chrono::duration;
 
-static const int WIDTH = 1280;
-static const int HEIGHT = 720;
+static const int WIDTH = 1600;
+static const int HEIGHT = 900;
 static const float ANGLE_PER_SEC = 120.f;
 
 static const int COLOR_BUFFER_SIZE = 8 * 3;
@@ -64,6 +64,9 @@ void handleInput(const Window& window, Camera* camera, float time) {
 	float cameraSpeed = 6.f * time;
 	Vec3 pos = camera->getPosition();
 	Vec3 direction = camera->getViewingDirection();
+	if (window.isKeyPressed(GLFW_KEY_T)) {
+		cameraSpeed *= 10;
+	}
 	if (window.isKeyPressed(GLFW_KEY_S)) {
 		pos -= direction * cameraSpeed;
 	}
@@ -86,18 +89,19 @@ void handleInput(const Window& window, Camera* camera, float time) {
 }
 
 int main() {
+	Utils::Log::getLog()->logMessage("Starting engine");
 	Window window("Engine", HEIGHT, WIDTH);
 	if (glewInit() != GLEW_OK) {
-		Utils::logError("Failed to init glew, terminating");
+		Utils::Log::getLog()->logError("Failed to init glew, terminating");
 		return EXIT_FAILURE;
 	}
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
 
+	Vec3 red(1.f, 0.f, 0.f);
 	Vec3 clearColor(0.f / 256.f, 191.f / 256.f, 255.f / 256.f);
-	glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
+	glClearColor(red.x, red.y, red.z, 1.f);
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
 	float positionsTex[] = {
@@ -179,10 +183,16 @@ int main() {
 		colorBuffer[i] = val;
 	}
 
-	int lim = 60;
-	int distance = 1;
+	int lim = 30;
+	int distance = 3;
+	int amount;
+	if (lim % distance == 0) {
+		amount = lim / distance;
+	} else {
+		amount = lim / distance + lim % distance;
+	}
 
-	int objAmount = lim * lim * lim;
+	int objAmount = amount * amount * amount;
 
 	Mat4* translationsBuffer = new Mat4[objAmount];
 	int index = 0;
@@ -190,11 +200,15 @@ int main() {
 		for (int y = 0; y < lim; y += distance) {
 			for (int z = 0; z < lim; z += distance) {
 				Vec3 translation(x, y, z);
-				translationsBuffer[index] = Mat4::translation(translation);
+				Mat4 rotation = Mat4::rotationX(90.f);
+				translationsBuffer[index] = Mat4::translation(translation) * rotation;
 				index++;
 			}
 		}
 	}
+
+
+
 
 
 	VertexArray vao;
@@ -215,7 +229,7 @@ int main() {
 	float w = float(WIDTH);
 	float h = float(HEIGHT);
 	Camera c(window, 0.1f, 100.f);
-	c.setPosition(Vec3(100, 0, 15));
+	c.setPosition(Vec3(40, 0, 15));
 	c.setViewingDirection(Vec3(0, 0, -1.f));
 	c.update(window);
 	Mat4 model(1.f);
@@ -226,13 +240,15 @@ int main() {
 	shader.setUniformMatrix4fv("projection", c.getProjectionMatrix());
 	shader.setUniform1i("texSlot", 0);
 	shader.setUniform3f("lightColor", clearColor);
-
+	Vec3 pointA(5, 6, 0);
+	Vec3 pointB(10, 12, 0);
+	std::cout << pointA.distance(pointB) << std::endl;
 
 	vao.bind();
 	shader.bind();
 	window.setMousePosition(window.getSize() / 2);
 
-
+	delete[] translationsBuffer;
 
 	Utils::Clock clock;
 
@@ -244,7 +260,7 @@ int main() {
 		clock.reset();
 		c.update(window);
 		shader.setUniformMatrix4fv("view", c.getViewMatrix());
-#if BLOCKS 
+#if BLOCKS
 		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, max);
 #else
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -252,5 +268,6 @@ int main() {
 		window.update();
 	}
 	glfwTerminate();
+	Utils::Log::closeLog();
 	return EXIT_SUCCESS;
 }

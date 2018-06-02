@@ -56,7 +56,7 @@ namespace Engine {
 				char* error = new char[length + 1];
 				glGetShaderInfoLog(shaderID, length + 1, &length, error);
 				std::string typeString = type == GL_FRAGMENT_SHADER ? "Fragment " : "Vertex ";
-				Utils::logError("Compilation failed : " + typeString + "shader");
+				Utils::Log::getLog()->logError("Compilation failed : " + typeString + "shader");
 				std::cout << error << std::endl;
 				return 0;
 			}
@@ -66,7 +66,7 @@ namespace Engine {
 		GLint Shader::getUniformLocation(const std::string& name) const {
 			GLint location = glGetUniformLocation(id, name.c_str());
 			if (location == -1)
-				Utils::logWarning("Uniform : " + name + ", location is -1");
+				Utils::Log::getLog()->logWarning("Location is -1 for uniform : " + name);
 			return location;
 		}
 

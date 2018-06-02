@@ -19,4 +19,5 @@ void main() {
 	gl_Position = pos;
 	fragColor = color;
 	texCoord = uvCoords;
+	
 }

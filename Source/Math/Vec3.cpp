@@ -57,6 +57,10 @@ namespace Engine {
 			return multiplied.x + multiplied.y + multiplied.z;
 		}
 
+		float Vec3::distance(const Vec3& vec) const {
+			return Vec3(x - vec.x, y - vec.y, z - vec.z).length();
+		}
+
 		Vec3 Vec3::operator+(float value) const {
 			return Vec3(x + value, y + value, z + value);
 		}

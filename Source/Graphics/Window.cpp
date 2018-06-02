@@ -11,12 +11,11 @@ namespace Engine {
 
 		Window::Window(const std::string& title, int height, int width) : title(title), height(height), width(width) {
 			if (!glfwInit())
-				Utils::logError("Failed to init glfw");
+				Utils::Log::getLog()->logError("Failed to init glfw");
 			glfwWindowHint(GLFW_SAMPLES, 4);
 			windowHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-			if (!windowHandle) {
-				Utils::logError("Failed to create window");
-			}
+			if (!windowHandle)
+				Utils::Log::getLog()->logError("Failed to create window");
 			glfwMakeContextCurrent(windowHandle);
 			glfwSwapInterval(0);
 			glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
