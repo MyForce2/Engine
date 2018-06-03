@@ -21,10 +21,20 @@ namespace Engine {
 			Mat4(const Mat4& mat);
 			~Mat4();
 
+			// Operators
+
 			Mat4 operator*(const Mat4& mat) const;
+			Mat4 operator*(float value) const;
+			Mat4 operator/(float value) const;
+			Mat4 operator+(float value) const;
+			Mat4 operator-(float value) const;
 			Vec4 operator*(const Vec4& mat) const;
+
 			void operator*=(const Mat4& mat);
-			void operator*=(const Vec4& mat);
+			void operator*=(float value);
+			void operator/=(float value);
+			void operator+=(float value);
+			void operator-=(float value);
 
 			Vec4& operator[](size_t index);
 			Vec4 operator[](size_t index) const;
@@ -49,6 +59,12 @@ namespace Engine {
 			static Mat4 perspective(float aspectRation, float fieldOfView, float near, float far);
 
 		private:
+
+			// More operators
+
+			friend Mat4 operator*(float value, const Mat4& mat);
+			friend Mat4 operator-(const Mat4& mat);
+
 			friend std::ostream& operator<<(std::ostream& os, const Mat4& mat);
 		};
 

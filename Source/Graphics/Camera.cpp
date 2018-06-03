@@ -47,15 +47,15 @@ namespace Engine {
 			view[0].x = x.x;
 			view[1].x = x.y;
 			view[2].x = x.z;
-			view[3].x = (x * -1).dot(position);
+			view[3].x = (-x).dot(position);
 			view[0].y = y.x;
 			view[1].y = y.y;
 			view[2].y = y.z;
-			view[3].y = (y * -1).dot(position);
+			view[3].y = (-y).dot(position);
 			view[0].z = z.x;
 			view[1].z = z.y;
 			view[2].z = z.z;
-			view[3].z = (z * -1).dot(position);
+			view[3].z = (-z).dot(position);
 			return view;
 		}
 

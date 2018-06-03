@@ -1,4 +1,6 @@
-Log started on : Sun Jun  3 16:21:01 2018
-[Sun Jun  3 16:21:01 2018] Starting engine
-[Sun Jun  3 16:21:02 2018] [Warning] Location is -1 for uniform : model
-[Sun Jun  3 16:21:02 2018] [Warning] Location is -1 for uniform : lightColor
+Log started on : Sun Jun  3 23:31:26 2018
+[Sun Jun  3 23:31:26 2018] Starting run
+[Sun Jun  3 23:31:27 2018] [Warning] Location is -1 for uniform : model
+[Sun Jun  3 23:31:27 2018] [Warning] Location is -1 for uniform : lightColor
+[Sun Jun  3 23:31:27 2018] [Error] Failed to open file [Crap.txt]
+Log ended on : Sun Jun  3 23:31:27 2018

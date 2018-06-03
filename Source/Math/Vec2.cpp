@@ -1,6 +1,8 @@
-#pragma once
 
 #include "Vec2.h"
+
+#include "Vec3.h"
+#include "Vec4.h"
 
 namespace Engine {
 	namespace Math {
@@ -14,6 +16,14 @@ namespace Engine {
 		}
 
 		Vec2::Vec2(float x, float y) : x(x), y(y) {
+
+		}
+
+		Vec2::Vec2(const Vec3& vec) : x(vec.x), y(vec.y) {
+
+		}
+
+		Vec2::Vec2(const Vec4& vec) : x(vec.x), y(vec.y) {
 
 		}
 
@@ -127,6 +137,14 @@ namespace Engine {
 
 		bool Vec2::operator!=(const Vec2& vec) const {
 			return !((*this) == vec);
+		}
+
+		Vec2 operator*(float value, const Vec2& vec) {
+			return vec * value;
+		}
+
+		Vec2 operator-(const Vec2& vec) {
+			return vec * -1;
 		}
 
 		std::ostream& operator<<(std::ostream& os, const Vec2& vec) {

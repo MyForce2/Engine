@@ -29,10 +29,14 @@ namespace Engine {
 			time_t now = time(0);
 			ctime_s(buffer, BUFFER_SIZE, &now);
 			std::string text = "Log started on : " + std::string(buffer);
-			fileHandle.write(text.c_str(), text.length());
+			fileHandle << text;
 		}
 
 		Log::~Log() {
+			time_t now = time(0);
+			ctime_s(buffer, BUFFER_SIZE, &now);
+			std::string text = "Log ended on : " + std::string(buffer);
+			fileHandle << text;
 			fileHandle.close();
 		}
 

@@ -14,7 +14,7 @@ namespace Engine {
 			ifstream reader;
 			reader.open(path);
 			if (!reader) {
-				Log::getLog()->logError("Failed to open file" + path);
+				Log::getLog()->logError("Failed to open file [" + path + ']');
 				return "";
 			}
 			reader.seekg(0, ios::end);

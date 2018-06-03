@@ -2,6 +2,9 @@
 
 #include "Vec4.h"
 
+#include "Vec2.h"
+#include "Vec3.h"
+
 namespace Engine {
 	namespace Math {
 
@@ -14,6 +17,14 @@ namespace Engine {
 		}
 
 		Vec4::Vec4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {
+
+		}
+
+		Vec4::Vec4(const Vec2& vec) : x(vec.x), y(vec.y), z(), w() {
+
+		}
+
+		Vec4::Vec4(const Vec3& vec) : x(vec.x), y(vec.y), z(vec.z), w() {
 
 		}
 
@@ -137,6 +148,14 @@ namespace Engine {
 
 		bool Vec4::operator!=(const Vec4& vec) const {
 			return !((*this) == vec);
+		}
+
+		Vec4 operator*(float value, const Vec4& vec) {
+			return vec * value;
+		}
+
+		Vec4 operator-(const Vec4& vec) {
+			return vec * -1;
 		}
 
 		std::ostream& operator<<(std::ostream& os, const Vec4& vec) {

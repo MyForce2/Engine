@@ -46,6 +46,34 @@ namespace Engine {
 			return result;
 		}
 
+		Mat4 Mat4::operator*(float value) const {
+			Mat4 result((*this));
+			for (int i = 0; i < 16; i++)
+				result.data[i] *= value;
+			return result;
+		}
+
+		Mat4 Mat4::operator/(float value) const {
+			Mat4 result((*this));
+			for (int i = 0; i < 16; i++)
+				result.data[i] /= value;
+			return result;
+		}
+
+		Mat4 Mat4::operator+(float value) const {
+			Mat4 result((*this));
+			for (int i = 0; i < 16; i++)
+				result.data[i] += value;
+			return result;
+		}
+
+		Mat4 Mat4::operator-(float value) const {
+			Mat4 result((*this));
+			for (int i = 0; i < 16; i++)
+				result.data[i] -= value;
+			return result;
+		}
+
 		Vec4 Mat4::operator*(const Vec4& vec) const {
 			Vec4 result;
 			float* vecData = (float*) (&vec);
@@ -60,11 +88,30 @@ namespace Engine {
 			return result;
 		}
 
-
 		void Mat4::operator*=(const Mat4& mat) {
 			Mat4 result = (*this) * mat;
 			for (int i = 0; i < 16; i++)
 				data[i] = result.data[i];
+		}
+
+		void Mat4::operator*=(float value) {
+			for (int i = 0; i < 16; i++)
+				data[i] *= value;
+		}
+
+		void Mat4::operator/=(float value) {
+			for (int i = 0; i < 16; i++)
+				data[i] /= value;
+		}
+
+		void Mat4::operator+=(float value) {
+			for (int i = 0; i < 16; i++)
+				data[i] += value;
+		}
+
+		void Mat4::operator-=(float value) {
+			for (int i = 0; i < 16; i++)
+				data[i] -= value;
 		}
 
 		Vec4 Mat4::operator[](size_t index) const {
@@ -169,6 +216,17 @@ namespace Engine {
 
 		float toRadians(float angle) {
 			return angle * M_PI / 180.f;
+		}
+
+		Mat4 operator*(float value, const Mat4& mat) {
+			return mat * value;
+		}
+
+		Mat4 operator-(const Mat4& mat) {
+			Mat4 result;
+			for (int i = 0; i < 16; i++)
+				result.data[i] = -mat.data[i];
+			return result;
 		}
 
 		std::ostream& operator<<(std::ostream& os, const Mat4& mat) {

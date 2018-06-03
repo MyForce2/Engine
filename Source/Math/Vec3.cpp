@@ -1,8 +1,10 @@
-#pragma once
 
 
 
 #include "Vec3.h"
+
+#include "Vec2.h"
+#include "Vec4.h"
 
 namespace Engine {
 	namespace Math {
@@ -16,6 +18,14 @@ namespace Engine {
 		}
 
 		Vec3::Vec3(float x, float y, float z) : x(x), y(y), z(z) {
+
+		}
+
+		Vec3::Vec3(const Vec2& vec) : x(vec.x), y(vec.y), z() {
+
+		}
+
+		Vec3::Vec3(const Vec4& vec) : x(vec.x), y(vec.y), z(vec.z) {
 
 		}
 
@@ -147,6 +157,14 @@ namespace Engine {
 
 		bool Vec3::operator!=(const Vec3& vec) const {
 			return !((*this) == vec);
+		}
+
+		Vec3 operator*(float value, const Vec3& vec) {
+			return vec * value;
+		}
+
+		Vec3 operator-(const Vec3& vec) {
+			return vec * -1;
 		}
 
 		std::ostream& operator<<(std::ostream& os, const Vec3& vec) {

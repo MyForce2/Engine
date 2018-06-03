@@ -2,8 +2,13 @@
 
 #include <iostream>
 
+
+
 namespace Engine {
 	namespace Math {
+
+		struct Vec2;
+		struct Vec3;
 
 		/*
 		A struct used to hold and wrap four values
@@ -14,6 +19,8 @@ namespace Engine {
 			Vec4();
 			Vec4(float value);
 			Vec4(float x, float y, float z, float w);
+			Vec4(const Vec2& vec);
+			Vec4(const Vec3& vec);
 			Vec4(const Vec4& vec);
 			~Vec4();
 
@@ -45,6 +52,12 @@ namespace Engine {
 			bool operator!=(const Vec4& vec) const;
 
 		private:
+
+			// More operators
+
+			friend Vec4 operator*(float value, const Vec4& vec);
+			friend Vec4 operator-(const Vec4& vec);
+
 			friend std::ostream& operator<<(std::ostream& os, const Vec4& vec);
 		};
 	}
