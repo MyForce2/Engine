@@ -1,4 +1,4 @@
-Log started on : Sun Jun  3 00:42:10 2018
-[Sun Jun  3 00:42:10 2018] Starting engine
-[Sun Jun  3 00:42:10 2018] [Warning] Location is -1 for uniform : model
-[Sun Jun  3 00:42:10 2018] [Warning] Location is -1 for uniform : lightColor
+Log started on : Sun Jun  3 16:21:01 2018
+[Sun Jun  3 16:21:01 2018] Starting engine
+[Sun Jun  3 16:21:02 2018] [Warning] Location is -1 for uniform : model
+[Sun Jun  3 16:21:02 2018] [Warning] Location is -1 for uniform : lightColor

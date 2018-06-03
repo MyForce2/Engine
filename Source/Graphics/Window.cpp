@@ -38,6 +38,14 @@ namespace Engine {
 			return glfwGetKey(windowHandle, key) == GLFW_RELEASE;
 		}
 
+		bool Window::isMouseButtonPressed(int button) const {
+			return glfwGetMouseButton(windowHandle, button) == GLFW_PRESS;
+		}
+
+		bool Window::isMouseButtonReleased(int button) const {
+			return glfwGetMouseButton(windowHandle, button) == GLFW_RELEASE;
+		}
+
 		void Window::update() {
 			glfwSwapBuffers(windowHandle);
 			glfwPollEvents();

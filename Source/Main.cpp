@@ -4,6 +4,8 @@
 #include "Graphics\Graphics.h"
 #include "Utils\Clock.h"
 #include "Utils\Log.h"
+#include "Math/Plane.h"
+#include "Math/Ray.h"
 
 
 #include <iostream>
@@ -19,8 +21,8 @@ using namespace Graphics;
 using std::chrono::high_resolution_clock;
 using std::chrono::duration;
 
-static const int WIDTH = 1600;
-static const int HEIGHT = 900;
+static const int WIDTH = 1280;
+static const int HEIGHT = 720;
 static const float ANGLE_PER_SEC = 120.f;
 
 static const int COLOR_BUFFER_SIZE = 8 * 3;
@@ -49,6 +51,17 @@ void fillColorBuffer(float* buffer) {
 		val /= 256;
 		buffer[i] = val;
 	}
+}
+
+void crossTest(const Vec3& position, const Vec3& direction) {
+	Vec3 pointA(1.f, 0.f, -0.5f);
+	Vec3 pointB(1.f, 1.f, -0.5f);
+	Vec3 pointC(0.f, 0.f, -0.5f);
+	Plane b(pointA, pointB, pointC);
+	float distance = 5.f;
+	Vec3 end = position + (direction * distance);
+	Ray ray(position, end);
+	std::cout << std::boolalpha << ray.intersectsWith(b, distance) << std::endl;
 }
 
 
@@ -85,6 +98,9 @@ void handleInput(const Window& window, Camera* camera, float time) {
 	if (window.isKeyPressed(GLFW_KEY_R)) {
 		pos -= Vec3(0, 1, 0) * cameraSpeed;
 	}
+	if (window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_1)) {
+		crossTest(pos, direction);
+	}
 	camera->setPosition(pos);
 }
 
@@ -95,13 +111,12 @@ int main() {
 		Utils::Log::getLog()->logError("Failed to init glew, terminating");
 		return EXIT_FAILURE;
 	}
-
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
 	Vec3 red(1.f, 0.f, 0.f);
-	Vec3 clearColor(0.f / 256.f, 191.f / 256.f, 255.f / 256.f);
-	glClearColor(red.x, red.y, red.z, 1.f);
+	Vec3 clearColor(0.f / 255.f, 191.f / 255.f, 255.f / 255.f);
+	glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
 	float positionsTex[] = {
@@ -183,7 +198,7 @@ int main() {
 		colorBuffer[i] = val;
 	}
 
-	int lim = 30;
+	int lim = 70;
 	int distance = 3;
 	int amount;
 	if (lim % distance == 0) {
@@ -208,7 +223,7 @@ int main() {
 	}
 
 
-
+	
 
 
 	VertexArray vao;
@@ -228,7 +243,7 @@ int main() {
 	Mat4 matrix(1.f);
 	float w = float(WIDTH);
 	float h = float(HEIGHT);
-	Camera c(window, 0.1f, 100.f);
+	Camera c(window, 0.1f, 250.f);
 	c.setPosition(Vec3(40, 0, 15));
 	c.setViewingDirection(Vec3(0, 0, -1.f));
 	c.update(window);
@@ -240,9 +255,8 @@ int main() {
 	shader.setUniformMatrix4fv("projection", c.getProjectionMatrix());
 	shader.setUniform1i("texSlot", 0);
 	shader.setUniform3f("lightColor", clearColor);
-	Vec3 pointA(5, 6, 0);
-	Vec3 pointB(10, 12, 0);
-	std::cout << pointA.distance(pointB) << std::endl;
+
+
 
 	vao.bind();
 	shader.bind();

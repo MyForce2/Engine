@@ -22,6 +22,9 @@ namespace Engine {
 			bool isKeyPressed(int key) const;
 			bool isKeyReleased(int key) const;
 
+			bool isMouseButtonPressed(int button) const;
+			bool isMouseButtonReleased(int button) const;
+
 			
 
 			void update();
