@@ -1,6 +1,8 @@
-Log started on : Sun Jun  3 23:31:26 2018
-[Sun Jun  3 23:31:26 2018] Starting run
-[Sun Jun  3 23:31:27 2018] [Warning] Location is -1 for uniform : model
-[Sun Jun  3 23:31:27 2018] [Warning] Location is -1 for uniform : lightColor
-[Sun Jun  3 23:31:27 2018] [Error] Failed to open file [Crap.txt]
-Log ended on : Sun Jun  3 23:31:27 2018
+Log started on : Mon Jun  4 18:12:21 2018
+[Mon Jun  4 18:12:21 2018] Starting run
+[Mon Jun  4 18:12:22 2018] [Warning] Location is -1 for uniform : model
+[Mon Jun  4 18:12:22 2018] [Warning] Location is -1 for uniform : lightColor
+[Mon Jun  4 18:12:22 2018] [Error] Failed to open file [Resources/Shaders/PPVertex.shader]
+[Mon Jun  4 18:12:22 2018] [Error] Failed to open file [Resources/Shaders/PPFragment.shader]
+[Mon Jun  4 18:12:22 2018] [Warning] Location is -1 for uniform : textureSlot
+Log ended on : Mon Jun  4 18:12:24 2018

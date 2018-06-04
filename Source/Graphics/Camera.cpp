@@ -28,8 +28,11 @@ namespace Engine {
 			view = generateViewMatrix();
 			viewingDirection = generateViewDirection(window);
 			if (windowSize != window.getSize()) {
+				std::cout << "Change" << std::endl;
 				windowSize = window.getSize();
 				projection = Mat4::perspective(windowSize.x / windowSize.y, 45.f, near, far);
+				glViewport(0, 0, windowSize.x, windowSize.y);
+				
 			}
 		}
 

@@ -71,23 +71,31 @@ namespace Engine {
 		}
 
 		void Shader::setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) const {
+			bind();
 			GLint location = getUniformLocation(name);
 			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix.data[0]);
+			unBind();
 		}
 
 		void Shader::setUniform1i(const std::string& name, int val) const {
+			bind();
 			GLint location = getUniformLocation(name);
 			glUniform1i(location, val);
+			unBind();
 		}
 
 		void Shader::setUniform2f(const std::string& name, const Math::Vec2& vec) const {
+			bind();
 			GLint location = getUniformLocation(name);
 			glUniform2f(location, vec.x, vec.y);
+			unBind();
 		}
 
 		void Shader::setUniform3f(const std::string& name, const Math::Vec3& vec) const {
+			bind();
 			GLint location = getUniformLocation(name);
 			glUniform3f(location, vec.x, vec.y, vec.z);
+			unBind();
 		}
 
 		void Shader::bindUniformBuffer(const UniformBuffer& ubo, const std::string& name, GLuint blockBinding) const {

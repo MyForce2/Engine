@@ -7,6 +7,8 @@
 #include "Math/Plane.h"
 #include "Math/Ray.h"
 #include "Utils/FileUtils.h"
+#include "Graphics/BasicRenderer.h"
+
 
 
 #include <iostream>
@@ -227,16 +229,44 @@ int main() {
 	shader.setUniformMatrix4fv("projection", c.getProjectionMatrix());
 	shader.setUniform1i("texSlot", 0);
 	shader.setUniform3f("lightColor", clearColor);
-	std::string fileText = Utils::readFile("Crap.txt");
 
+
+	float quadPos[] = {
+		1.f, 1.f, 1.f, 1.f,
+		0.f, 0.f, 0.f, 0.f,
+		1.f, 0.f, 1.f, 0.f,
+		0.f, 1.f, 0.f, 1.f
+	};
+
+	unsigned int quadIndices[] = {
+		0, 3, 1, 0, 1, 2
+	};
+
+	Shader fboShader("Resources/Shaders/PPVertex.shader", "Resources/Shaders/PPFragment.shader");
+	IndexBuffer ibo(quadIndices, 6);
+	VertexBuffer fboBuff(quadPos, sizeof(quadPos));
+	VBLayout layout;
+	layout.addElement(2, GL_FLOAT);
+	layout.addElement(2, GL_FLOAT);
+	VertexArray vaoQuad;
+	vaoQuad.addBuffer(fboBuff, layout);
+	fboShader.setUniform1i("textureSlot", 31);
+
+
+
+
+	BasicRenderer renderer;
 
 	vao.bind();
 	shader.bind();
+	t.setSlot();
 	window.setMousePosition(window.getSize() / 2);
 
 	delete[] translationsBuffer;
 
 	Utils::Clock clock;
+
+
 
 	
 	int max = lim * lim * lim;
@@ -246,11 +276,8 @@ int main() {
 		clock.reset();
 		c.update(window);
 		shader.setUniformMatrix4fv("view", c.getViewMatrix());
-#if BLOCKS
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 36, max);
-#else
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-#endif
+		renderer.renderArraysInstanced(vao, shader, 0, 36, objAmount);
+
 		window.update();
 	}
 	glfwTerminate();
