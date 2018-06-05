@@ -1,15 +1,16 @@
 #pragma once
 
+#include "FrameBuffer.h"
 #include <GLFW\glfw3.h>
-#include <iostream>
 
 #include "Window.h"
 #include "Utils\Log.h"
 
+
 namespace Engine {
 	namespace Graphics {
 
-		Window::Window(const std::string& title, int height, int width) : title(title), height(height), width(width) {
+		Window::Window(const std::string& title, int height, int width, GLbitfield clearMask) : title(title), height(height), width(width), clearMask(clearMask) {
 			if (!glfwInit())
 				Utils::Log::getLog()->logError("Failed to init glfw");
 			glfwWindowHint(GLFW_SAMPLES, 4);
@@ -50,7 +51,7 @@ namespace Engine {
 			glfwGetWindowSize(windowHandle, &width, &height);
 			glfwSwapBuffers(windowHandle);
 			glfwPollEvents();
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			FrameBuffer::clearBuffer(clearMask);
 		}
 
 		Math::Vec2 Window::getMousePosition() const {

@@ -13,9 +13,10 @@ namespace Engine {
 			int height, width;
 			std::string title;
 			GLFWwindow* windowHandle;
+			GLbitfield clearMask;
 
 		public:
-			Window(const std::string& title, int height, int width);
+			Window(const std::string& title, int height, int width, GLbitfield clearMask);
 			~Window();
 
 			bool isClosed() const;

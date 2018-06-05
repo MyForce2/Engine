@@ -8,6 +8,7 @@
 #include "Math/Ray.h"
 #include "Utils/FileUtils.h"
 #include "Graphics/BasicRenderer.h"
+#include "Graphics/FrameBuffer.h"
 
 
 
@@ -85,7 +86,7 @@ void handleInput(const Window& window, Camera* camera, float time) {
 
 int main() {
 	Utils::Log::getLog()->logMessage("Starting run");
-	Window window("Engine", HEIGHT, WIDTH);
+	Window window("Engine", HEIGHT, WIDTH, GL_COLOR_BUFFER_BIT);
 	if (glewInit() != GLEW_OK) {
 		Utils::Log::getLog()->logError("Failed to init glew, terminating");
 		return EXIT_FAILURE;
@@ -97,60 +98,65 @@ int main() {
 	glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
+	float start = 0.f;
+	float end = 1.f;;
+
+
+
 	float positionsTex[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-		0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		-1.f, -1.f, -1.f,  start, start, // Bottom-left
+		1.f,  1.f, -1.f,  end, end, // top-right
+		1.f, -1.f, -1.f,  end, start, // bottom-right         
+		1.f,  1.f, -1.f,  end, end, // top-right
+		-1.f, -1.f, -1.f,  start, start, // bottom-left
+		-1.f,  1.f, -1.f,  start, end, // top-left
 		
 		// Front face
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-		0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-		0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-		0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		-1.f, -1.f,  1.f,  start, start, // bottom-left
+		1.f, -1.f,  1.f,  end, start, // bottom-right
+		1.f,  1.f,  1.f,  end, end, // top-right
+		1.f,  1.f,  1.f,  end, end, // top-right
+		-1.f,  1.f,  1.f,  start, end, // top-left
+		-1.f, -1.f,  1.f,  start, start, // bottom-left
 		// Left face
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+		-1.f,  1.f,  1.f,  end, start, // top-right
+		-1.f,  1.f, -1.f,  end, end, // top-left
+		-1.f, -1.f, -1.f,  start, end, // bottom-left
+		-1.f, -1.f, -1.f,  start, end, // bottom-left
+		-1.f, -1.f,  1.f,  start, start, // bottom-right
+		-1.f,  1.f,  1.f,  end, start, // top-right
 		// Right face
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-		0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
-		0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-		0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
+		1.f,  1.f,  1.f,  end, start, // top-left
+		1.f, -1.f, -1.f,  start, end, // bottom-right
+		1.f,  1.f, -1.f,  end, end, // top-right         
+		1.f, -1.f, -1.f,  start, end, // bottom-right
+		1.f,  1.f,  1.f,  end, start, // top-left
+		1.f, -1.f,  1.f,  start, start, // bottom-left     
 		// Bottom face
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-		0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
-		0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-		0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+		-1.f, -1.f, -1.f,  start, end, // top-right
+		1.f, -1.f, -1.f,  end, end, // top-left
+		1.f, -1.f,  1.f,  end, start, // bottom-left
+		1.f, -1.f,  1.f,  end, start, // bottom-left
+		-1.f, -1.f,  1.f,  start, start, // bottom-right
+		-1.f, -1.f, -1.f,  start, end, // top-right
 		// Top face
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-		0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
-		0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left
+		-1.f,  1.f, -1.f,  start, end, // top-left
+		1.f,  1.f,  1.f,  end, start, // bottom-right
+		1.f,  1.f, -1.f,  end, end, // top-right     
+		1.f,  1.f,  1.f,  end, start, // bottom-right
+		-1.f,  1.f, -1.f,  start, end, // top-left
+		-1.f,  1.f,  1.f,  start, start  // bottom-left
 	};
 
 	float positions[] = {
-		0.5f, 0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
-		0.5f, 0.5f, 0.5,
-		0.5f, -0.5f, 0.5,
-		-0.5f, -0.5f, 0.5,
-		-0.5f, 0.5f, 0.5
+		1.f, 1.f, -1.f,
+		1.f, -1.f, -1.f,
+		-1.f, -1.f, -1.f,
+		-1.f, 1.f, -1.f,
+		1.f, 1.f, 0.5,
+		1.f, -1.f, 0.5,
+		-1.f, -1.f, 0.5,
+		-1.f, 1.f, 0.5
 	};
 
 	unsigned int indices[] = {
@@ -222,7 +228,7 @@ int main() {
 	c.setViewingDirection(Vec3(0, 0, -1.f));
 	c.update(window);
 	Mat4 model(1.f);
-	Texture t("Resources/Textures/Texture.png");
+	Texture t("Resources/Textures/grass_side.png");
 	t.setSlot();
 	shader.setUniformMatrix4fv("view", c.getViewMatrix());
 	shader.setUniformMatrix4fv("model", model);
@@ -232,10 +238,13 @@ int main() {
 
 
 	float quadPos[] = {
-		1.f, 1.f, 1.f, 1.f,
-		0.f, 0.f, 0.f, 0.f,
-		1.f, 0.f, 1.f, 0.f,
-		0.f, 1.f, 0.f, 1.f
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		-1.0f, -1.0f,  0.0f, 0.0f,
+		1.0f, -1.0f,  1.0f, 0.0f,
+
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		1.0f, -1.0f,  1.0f, 0.0f,
+		1.0f,  1.0f,  1.0f, 1.0f
 	};
 
 	unsigned int quadIndices[] = {
@@ -250,10 +259,11 @@ int main() {
 	layout.addElement(2, GL_FLOAT);
 	VertexArray vaoQuad;
 	vaoQuad.addBuffer(fboBuff, layout);
-	fboShader.setUniform1i("textureSlot", 31);
+	fboShader.setUniform1i("u_TextureSlot", 0);
 
 
-
+	FrameBuffer fbo(w, h);
+	fbo.bindRenderBuffer();
 
 	BasicRenderer renderer;
 
@@ -276,7 +286,16 @@ int main() {
 		clock.reset();
 		c.update(window);
 		shader.setUniformMatrix4fv("view", c.getViewMatrix());
+		fbo.bind();
+		glEnable(GL_DEPTH_TEST);
+		FrameBuffer::clearBuffer(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		t.setSlot();
 		renderer.renderArraysInstanced(vao, shader, 0, 36, objAmount);
+		fbo.unBind();
+		glDisable(GL_DEPTH_TEST);
+		fboShader.bind();
+		fbo.bindTexture();
+		renderer.renderArrays(vaoQuad, fboShader, 0, 6);
 
 		window.update();
 	}
