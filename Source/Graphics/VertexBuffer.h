@@ -13,9 +13,16 @@ namespace Engine {
 			GLuint id;
 			
 		public:
-			VertexBuffer();
+			VertexBuffer(GLsizeiptr size);
+			VertexBuffer(GLsizeiptr size, GLenum usage);
+
 			// Size in bytes
-			VertexBuffer(const void* data, size_t size);
+			VertexBuffer(const GLvoid* data, GLsizeiptr size);
+			VertexBuffer(const GLvoid* data, GLsizeiptr size, GLenum usage);
+
+			VertexBuffer(const VertexBuffer& vbo) = delete;
+			VertexBuffer(VertexBuffer&& vbo) = delete;
+
 			~VertexBuffer();
 
 
@@ -24,7 +31,8 @@ namespace Engine {
 			// Unbinds this buffer
 			void unBind() const;
 			// Refill this buffer with new data
-			void setData(const void* data, size_t size);
+			void setData(const GLvoid* data, GLsizeiptr size);
+
 			inline GLuint getID() const { return id; }
 		};
 	}

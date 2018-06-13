@@ -10,8 +10,6 @@ namespace Engine {
 
 
 		FrameBuffer::FrameBuffer(float width, float height) : windowSize(width, height) {
-			glGenFramebuffers(1, &bufferID);
-			bind();
 			handleCreation();
 			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 				Utils::Log::getLog()->logError("Failed to create frame buffer, id : [" + bufferID + ']');
@@ -56,12 +54,15 @@ namespace Engine {
 			windowSize = size;
 			glDeleteTextures(1, &textureID);
 			glDeleteRenderbuffers(1, &rboID);
+			glDeleteFramebuffers(1, &bufferID);
 			handleCreation();
 		}
 
 		void FrameBuffer::handleCreation() {
 			glGenTextures(1, &textureID);
 			glGenRenderbuffers(1, &rboID);
+			glGenFramebuffers(1, &bufferID);
+			bind();
 			bindTexture();
 			bindRenderBuffer();
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

@@ -29,7 +29,7 @@ namespace Engine {
 			vao.bind();
 			shader.bind();
 			ibo.bind();
-			glDrawElementsInstanced(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_BYTE, nullptr, instances);
+			glDrawElementsInstanced(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_SHORT, nullptr, instances);
 			vao.unBind();
 			shader.unBind();
 			ibo.unBind();
@@ -39,7 +39,7 @@ namespace Engine {
 			vao.bind();
 			shader.bind();
 			ibo.bind();
-			glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_BYTE, nullptr);
+			glDrawElements(GL_TRIANGLES, ibo.getCount(), GL_UNSIGNED_SHORT, nullptr);
 			vao.unBind();
 			shader.unBind();
 			ibo.unBind();

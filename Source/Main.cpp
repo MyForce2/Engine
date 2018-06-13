@@ -9,6 +9,7 @@
 #include "Utils/FileUtils.h"
 #include "Graphics/BasicRenderer.h"
 #include "Graphics/FrameBuffer.h"
+#include "Graphics/TextureAtlas.h"
 
 
 
@@ -48,13 +49,10 @@ struct Timer {
 	}
 };
 
-void test(Mat4& model, float time, float tUnit) {
-	Vec3 trans = Vec3(tUnit, tUnit, 0.f);
-	float angle = time * ANGLE_PER_SEC;
-	model = Mat4::translation(trans * -1) * model;
-	model = Mat4::rotationZ(angle) * model;
-	model = Mat4::translation(trans) * model;
+Vec3* createNormalsBuffer(float* vertices) {
+	return nullptr;
 }
+
 
 void handleInput(const Window& window, Camera* camera, float time) {
 	float cameraSpeed = 6.f * time;
@@ -101,78 +99,69 @@ int main() {
 	float start = 0.f;
 	float end = 1.f;;
 
+	TextureAtlas atlas("Resources/Textures/DefaultPack2.png", 256, 16);
+	Texture tex = atlas.getTexture();
+	auto uv = atlas.getUVCoordinates(0);
+
+	float xMaxA = uv[0];
+	float yMaxA = uv[1];
+	float xMinA = uv[2];
+	float yMinA = uv[5];
+
+	auto uvTwo = atlas.getUVCoordinates(0);
+
+	float xMax = uvTwo[0];
+	float yMax = uvTwo[1];
+	float xMin = uvTwo[2];
+	float yMin = uvTwo[5];
+
 
 
 	float positionsTex[] = {
-		-1.f, -1.f, -1.f,  start, start, // Bottom-left
-		1.f,  1.f, -1.f,  end, end, // top-right
-		1.f, -1.f, -1.f,  end, start, // bottom-right         
-		1.f,  1.f, -1.f,  end, end, // top-right
-		-1.f, -1.f, -1.f,  start, start, // bottom-left
-		-1.f,  1.f, -1.f,  start, end, // top-left
+		-1.f, -1.f, -1.f,  xMinA, yMinA, // Bottom-left
+		1.f,  1.f, -1.f,  xMaxA, yMaxA, // top-right
+		1.f, -1.f, -1.f,  xMaxA, yMinA, // bottom-right         
+		1.f,  1.f, -1.f,  xMaxA, yMaxA, // top-right
+		-1.f, -1.f, -1.f,  xMinA, yMinA, // bottom-left
+		-1.f,  1.f, -1.f,  xMinA, yMaxA, // top-left
 		
 		// Front face
-		-1.f, -1.f,  1.f,  start, start, // bottom-left
-		1.f, -1.f,  1.f,  end, start, // bottom-right
-		1.f,  1.f,  1.f,  end, end, // top-right
-		1.f,  1.f,  1.f,  end, end, // top-right
-		-1.f,  1.f,  1.f,  start, end, // top-left
-		-1.f, -1.f,  1.f,  start, start, // bottom-left
+		-1.f, -1.f,  1.f,   xMinA, yMinA, // bottom-left
+		1.f, -1.f,  1.f,   xMaxA, yMinA,  // bottom-right
+		1.f,  1.f,  1.f,   xMaxA, yMaxA,  // top-right
+		1.f,  1.f,  1.f,   xMaxA, yMaxA,  // top-right
+		-1.f,  1.f,  1.f,   xMinA, yMaxA, // top-left
+		-1.f, -1.f,  1.f,   xMinA, yMinA, // bottom-left
 		// Left face
-		-1.f,  1.f,  1.f,  end, start, // top-right
-		-1.f,  1.f, -1.f,  end, end, // top-left
-		-1.f, -1.f, -1.f,  start, end, // bottom-left
-		-1.f, -1.f, -1.f,  start, end, // bottom-left
-		-1.f, -1.f,  1.f,  start, start, // bottom-right
-		-1.f,  1.f,  1.f,  end, start, // top-right
+		-1.f,  1.f,  1.f,  xMax, yMax, // top-right
+		-1.f,  1.f, -1.f,  xMin, yMax, // top-left
+		-1.f, -1.f, -1.f,  xMin, yMin, // bottom-left
+		-1.f, -1.f, -1.f,  xMin, yMin, // bottom-left
+		-1.f, -1.f,  1.f,  xMax, yMin, // bottom-right
+		-1.f,  1.f,  1.f,  xMax, yMax, // top-right
 		// Right face
-		1.f,  1.f,  1.f,  end, start, // top-left
-		1.f, -1.f, -1.f,  start, end, // bottom-right
-		1.f,  1.f, -1.f,  end, end, // top-right         
-		1.f, -1.f, -1.f,  start, end, // bottom-right
-		1.f,  1.f,  1.f,  end, start, // top-left
-		1.f, -1.f,  1.f,  start, start, // bottom-left     
+		1.f,  1.f,  1.f,  xMin, yMax, // top-left
+		1.f, -1.f, -1.f,  xMax, yMin, // bottom-right
+		1.f,  1.f, -1.f,  xMax, yMax, // top-right         
+		1.f, -1.f, -1.f,  xMax, yMin, // bottom-right
+		1.f,  1.f,  1.f,  xMin, yMax, // top-left
+		1.f, -1.f,  1.f,  xMin, yMin, // bottom-left     
 		// Bottom face
-		-1.f, -1.f, -1.f,  start, end, // top-right
-		1.f, -1.f, -1.f,  end, end, // top-left
-		1.f, -1.f,  1.f,  end, start, // bottom-left
-		1.f, -1.f,  1.f,  end, start, // bottom-left
-		-1.f, -1.f,  1.f,  start, start, // bottom-right
-		-1.f, -1.f, -1.f,  start, end, // top-right
+		-1.f, -1.f, -1.f,  xMax, yMax, // top-right
+		1.f, -1.f, -1.f,  xMin, yMax, // top-left
+		1.f, -1.f,  1.f,  xMin, yMin, // bottom-left
+		1.f, -1.f,  1.f,  xMin, yMin, // bottom-left
+		-1.f, -1.f,  1.f,  xMax, yMin, // bottom-right
+		-1.f, -1.f, -1.f,  xMax, yMax, // top-right
 		// Top face
-		-1.f,  1.f, -1.f,  start, end, // top-left
-		1.f,  1.f,  1.f,  end, start, // bottom-right
-		1.f,  1.f, -1.f,  end, end, // top-right     
-		1.f,  1.f,  1.f,  end, start, // bottom-right
-		-1.f,  1.f, -1.f,  start, end, // top-left
-		-1.f,  1.f,  1.f,  start, start  // bottom-left
+		-1.f,  1.f, -1.f,  xMin, yMax, // top-left
+		1.f,  1.f,  1.f,  xMax, yMin, // bottom-right
+		1.f,  1.f, -1.f,  xMax, yMax, // top-right     
+		1.f,  1.f,  1.f,  xMax, yMin, // bottom-right
+		-1.f,  1.f, -1.f,  xMin, yMax, // top-left
+		-1.f,  1.f,  1.f,  xMin, yMin  // bottom-left
 	};
 
-	float positions[] = {
-		1.f, 1.f, -1.f,
-		1.f, -1.f, -1.f,
-		-1.f, -1.f, -1.f,
-		-1.f, 1.f, -1.f,
-		1.f, 1.f, 0.5,
-		1.f, -1.f, 0.5,
-		-1.f, -1.f, 0.5,
-		-1.f, 1.f, 0.5
-	};
-
-	unsigned int indices[] = {
-		0, 1, 2,
-		0, 3, 2,
-		0, 1, 5,
-		0, 4, 5,
-		0, 3, 4,
-		4, 7, 3,
-		4, 5, 6,
-		4, 7, 6,
-		7, 3, 2,
-		7, 6, 2,
-		1, 2, 5,
-		6, 5, 2
-	};
 
 	float colorBuffer[36 * 3];
 	srand(time(nullptr));
@@ -247,7 +236,7 @@ int main() {
 		1.0f,  1.0f,  1.0f, 1.0f
 	};
 
-	unsigned int quadIndices[] = {
+	unsigned short quadIndices[] = {
 		0, 3, 1, 0, 1, 2
 	};
 
@@ -260,7 +249,7 @@ int main() {
 	VertexArray vaoQuad;
 	vaoQuad.addBuffer(fboBuff, layout);
 	fboShader.setUniform1i("u_TextureSlot", 0);
-
+	fboShader.setUniform3f("u_ClearColor", clearColor);
 
 	FrameBuffer fbo(w, h);
 	fbo.bindRenderBuffer();
@@ -276,8 +265,7 @@ int main() {
 
 	Utils::Clock clock;
 
-
-
+	Vec2 size = window.getSize();
 	
 	int max = lim * lim * lim;
 
@@ -285,11 +273,15 @@ int main() {
 		handleInput(window, &c, clock.getTimePassed());
 		clock.reset();
 		c.update(window);
+		if (window.getSize() != size) {
+			size = window.getSize();
+			fbo.setSize(size);
+		}
 		shader.setUniformMatrix4fv("view", c.getViewMatrix());
 		fbo.bind();
 		glEnable(GL_DEPTH_TEST);
 		FrameBuffer::clearBuffer(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		t.setSlot();
+		tex.setSlot();
 		renderer.renderArraysInstanced(vao, shader, 0, 36, objAmount);
 		fbo.unBind();
 		glDisable(GL_DEPTH_TEST);
