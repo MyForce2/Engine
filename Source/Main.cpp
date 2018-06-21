@@ -2,14 +2,8 @@
 #include <GLFW\glfw3.h>
 #include "Math\Math.h"
 #include "Graphics\Graphics.h"
-#include "Utils\Clock.h"
-#include "Utils\Log.h"
-#include "Math/Plane.h"
-#include "Math/Ray.h"
-#include "Utils/FileUtils.h"
-#include "Graphics/BasicRenderer.h"
-#include "Graphics/FrameBuffer.h"
-#include "Graphics/TextureAtlas.h"
+#include "Utils/Utils.h"
+
 
 
 
@@ -83,7 +77,7 @@ void handleInput(const Window& window, Camera* camera, float time) {
 }
 
 int main() {
-	Utils::Log::getLog()->logMessage("Starting run");
+	Utils::Log::getLog()->logInfo("Starting run");
 	Window window("Engine", HEIGHT, WIDTH, GL_COLOR_BUFFER_BIT);
 	if (glewInit() != GLEW_OK) {
 		Utils::Log::getLog()->logError("Failed to init glew, terminating");
@@ -100,7 +94,7 @@ int main() {
 	float end = 1.f;;
 
 	TextureAtlas atlas("Resources/Textures/DefaultPack2.png", 256, 16);
-	Texture tex = atlas.getTexture();
+	const Texture& tex = atlas.getTexture();
 	auto uv = atlas.getUVCoordinates(0);
 
 	float xMaxA = uv[0];
@@ -227,17 +221,14 @@ int main() {
 
 
 	float quadPos[] = {
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		1.0f, -1.0f,  1.0f, 0.0f,
-
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		1.0f, -1.0f,  1.0f, 0.0f,
-		1.0f,  1.0f,  1.0f, 1.0f
+		1.f, 1.f, 1.f, 1.f,
+		-1.f, 1.f, 0.f, 1.f,
+		-1.f, -1.f, 0.f, 0.f,
+		1.f, -1.f, 1.f, 0.f
 	};
 
 	unsigned short quadIndices[] = {
-		0, 3, 1, 0, 1, 2
+		0, 1, 2, 0, 2, 3
 	};
 
 	Shader fboShader("Resources/Shaders/PPVertex.shader", "Resources/Shaders/PPFragment.shader");
@@ -246,13 +237,15 @@ int main() {
 	VBLayout layout;
 	layout.addElement(2, GL_FLOAT);
 	layout.addElement(2, GL_FLOAT);
-	VertexArray vaoQuad;
-	vaoQuad.addBuffer(fboBuff, layout);
+	VertexArray quadVao;
+	quadVao.addBuffer(fboBuff, layout);
 	fboShader.setUniform1i("u_TextureSlot", 0);
 	fboShader.setUniform3f("u_ClearColor", clearColor);
 
 	FrameBuffer fbo(w, h);
 	fbo.bindRenderBuffer();
+
+	Shader s("Resources/Shaders/QuadVertex.shader", "Resources/Shaders/QuadFragment.shader");
 
 	BasicRenderer renderer;
 
@@ -287,7 +280,7 @@ int main() {
 		glDisable(GL_DEPTH_TEST);
 		fboShader.bind();
 		fbo.bindTexture();
-		renderer.renderArrays(vaoQuad, fboShader, 0, 6);
+		renderer.renderElements(quadVao, fboShader, ibo);
 
 		window.update();
 	}

@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "VBElement.h"
-#include "VertexBuffer.h"
 
 namespace Engine {
 	namespace Graphics {

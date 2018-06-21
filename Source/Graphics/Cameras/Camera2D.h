@@ -3,7 +3,7 @@
 #include "Math\Mat4.h"
 #include "Math\Vec2.h"
 #include "Math\Vec3.h"
-#include "Window.h"
+#include "Graphics/Window.h"
 
 namespace Engine {
 	namespace Graphics {

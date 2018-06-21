@@ -1,7 +1,7 @@
 #pragma once
 
 #include <GL\glew.h>
-#include "VertexBuffer.h"
+#include "Buffers/VertexBuffer.h"
 #include "VBLayout.h"
 
 namespace Engine {

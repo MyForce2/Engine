@@ -40,7 +40,7 @@ namespace Engine {
 			// Logs a warning to the log file
 			void logWarning(const std::string& message);
 			// Logs a regular message to the log file
-			void logMessage(const std::string& message);
+			void logInfo(const std::string& message);
 
 		};
 

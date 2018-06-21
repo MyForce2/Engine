@@ -3,9 +3,9 @@
 #include <GL/glew.h>
 
 
-#include "VertexArray.h"
-#include "Shader.h"
-#include "IndexBuffer.h"
+#include "Graphics/VertexArray.h"
+#include "Graphics/Shader.h"
+#include "Graphics/Buffers/IndexBuffer.h"
 
 namespace Engine {
 	namespace Graphics {
