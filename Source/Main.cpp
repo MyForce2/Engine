@@ -4,15 +4,14 @@
 #include "Graphics\Graphics.h"
 #include "Utils/Utils.h"
 
-
-
+#include <ft2build.h>
+#include "Extensions/FreetypeGL/freetype-gl.h"
 
 #include <iostream>
 #include <chrono>
 #include <thread>
 
 #define BLOCKS true
-
 
 using namespace Engine;
 using namespace Math;
@@ -109,6 +108,8 @@ int main() {
 	float xMin = uvTwo[2];
 	float yMin = uvTwo[5];
 
+	ftgl::texture_atlas_t* ftglAtlas = ftgl::texture_atlas_new(0, 0, 1);
+	ftglAtlas->data = nullptr;
 
 
 	float positionsTex[] = {
@@ -165,8 +166,8 @@ int main() {
 		colorBuffer[i] = val;
 	}
 
-	int lim = 70;
-	int distance = 3;
+	int lim = 16;
+	int distance = 2;
 	int amount;
 	if (lim % distance == 0) {
 		amount = lim / distance;
@@ -181,7 +182,7 @@ int main() {
 	for (int x = 0; x < lim; x += distance) {
 		for (int y = 0; y < lim; y += distance) {
 			for (int z = 0; z < lim; z += distance) {
-				Vec3 translation(x, y, z);
+				Vec3 translation(x + 1, y + 1, z + 1);
 				Mat4 rotation = Mat4::rotationX(90.f);
 				translationsBuffer[index] = Mat4::translation(translation) * rotation;
 				index++;

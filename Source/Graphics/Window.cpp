@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FrameBuffer.h"
+#include "Buffers/FrameBuffer.h"
 #include <GLFW\glfw3.h>
 
 #include "Window.h"
