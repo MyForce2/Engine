@@ -19,6 +19,8 @@ namespace Engine {
 
 		public:
 			VBLayout();
+			// Creates this layout with the given elements
+			VBLayout(size_t amount, GLenum type);
 			~VBLayout();
 
 			// Adds an element to this layout

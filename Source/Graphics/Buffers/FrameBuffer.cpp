@@ -13,7 +13,6 @@ namespace Engine {
 			handleCreation();
 			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 				Utils::Log::getLog()->logError("Failed to create frame buffer, id : [" + bufferID + ']');
-			unBind();
 		}
 
 		FrameBuffer::~FrameBuffer() {
@@ -73,6 +72,7 @@ namespace Engine {
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboID);
 			unBindRenderBuffer();
 			unBindTexture();
+			unBind();
 		}
 
 	}

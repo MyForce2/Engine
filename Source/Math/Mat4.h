@@ -55,6 +55,8 @@ namespace Engine {
 			static Mat4 rotationZ(float angle);
 			// Generates an orthographic matrix, according to the given parameters
 			static Mat4 orthographic(float left, float right, float bottom, float top, float near, float far);
+			// Generates an orthograpic matrix, according to the given parameters
+			static Mat4 orthographic(float left, float right, float bottom, float top);
 			// Generates a perspective matrix, according to the given parameters
 			static Mat4 perspective(float aspectRation, float fieldOfView, float near, float far);
 

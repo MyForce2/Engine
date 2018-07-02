@@ -19,6 +19,8 @@ namespace Engine {
 		public:
 			Texture(const std::string& path);
 			Texture(const char* path);
+			Texture(const std::string& path, GLint filterParam);
+			Texture(const char* path, GLint filterParam);
 			~Texture();
 
 			// Binds this texture to the given slot, default slot is 0

@@ -8,3 +8,5 @@
 #include "VBElement.h"
 #include "VertexArray.h"
 #include "Window.h"
+#include "Renderable2D.h"
+#include "Renderable2DTexture.h"

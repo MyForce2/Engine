@@ -186,8 +186,9 @@ namespace Engine {
 			return result;
 		}
 
-
-
+		Mat4 Mat4::orthographic(float left, float right, float bottom, float top) {
+			return orthographic(left, right, bottom, top, -1.f, 1.f);
+		}
 
 		Mat4 Mat4::orthographic(float left, float right, float bottom, float top, float near, float far) {
 			Mat4 result(1.f);

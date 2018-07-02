@@ -9,6 +9,11 @@ namespace Engine {
 
 		}
 
+		VBLayout::VBLayout(size_t amount, GLenum type) : stride(amount * VBElement::getSizeOfElement(type)), elements() {
+			VBElement element = { amount, type };
+			elements.push_back(element);
+		}
+
 		VBLayout::~VBLayout() {
 
 		}
