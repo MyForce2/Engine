@@ -48,7 +48,7 @@ namespace Engine {
 		}
 
 		Texture::Texture(const char* path, GLint filterParam) {
-			stbi_set_flip_vertically_on_load(0);
+			stbi_set_flip_vertically_on_load(1);
 			int height = 0, width = 0, bitsPerPixel = 0;
 			unsigned char* buffer = nullptr;
 			buffer = stbi_load(path, &width, &height, &bitsPerPixel, 4);

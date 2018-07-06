@@ -1,3 +1,4 @@
-Log started on : Mon Jul  2 18:02:35 2018
-[Mon Jul  2 18:02:35 2018] [Info] Starting run
-Log ended on : Mon Jul  2 18:02:41 2018
+Log started on : Fri Jul  6 23:48:51 2018
+[Fri Jul  6 23:48:51 2018] [Info] Starting run
+[Fri Jul  6 23:48:52 2018] [Warning] Location is -1 for uniform : u_TexSlot
+Log ended on : Fri Jul  6 23:48:56 2018

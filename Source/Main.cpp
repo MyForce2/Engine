@@ -144,7 +144,7 @@ int main() {
 
 	//glClearColor(0.32f, 0.53f, 0.53f, 1.f);
 
-	Tg::FontDescription fD = Tg::FontDescription("arial.ttf", 36);
+	Tg::FontDescription fD = Tg::FontDescription("arial.ttf", 192);
 	Tg::FontGlyphRange range = Tg::FontGlyphRange((char)32, (char)126);
 	auto font = Tg::BuildFont(fD, range);
 	auto img = font.image;
@@ -154,17 +154,20 @@ int main() {
 	
 	auto glyph = font.glyphSet['e'];
 	
-	std::cout << glyph.yOffset << '\n';
+	std::cout << img.GetSize().Area() << '\n';
 
 
 
 
-	float height = float(font.image.GetSize().height) - 1.f;
-	float width = float(font.image.GetSize().width) - 1.f;
+	float height = float(font.image.GetSize().height);
+	float width = float(font.image.GetSize().width);
+
+	//height -= 1.f;
+	//width -= 1.f;
 
 
-	float	TyMax = glyph.rect.top / height;
-	float   TyMin = glyph.rect.bottom / height;
+	float	TyMax = 1.f - glyph.rect.top / height;
+	float   TyMin = 1.f - glyph.rect.bottom / height;
 	float   TxMax = glyph.rect.right / width;
 	float   TxMin = glyph.rect.left / width;
 
@@ -176,9 +179,9 @@ int main() {
 	//TxMin = 0.f;
 
 	float xMin = 60.f;
-	float xMax = 100.f;
+	float xMax = 80.f;
 	float yMin = 60.f;
-	float yMax = 100.f;
+	float yMax = 80.f;
 	
 
 
@@ -187,10 +190,10 @@ int main() {
 	texture.setSlot();*/
 
 	const GLfloat data[] = {
-		xMax, yMax, TxMax, TyMax,
-		xMin, yMax, TxMin, TyMax,
-		xMin, yMin, TxMin, TyMin,
-		xMax, yMin, TxMax, TyMin
+		xMax, yMax,
+		xMin, yMax,
+		xMin, yMin,
+		xMax, yMin
 	};
 
 	const GLushort indices[] = {
@@ -198,26 +201,31 @@ int main() {
 		0, 2, 3
 	};
 
-	VertexBuffer vbo(data, sizeof(data));
-	IndexBuffer ibo(indices, 6);
-	VertexArray vao;
-	VBLayout layout;
-	layout.addElement(2, GL_FLOAT);
-	layout.addElement(2, GL_FLOAT);
-	vao.addBuffer(vbo, layout);
-	vao.bind();
+	GLfloat dataTwo[8];
+	for (int i = 0; i < 8; i++)
+		dataTwo[i] = data[i] * 3;
 
-	
+	Renderable2D obj = Renderable2D(data, sizeof(data));
+	Renderable2D objTwo = Renderable2D(dataTwo, sizeof(dataTwo));
 
+	BatchRenderer batch;
 
 	BasicRenderer renderer;
 	std::string path = "Resources/Shaders/";
 	Shader shader(path + "QuadVertex.shader", path + "QuadFragment.shader");
 	shader.setUniform1i("u_TexSlot", 0);
 	shader.setUniformMatrix4fv("projection", Mat4::orthographic(0.f, 512.f, 0.f, 512.f));
+	shader.setUniformMatrix4fv("model", Mat4(1.f));
+	shader.bind();
 
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
-		renderer.renderElements(vao, shader, ibo);
+		batch.start();
+		batch.add(obj);
+		batch.add(objTwo);
+		for (int i = 0; i < 1000; i++)
+			batch.add(obj);
+		batch.end();
+		batch.flush();
 		window.update();
 	}
 

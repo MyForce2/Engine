@@ -3,9 +3,15 @@
 #include "Texture.h"
 
 #include <array>
+#include "Math/Vec2.h"
 
 namespace Engine {
 	namespace Graphics {
+
+		struct UVCoords {
+			Math::Vec2 topRight;
+			Math::Vec2 bottomLeft;
+		};
 
 
 		class TextureAtlas {
@@ -20,7 +26,7 @@ namespace Engine {
 
 			inline const Texture& getTexture() const { return atlas; }
 			
-			std::array<float, 8> getUVCoordinates(unsigned int textureOffset) const;
+			UVCoords getUVCoordinates(unsigned int textureOffset) const;
 		};
 	}
 }

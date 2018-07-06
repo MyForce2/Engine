@@ -2,10 +2,7 @@
 
 layout(location = 0) out vec4 color;
 
-in vec2 v_UV;
-
-uniform sampler2D u_TexSlot;
 
 void main() {
-	color = texture(u_TexSlot, v_UV);
+	color = vec4(0.32, 0.62, 0.92, 1.0);
 }

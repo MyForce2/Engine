@@ -13,19 +13,15 @@ namespace Engine {
 
 		}
 
-		std::array<float, 8> TextureAtlas::getUVCoordinates(unsigned int textureOffset) const {
+		UVCoords TextureAtlas::getUVCoordinates(unsigned int textureOffset) const {
 			float xMin = textureSize * textureOffset;
 			float xMax = xMin + textureSize;
 			float yMax = 1.f - textureSize * (textureOffset / 16);
 			float yMin = yMax - textureSize;
-			std::array<float, 8> UVCoords =
-			{
-				xMax, yMax,
-				xMin, yMax,
-				xMin, yMin,
-				xMax, yMin
-			};
-			return UVCoords;
+			UVCoords uv;
+			uv.topRight = Math::Vec2(xMax, yMax);
+			uv.bottomLeft = Math::Vec2(xMin, yMin);
+			return uv;
 		}
 	}
 }

@@ -19,6 +19,9 @@ namespace Engine {
 			IndexBuffer(const GLushort* data, size_t size);
 			~IndexBuffer();
 
+			IndexBuffer(const IndexBuffer&) = delete;
+			IndexBuffer(IndexBuffer&&) = delete;
+
 			// Binds this buffer
 			void bind() const;
 			// Unbinds this buffer
