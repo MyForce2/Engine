@@ -12,14 +12,14 @@ namespace Engine {
 		private:
 			GLuint id;
 			// The amount of indices
-			unsigned int count;
+			GLushort count;
 
 		public:
 			IndexBuffer();
 			IndexBuffer(const GLushort* data, size_t size);
+			IndexBuffer(const IndexBuffer& ibo);
 			~IndexBuffer();
 
-			IndexBuffer(const IndexBuffer&) = delete;
 			IndexBuffer(IndexBuffer&&) = delete;
 
 			// Binds this buffer
@@ -28,7 +28,7 @@ namespace Engine {
 			void unBind() const;
 
 			inline GLuint getID() const { return id; };
-			inline GLuint getCount() const { return count; };
+			inline GLushort getCount() const { return count; };
 		};
 	}
 }

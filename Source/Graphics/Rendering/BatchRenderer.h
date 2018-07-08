@@ -1,18 +1,21 @@
 #pragma once
 
-#include "../Buffers/IndexBuffer.h"
-#include "../Buffers/VertexBuffer.h"
-#include "../VertexArray.h"
-#include "../Renderable2D.h"
+#include "Graphics/Buffers/VertexBuffer.h"
+#include "Graphics/Buffers/IndexBuffer.h"
+#include "Graphics/VertexArray.h"
+#include "Graphics/Renderable2D.h"
+#include "Graphics/Renderable2DTexture.h"
 #include "Math/Vec2.h"
+#include <Typo/Typo.h>
 
 
 namespace Engine {
 	namespace Graphics {
 
 		// A struct depicting the structure of a vertex
-		struct Vertex {
+		struct BatchVertex {
 			Math::Vec2 position;
+			Math::Vec2 uvCoords;
 		};
 		
 		/* 
@@ -24,13 +27,17 @@ namespace Engine {
 			IndexBuffer* ibo;
 			VertexBuffer* vbo;
 			VertexArray vao;
-			Vertex* data;
+			BatchVertex* data;
 			GLsizei amountOfIndices;
+			Texture* fontAtlas;
+			Tg::FontModel font;
 
+			
+			static const unsigned int FONT_SIZE = 192;
 			static const unsigned short INDICES_PER_OBJECT = 6;
 			static const unsigned short MAX_OBJECTS = 10000;
 			static const unsigned short IBO_SIZE = INDICES_PER_OBJECT * MAX_OBJECTS;
-			static const unsigned int VBO_SIZE = sizeof(Vertex) * MAX_OBJECTS;
+			static const unsigned int VBO_SIZE = sizeof(BatchVertex) * MAX_OBJECTS;
 
 		public:
 			BatchRenderer();
@@ -41,7 +48,8 @@ namespace Engine {
 			void start();
 			void end();
 
-			void add(const Renderable2D& object);
+			// Draws the requested text, at the given position
+			void drawText(const std::string& text, Math::Vec2 startPosition, unsigned int fontSize);
 			void flush();
 
 		};

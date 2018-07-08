@@ -3,9 +3,8 @@
 #include "Math\Math.h"
 #include "Graphics\Graphics.h"
 #include <Typo/Typo.h>
+#include <vector>
 #include "Utils/Utils.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <Utils/stb_image_write.h>
 
 
 #include <iostream>
@@ -83,13 +82,18 @@ int main() {
 		Utils::Log::getLog()->logError("Failed to init glew, terminating");
 		return EXIT_FAILURE;
 	}
-	//glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
+	/*glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);*/
 
 	/*Vec3 clearColor(0.f / 255.f, 191.f / 255.f, 255.f / 255.f);*/
 	Vec3 clearColor(0.f / 255.f, 0.f / 255.f, 0.f / 255.f);
 	glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
 	std::cout << glGetString(GL_VERSION) << std::endl;
+
+	std::vector<int> list;
+	list.push_back(6);
+	int k = 2;
+	list.push_back(k);
 
 
 
@@ -144,32 +148,12 @@ int main() {
 
 	//glClearColor(0.32f, 0.53f, 0.53f, 1.f);
 
-	Tg::FontDescription fD = Tg::FontDescription("arial.ttf", 192);
-	Tg::FontGlyphRange range = Tg::FontGlyphRange((char)32, (char)126);
-	auto font = Tg::BuildFont(fD, range);
-	auto img = font.image;
-	stbi_write_png("Test.png", img.GetSize().width, img.GetSize().height, 1, img.GetImageBuffer().data(), img.GetSize().width);
-	Texture t("Test.png", GL_LINEAR);
-	t.setSlot();
+
 	
-	auto glyph = font.glyphSet['e'];
-	
-	std::cout << img.GetSize().Area() << '\n';
 
 
 
 
-	float height = float(font.image.GetSize().height);
-	float width = float(font.image.GetSize().width);
-
-	//height -= 1.f;
-	//width -= 1.f;
-
-
-	float	TyMax = 1.f - glyph.rect.top / height;
-	float   TyMin = 1.f - glyph.rect.bottom / height;
-	float   TxMax = glyph.rect.right / width;
-	float   TxMin = glyph.rect.left / width;
 
 
 
@@ -190,10 +174,10 @@ int main() {
 	texture.setSlot();*/
 
 	const GLfloat data[] = {
-		xMax, yMax,
-		xMin, yMax,
-		xMin, yMin,
-		xMax, yMin
+		xMax, yMax, 1.f, 1.f,
+		xMin, yMax, 0.f, 1.f,
+		xMin, yMin, 0.f, 0.f,
+		xMax, yMin, 1.f, 0.f
 	};
 
 	const GLushort indices[] = {
@@ -205,8 +189,9 @@ int main() {
 	for (int i = 0; i < 8; i++)
 		dataTwo[i] = data[i] * 3;
 
-	Renderable2D obj = Renderable2D(data, sizeof(data));
-	Renderable2D objTwo = Renderable2D(dataTwo, sizeof(dataTwo));
+	Renderable2DTexture obj = Renderable2DTexture(data, sizeof(data), "Test.png");
+	Renderable2DTexture objTwo = Renderable2DTexture(data, sizeof(data), "Test.png");
+	obj.getTexture().setSlot();
 
 	BatchRenderer batch;
 
@@ -220,10 +205,12 @@ int main() {
 
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
 		batch.start();
-		batch.add(obj);
-		batch.add(objTwo);
-		for (int i = 0; i < 1000; i++)
-			batch.add(obj);
+		batch.drawText("Nadav, great!", Math::Vec2(10, 300), 60);
+		batch.drawText("fksafjklsadjflksdajflkdsajflksajflksadjflasjfklsadfasd", Math::Vec2(10, 250), 22);
+		batch.drawText("Post malon!", Math::Vec2(10, 350), 22);
+		batch.drawText("Fuck this renderer!", Math::Vec2(10, 200), 22);
+		batch.drawText("Test dfjsakfjsalkdfjmslkadjflkasdjflkadsjflkasd", Math::Vec2(10, 150), 22);
+		batch.drawText("This is crap, so much text lets chcek perN", Math::Vec2(10, 100), 22);
 		batch.end();
 		batch.flush();
 		window.update();

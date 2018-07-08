@@ -27,6 +27,8 @@ namespace Engine {
 			void setSlot(unsigned int slot = 0) const;
 			// Unbinds this texture
 			void unBind() const;
+
+			inline const GLuint getID() const { return id; }
 		};
 	}
 }

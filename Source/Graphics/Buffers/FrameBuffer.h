@@ -24,6 +24,9 @@ namespace Engine {
 			FrameBuffer(float width, float height);
 			~FrameBuffer();
 
+			FrameBuffer(const FrameBuffer&) = delete;
+			FrameBuffer(FrameBuffer&&) = delete;
+
 			// Binds this frame buffer
 			void bind() const;
 			// Unbinds this frame buffer

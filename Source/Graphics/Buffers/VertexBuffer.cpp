@@ -33,6 +33,20 @@ namespace Engine {
 			unBind();
 		}
 
+		VertexBuffer::VertexBuffer(const VertexBuffer& vbo) {
+			glGenBuffers(1, &id);
+			GLint size, usage;
+			vbo.bind();
+			glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+			glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_USAGE, &usage);
+			GLvoid* data = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
+			bind();
+			glBufferData(GL_ARRAY_BUFFER, size, data, usage);
+			vbo.bind();
+			glUnmapBuffer(GL_ARRAY_BUFFER);
+			vbo.unBind();
+		}
+
 		VertexBuffer::~VertexBuffer() {
 			glDeleteBuffers(1, &id);
 			unBind();

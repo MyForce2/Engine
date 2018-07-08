@@ -15,12 +15,12 @@ namespace Engine {
 		public:
 			VertexBuffer(GLsizeiptr size);
 			VertexBuffer(GLsizeiptr size, GLenum usage);
+			VertexBuffer(const VertexBuffer& vbo);
 
 			// Size in bytes
 			VertexBuffer(const GLvoid* data, GLsizeiptr size);
 			VertexBuffer(const GLvoid* data, GLsizeiptr size, GLenum usage);
 
-			VertexBuffer(const VertexBuffer& vbo) = delete;
 			VertexBuffer(VertexBuffer&& vbo) = delete;
 
 			~VertexBuffer();
