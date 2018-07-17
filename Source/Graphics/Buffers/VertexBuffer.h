@@ -30,8 +30,10 @@ namespace Engine {
 			void bind() const;
 			// Unbinds this buffer
 			void unBind() const;
-			// Refill this buffer with new data
-			void setData(const GLvoid* data, GLsizeiptr size);
+			// Maps this buffer
+			GLvoid* map(GLenum access) const;
+			// Unmaps this buffer
+			void unMap() const ;
 
 			inline GLuint getID() const { return id; }
 		};

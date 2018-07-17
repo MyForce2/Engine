@@ -8,6 +8,8 @@
 #include "Math/Vec2.h"
 #include <Typo/Typo.h>
 
+#include <array>
+
 
 namespace Engine {
 	namespace Graphics {
@@ -16,6 +18,7 @@ namespace Engine {
 		struct BatchVertex {
 			Math::Vec2 position;
 			Math::Vec2 uvCoords;
+			GLfloat textureSlot;
 		};
 		
 		/* 
@@ -32,6 +35,8 @@ namespace Engine {
 			Texture* fontAtlas;
 			Tg::FontModel font;
 
+			std::array<GLuint, 10> textureSlots;
+
 			
 			static const unsigned int FONT_SIZE = 192;
 			static const unsigned short INDICES_PER_OBJECT = 6;
@@ -44,14 +49,16 @@ namespace Engine {
 			~BatchRenderer();
 
 			void init();
-
 			void start();
 			void end();
+			void flush();
 
 			// Draws the requested text, at the given position
 			void drawText(const std::string& text, Math::Vec2 startPosition, unsigned int fontSize);
-			void flush();
+			void add(const Renderable2DTexture& object);
 
+		private:
+			GLfloat addTexture(const Texture& texture);
 		};
 	}
 }

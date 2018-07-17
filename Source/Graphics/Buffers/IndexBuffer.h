@@ -16,7 +16,7 @@ namespace Engine {
 
 		public:
 			IndexBuffer();
-			IndexBuffer(const GLushort* data, size_t size);
+			IndexBuffer(const GLushort* data, unsigned short size);
 			IndexBuffer(const IndexBuffer& ibo);
 			~IndexBuffer();
 

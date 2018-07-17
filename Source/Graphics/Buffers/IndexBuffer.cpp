@@ -9,7 +9,7 @@ namespace Engine {
 			glGenBuffers(1, &id);
 		}
 
-		IndexBuffer::IndexBuffer(const GLushort* data, size_t size) : count(size) {
+		IndexBuffer::IndexBuffer(const GLushort* data, unsigned short size) : count(size) {
 			glGenBuffers(1, &id);
 			bind();
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLushort), data, GL_STATIC_DRAW);

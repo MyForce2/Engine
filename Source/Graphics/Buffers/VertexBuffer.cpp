@@ -60,12 +60,21 @@ namespace Engine {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
-		void VertexBuffer::setData(const GLvoid* data, GLsizeiptr size) {
+		GLvoid* VertexBuffer::map(GLenum access) const {
 			bind();
-			GLvoid* buffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-			memcpy(buffer, data, size);
+			GLvoid* data =  glMapBuffer(GL_ARRAY_BUFFER, access);
+			unBind();
+			return data;
+		}
+
+		void VertexBuffer::unMap() const {
+			bind();
 			glUnmapBuffer(GL_ARRAY_BUFFER);
 			unBind();
 		}
+
+
+
+
 	}
 }

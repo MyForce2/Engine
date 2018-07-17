@@ -26,7 +26,7 @@ namespace Engine {
 			void unBind() const;
 
 			// Sets the data of this uniform buffer, the size of the data must correspond to the size of this ubo
-			void setData(const void* data;
+			void setData(const void* data);
 
 			inline GLuint getID() const { return id; }
 			

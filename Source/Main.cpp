@@ -82,8 +82,8 @@ int main() {
 		Utils::Log::getLog()->logError("Failed to init glew, terminating");
 		return EXIT_FAILURE;
 	}
-	/*glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);*/
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	/*Vec3 clearColor(0.f / 255.f, 191.f / 255.f, 255.f / 255.f);*/
 	Vec3 clearColor(0.f / 255.f, 0.f / 255.f, 0.f / 255.f);
@@ -146,7 +146,7 @@ int main() {
 
 
 
-	//glClearColor(0.32f, 0.53f, 0.53f, 1.f);
+	glClearColor(0.32f, 0.53f, 0.53f, 0.f);
 
 
 	
@@ -173,7 +173,7 @@ int main() {
 	/*Texture texture("Resources/Textures/grass_side.png");
 	texture.setSlot();*/
 
-	const GLfloat data[] = {
+	GLfloat data[] = {
 		xMax, yMax, 1.f, 1.f,
 		xMin, yMax, 0.f, 1.f,
 		xMin, yMin, 0.f, 0.f,
@@ -189,28 +189,31 @@ int main() {
 	for (int i = 0; i < 8; i++)
 		dataTwo[i] = data[i] * 3;
 
-	Renderable2DTexture obj = Renderable2DTexture(data, sizeof(data), "Test.png");
-	Renderable2DTexture objTwo = Renderable2DTexture(data, sizeof(data), "Test.png");
-	obj.getTexture().setSlot();
+	Renderable2DTexture obj = Renderable2DTexture(data, sizeof(data), "Resources/Textures/grass_side.png");
+	for (int i = 0; i < 16; i += 4) {
+		data[i] *= 2;
+		data[i + 1] *= 2;
+	}
+	Renderable2DTexture objTwo = Renderable2DTexture(data, sizeof(data), "Resources/Textures/Texture.png");
 
 	BatchRenderer batch;
 
 	BasicRenderer renderer;
 	std::string path = "Resources/Shaders/";
 	Shader shader(path + "QuadVertex.shader", path + "QuadFragment.shader");
-	shader.setUniform1i("u_TexSlot", 0);
 	shader.setUniformMatrix4fv("projection", Mat4::orthographic(0.f, 512.f, 0.f, 512.f));
 	shader.setUniformMatrix4fv("model", Mat4(1.f));
+	for (int i = 0; i < 10; i++) {
+		shader.setUniform1i("u_TexSlots[" + std::to_string(i) + "]", i);
+	}
 	shader.bind();
 
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
 		batch.start();
 		batch.drawText("Nadav, great!", Math::Vec2(10, 300), 60);
 		batch.drawText("fksafjklsadjflksdajflkdsajflksajflksadjflasjfklsadfasd", Math::Vec2(10, 250), 22);
-		batch.drawText("Post malon!", Math::Vec2(10, 350), 22);
-		batch.drawText("Fuck this renderer!", Math::Vec2(10, 200), 22);
-		batch.drawText("Test dfjsakfjsalkdfjmslkadjflkasdjflkadsjflkasd", Math::Vec2(10, 150), 22);
-		batch.drawText("This is crap, so much text lets chcek perN", Math::Vec2(10, 100), 22);
+		batch.add(obj);
+		batch.add(objTwo);
 		batch.end();
 		batch.flush();
 		window.update();
