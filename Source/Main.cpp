@@ -90,12 +90,6 @@ int main() {
 	glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.f);
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
-	std::vector<int> list;
-	list.push_back(6);
-	int k = 2;
-	list.push_back(k);
-
-
 
 	//float positionsTex[] = {
 	//	-1.f, -1.f, -1.f,  xMinA, yMinA, // Bottom-left
@@ -208,12 +202,18 @@ int main() {
 	}
 	shader.bind();
 
+	Label l;
+	l.setFontSize(72);
+	l.setStartPosition({ 0, 400 });
+	l.setText("Label test");
+	l.setLabelColor(Vec3(255, 100, 100));
+
+
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
 		batch.start();
-		batch.drawText("Nadav, great!", Math::Vec2(10, 300), 60);
-		batch.drawText("fksafjklsadjflksdajflkdsajflksajflksadjflasjfklsadfasd", Math::Vec2(10, 250), 22);
+		batch.addText("Test", Math::Vec2(300, 300), 22);
+		batch.addText(l);
 		batch.add(obj);
-		batch.add(objTwo);
 		batch.end();
 		batch.flush();
 		window.update();

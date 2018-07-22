@@ -11,10 +11,18 @@ namespace Engine {
 			glGenBuffers(1, &id);
 		}
 
-		UniformBuffer::UniformBuffer(const void* data, size_t size) {
+		UniformBuffer::UniformBuffer(GLvoid* data, GLsizeiptr size) {
 			glGenBuffers(1, &id);
 			bind();
 			glBufferData(GL_UNIFORM_BUFFER, size, data, GL_DYNAMIC_DRAW);
+			unBind();
+		}
+
+		UniformBuffer::UniformBuffer(GLvoid* data, GLsizeiptr size, GLenum usage) {
+			glGenBuffers(1, &id);
+			bind();
+			glBufferData(GL_UNIFORM_BUFFER, size, data, usage);
+			unBind();
 		}
 
 		UniformBuffer::UniformBuffer(const UniformBuffer& ubo) {
@@ -44,12 +52,15 @@ namespace Engine {
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		}
 
-		void UniformBuffer::setData(const void* data) {
+		GLvoid* UniformBuffer::map(GLenum access) const {
 			bind();
-			GLint size;
-			glGetBufferParameteriv(GL_UNIFORM_BUFFER, GL_BUFFER_SIZE, &size);
-			GLvoid* buffer = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
-			memcpy(buffer, data, size);
+			GLvoid* data = glMapBuffer(GL_UNIFORM_BUFFER, access);
+			unBind();
+			return data;
+		}
+
+		void UniformBuffer::unMap() const {
+			bind();
 			glUnmapBuffer(GL_UNIFORM_BUFFER);
 			unBind();
 		}

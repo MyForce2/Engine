@@ -16,6 +16,13 @@ namespace Engine {
 			unBind();
 		}
 
+		IndexBuffer::IndexBuffer(const GLushort* data, unsigned short size, GLenum access) : count(size) {
+			glGenBuffers(1, &id);
+			bind();
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLushort), data, access);
+			unBind();
+		}
+
 		IndexBuffer::IndexBuffer(const IndexBuffer& ibo) : count(ibo.count) {
 			glGenBuffers(1, &id);
 			GLint usage;
@@ -41,6 +48,19 @@ namespace Engine {
 
 		void IndexBuffer::unBind() const {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		}
+
+		GLvoid* IndexBuffer::map(GLenum access) const {
+			bind();
+			GLvoid* data = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, access);
+			unBind();
+			return data;
+		}
+
+		void IndexBuffer::unMap() const {
+			bind();
+			glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+			unBind();
 		}
 	}
 }

@@ -17,6 +17,7 @@ namespace Engine {
 		public:
 			IndexBuffer();
 			IndexBuffer(const GLushort* data, unsigned short size);
+			IndexBuffer(const GLushort* data, unsigned short size, GLenum usage);
 			IndexBuffer(const IndexBuffer& ibo);
 			~IndexBuffer();
 
@@ -26,6 +27,10 @@ namespace Engine {
 			void bind() const;
 			// Unbinds this buffer
 			void unBind() const;
+			// Maps this buffer
+			GLvoid* map(GLenum access) const;
+			// Unmaps this buffer
+			void unMap() const;
 
 			inline GLuint getID() const { return id; };
 			inline GLushort getCount() const { return count; };

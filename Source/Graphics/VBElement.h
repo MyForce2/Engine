@@ -34,6 +34,29 @@ namespace Engine {
 					return 0;
 				}
 			}
+
+			inline static constexpr bool isInteger(GLenum type) {
+				switch (type) {
+				case GL_BYTE:
+					return true;
+				case GL_UNSIGNED_BYTE:
+					return true;
+				case GL_SHORT:
+					return true;
+				case GL_UNSIGNED_SHORT:
+					return true;
+				case GL_INT:
+					return true;
+				case GL_UNSIGNED_INT:
+					return true;
+				default:
+					return false;
+				}
+			}
+
+			inline static constexpr bool isDouble(GLenum type) {
+				return type == GL_DOUBLE;
+			}
 		};
 	}
 }

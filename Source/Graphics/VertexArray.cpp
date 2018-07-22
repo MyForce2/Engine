@@ -26,16 +26,20 @@ namespace Engine {
 			bind();
 			vbo.bind();
 			std::vector<VBElement> elements = layout.getElements();
-			size_t size = elements.size();
 			unsigned int off = 0U;
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < elements.size(); i++) {
 				glEnableVertexAttribArray(i + amountOfAttributes);
 				const VBElement& element = elements[i];
 				GLint elementSize = VBElement::getSizeOfElement(element.type);
-				glVertexAttribPointer(i + amountOfAttributes, element.amount, element.type, GL_FALSE, layout.getStride(), (const void*) off);
+				if (VBElement::isInteger(element.type))
+					glVertexAttribIPointer(i + amountOfAttributes, element.amount, element.type, layout.getStride(), (const void*) off);
+				else if (VBElement::isDouble(element.type))
+					glVertexAttribLPointer(i + amountOfAttributes, element.amount, element.type, layout.getStride(), (const void*) off);
+				else
+					glVertexAttribPointer(i + amountOfAttributes, element.amount, element.type, GL_FALSE, layout.getStride(), (const void*) off);
 				off += element.amount * elementSize;
 			}
-			amountOfAttributes += size;
+			amountOfAttributes += elements.size();
 			unBind();
 		}
 
@@ -51,5 +55,7 @@ namespace Engine {
 			}
 			amountOfAttributes += 4;
 		}
+
+		
 	}
 }

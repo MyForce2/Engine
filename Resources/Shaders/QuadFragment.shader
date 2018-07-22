@@ -3,18 +3,18 @@
 layout(location = 0) out vec4 color;
 
 in vec2 v_UV;
-in float v_SamplerID;
+in vec3 v_TextColor;
+flat in int v_IsText;
+flat in int v_SamplerID;
 
 uniform sampler2D u_TexSlots[10];
 
 void main() {
-	vec3 textColor = vec3(0.5, 0.8f, 0.2);
-	int i = int(v_SamplerID + 0.1);
-	vec4 tex = texture(u_TexSlots[i], v_UV);
-	if (i == 0) {
+	vec4 tex = texture(u_TexSlots[v_SamplerID], v_UV);
+	if (v_IsText == 1) {
 		if (tex.rgb == 0.f)
 			discard;
-		tex = vec4(vec3(tex) * textColor, 1.0);
+		tex = vec4(v_TextColor, 1.0);
 	}
 	color = tex;
 }

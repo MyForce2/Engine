@@ -16,7 +16,8 @@ namespace Engine {
 		public:
 			UniformBuffer();
 			// size in bytes
-			UniformBuffer(const void* data, size_t size);
+			UniformBuffer(GLvoid* data, GLsizeiptr size);
+			UniformBuffer(GLvoid* data, GLsizeiptr size, GLenum usage);
 			UniformBuffer(const UniformBuffer& ubo);
 			~UniformBuffer();
 
@@ -24,9 +25,11 @@ namespace Engine {
 			void bind() const;
 			// Unbinds this buffer
 			void unBind() const;
-
-			// Sets the data of this uniform buffer, the size of the data must correspond to the size of this ubo
-			void setData(const void* data);
+			// Maps this buffer
+			GLvoid* map(GLenum access) const;
+			// Unmaps this buffer
+			void unMap() const;
+				
 
 			inline GLuint getID() const { return id; }
 			
