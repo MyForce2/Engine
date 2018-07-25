@@ -45,8 +45,12 @@ namespace Engine {
 
 			// Generates a translation matrix, according to the translation vector
 			static Mat4 translation(const Vec3& translation);
+			// Generates a translation matrix according to the translation vector
+			static Mat4 translation(const Vec2& translation);
 			// Generates a scale matrix, according to the scale vector
 			static Mat4 scale(const Vec3& scale);
+			// Generates a scale matrix, according to the scale vector
+			static Mat4 scale(const Vec2& scale);
 			// Generates a rotation matrix around the X axis (angle in degrees)
 			static Mat4 rotationX(float angle);
 			// Generates a rotation matrix around the Y axis (angle in degrees)

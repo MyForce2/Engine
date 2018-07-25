@@ -50,6 +50,18 @@ namespace Engine {
 			for (int i = 0; i < 4; i++) {
 				glEnableVertexAttribArray(i + amountOfAttributes);
 				glVertexAttribPointer(i + amountOfAttributes, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 16, (const void*) offset);
+				offset += sizeof(GLfloat) * 4;
+			}
+			amountOfAttributes += 4;
+		}
+
+		void VertexArray::addInstancedMatrixBuffer(const VertexBuffer& vbo) {
+			bind();
+			vbo.bind();
+			unsigned int offset = 0U;
+			for (int i = 0; i < 4; i++) {
+				glEnableVertexAttribArray(i + amountOfAttributes);
+				glVertexAttribPointer(i + amountOfAttributes, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 16, (const void*) offset);
 				glVertexAttribDivisor(i + amountOfAttributes, 1);
 				offset += sizeof(GLfloat) * 4;
 			}

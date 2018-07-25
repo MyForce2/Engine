@@ -142,11 +142,25 @@ namespace Engine {
 			return result;
 		}
 
+		Mat4 Mat4::translation(const Vec2& translation) {
+			Mat4 result(1.f);
+			result[3].x = translation.x;
+			result[3].y = translation.y;
+			return result;
+		}
+
 		Mat4 Mat4::scale(const Vec3& scale) {
 			Mat4 result(1.f);
 			result[0].x = scale.x;
 			result[1].y = scale.y;
 			result[2].z = scale.z;
+			return result;
+		}
+
+		Mat4 Mat4::scale(const Vec2& scale) {
+			Mat4 result(1.f);
+			result[0].x = scale.x;
+			result[1].y = scale.y;
 			return result;
 		}
 

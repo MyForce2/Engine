@@ -21,6 +21,7 @@ namespace Engine {
 			glfwSwapInterval(0);
 			glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			setMousePosition(getSize() / 2);
+			glfwSetClipboardString(windowHandle, "Hello");
 		}
 
 		Window::~Window() {

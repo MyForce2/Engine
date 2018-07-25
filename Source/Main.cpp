@@ -5,11 +5,13 @@
 #include <Typo/Typo.h>
 #include <vector>
 #include "Utils/Utils.h"
-
+#include <Windows.h>
+#include "Graphics/Layers/Layer2D.h"
 
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <unordered_map>
 
 #define BLOCKS true
 
@@ -140,7 +142,7 @@ int main() {
 
 
 
-	glClearColor(0.32f, 0.53f, 0.53f, 0.f);
+	//glClearColor(0.32f, 0.53f, 0.53f, 0.f);
 
 
 	
@@ -183,39 +185,31 @@ int main() {
 	for (int i = 0; i < 8; i++)
 		dataTwo[i] = data[i] * 3;
 
-	Renderable2DTexture obj = Renderable2DTexture(data, sizeof(data), "Resources/Textures/grass_side.png");
-	for (int i = 0; i < 16; i += 4) {
-		data[i] *= 2;
-		data[i + 1] *= 2;
-	}
-	Renderable2DTexture objTwo = Renderable2DTexture(data, sizeof(data), "Resources/Textures/Texture.png");
 
-	BatchRenderer batch;
+
+
 
 	BasicRenderer renderer;
 	std::string path = "Resources/Shaders/";
-	Shader shader(path + "QuadVertex.shader", path + "QuadFragment.shader");
-	shader.setUniformMatrix4fv("projection", Mat4::orthographic(0.f, 512.f, 0.f, 512.f));
-	shader.setUniformMatrix4fv("model", Mat4(1.f));
-	for (int i = 0; i < 10; i++) {
-		shader.setUniform1i("u_TexSlots[" + std::to_string(i) + "]", i);
-	}
-	shader.bind();
+	Layer2D layer = Layer2D(512.f, 512.f, path + "QuadVertex.shader", path + "QuadFragment.shader");
 
-	Label l;
-	l.setFontSize(72);
-	l.setStartPosition({ 0, 400 });
-	l.setText("Label test");
-	l.setLabelColor(Vec3(255, 100, 100));
+	Renderable2DTexture obj = Renderable2DTexture(data, sizeof(data), "Resources/Textures/grass_side.png");
+	Renderable2DTexture objTwo = Renderable2DTexture(data, sizeof(data), "Resources/Textures/grass_side.png");
+
+
+	Label one = Label("One", 36, Vec2(100, 300), Vec3(100, 100, 0));
+	Label two = Label("Two", 36, Vec2(100, 100), Vec3(0, 100, 100));
+	Vec2 t(100, 0);
+	Mat4 m = Mat4::translation(t);
+	one.setModelMatrix(m);
+
 
 
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
-		batch.start();
-		batch.addText("Test", Math::Vec2(300, 300), 22);
-		batch.addText(l);
-		batch.add(obj);
-		batch.end();
-		batch.flush();
+		layer.startFrame();
+		layer.add(one);
+		layer.add(two);
+		layer.render();
 		window.update();
 	}
 

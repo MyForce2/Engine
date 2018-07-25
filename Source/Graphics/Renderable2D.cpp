@@ -4,7 +4,7 @@ namespace Engine {
 	namespace Graphics {
 
 
-		Renderable2D::Renderable2D(const GLvoid* data, GLsizeiptr size) : modelMatrix(1.f) {
+		Renderable2D::Renderable2D(const GLvoid* data, GLsizeiptr size) : modelMatrix(1.f), vbo(nullptr) {
 			vbo = new VertexBuffer(data, size);
 			GLushort indices[]= {
 				0, 1, 2,
@@ -16,7 +16,7 @@ namespace Engine {
 			vao.addBuffer(*vbo, layout);
 		}
 
-		Renderable2D::Renderable2D(const GLvoid* data, GLsizeiptr size, const Math::Mat4& modelMatrix) : modelMatrix(modelMatrix) {
+		Renderable2D::Renderable2D(const GLvoid* data, GLsizeiptr size, const Math::Mat4& modelMatrix) : modelMatrix(modelMatrix), vbo(nullptr) {
 			vbo = new VertexBuffer(data, size);
 			GLushort indices[] = {
 				0, 1, 2,
@@ -40,6 +40,10 @@ namespace Engine {
 			if (vbo != nullptr)
 				delete vbo;
 			delete ibo;
+		}
+
+		void Renderable2D::setModelMatrix(const Math::Mat4& modelMatrix) {
+			this->modelMatrix = modelMatrix;
 		}
 	}
 }

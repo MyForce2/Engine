@@ -23,10 +23,10 @@ namespace Engine {
 			Math::Vec2 uvCoords;
 			// The vertex textureSlot in the texture slots array
 			GLint textureSlot;
-			// A boolean variable, GLSL doesn't support bool attributes / variants
+			// A C style boolean variable, GLSL doesn't support bool attributes / variants
 			GLint isText;
 			// Text color, if the object is text
-			Math::Vec4 textColor;
+			Math::Vec3 textColor;
 		};
 		
 		/* 
@@ -37,12 +37,15 @@ namespace Engine {
 		private:
 			IndexBuffer* ibo;
 			VertexBuffer* vbo;
+			VertexBuffer* modelMatricesBuffer;
 			VertexArray vao;
 
 			// A pointer to the vbo data
 			BatchVertex* data;
+			// A pointer to the translation buffer per object
+			Math::Mat4* modelMatrices;
 			// The amount of vertices to render in the next draw call
-			GLsizei amountOfIndices;
+			GLsizei amountOfObjects;
 			// The actual font atlas texture
 			Texture* fontAtlas;
 			// The font atlas data
@@ -55,8 +58,10 @@ namespace Engine {
 			static const unsigned short INDICES_PER_OBJECT = 6;
 			static const unsigned short MAX_OBJECTS = 10000;
 			static const unsigned short IBO_SIZE = INDICES_PER_OBJECT * MAX_OBJECTS;
-			static const unsigned int VBO_SIZE = sizeof(BatchVertex) * MAX_OBJECTS;
+			static const unsigned int VBO_SIZE = sizeof(BatchVertex) * 4 * MAX_OBJECTS;
+			static const unsigned int MATRICES_BUFFER_SIZE = 16 * 4 * sizeof(float) * MAX_OBJECTS;
 			static const std::string FONT_ATLAS_PATH;
+			static const std::string FONT_PATH;
 
 		public:
 			BatchRenderer();
@@ -70,13 +75,13 @@ namespace Engine {
 			void flush();
 
 			// Adds the requested text, at the given position
-			void addText(const std::string& text, const Math::Vec2& startPosition, unsigned int fontSize);
-			// Adds the requested text, at the given position
-			void addText(const std::string& text, Math::Vec2 startPosition, unsigned int fontSize, const Math::Vec3& textColor);
+			void addText(const std::string& text, Math::Vec2 startPosition, unsigned int fontSize, const Math::Vec3& textColor, const Math::Mat4& model);
 			// Adds the request label
 			void addText(const Label& label);
 			// Adds this object
 			void add(const Renderable2DTexture& object);
+
+			inline GLsizei getAmountOfObjets() const { return amountOfObjects; }
 
 		private:
 			// Inits all of the renderer members

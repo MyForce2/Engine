@@ -24,6 +24,7 @@ namespace Engine {
 
 			void addBuffer(const VertexBuffer& vbo, const VBLayout& layout);
 			void addMatrixBuffer(const VertexBuffer& vbo);
+			void addInstancedMatrixBuffer(const VertexBuffer& vbo);
 		};
 	}
 }

@@ -13,6 +13,7 @@ namespace Engine {
 
 		public:
 			Renderable2DTexture(const GLvoid* data, GLsizeiptr size, const std::string& texturePath);
+			Renderable2DTexture(const GLvoid* data, GLsizeiptr size, const std::string& texturePath, const Math::Mat4& modelMatrix);
 			~Renderable2DTexture();
 
 			inline const Texture& getTexture() const { return texture; }

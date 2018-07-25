@@ -26,6 +26,8 @@ namespace Engine {
 			inline const VertexBuffer* getVBO() const { return vbo; }
 			inline const VertexArray& getVAO() const { return vao; }
 			inline const Math::Mat4& getModelMatrix() const { return modelMatrix; }
+
+			void setModelMatrix(const Math::Mat4& modelMatrix);
 		};
 	}
 }

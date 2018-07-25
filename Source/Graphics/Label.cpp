@@ -3,21 +3,21 @@
 namespace Engine {
 	namespace Graphics {
 
-		Label::Label(const std::string& text, unsigned short fontSize) : text(text), fontSize(fontSize), startPosition(), labelColor(1.f) {
+		Label::Label(const std::string& text, unsigned short fontSize) : text(text), fontSize(fontSize), startPosition(), labelColor(255.f), model(1.f) {
 
 		}
 
 		Label::Label(const std::string& text, unsigned short fontSize, const Math::Vec2& startPosition) : text(text), fontSize(fontSize),
-			startPosition(startPosition), labelColor(1.f) {
+			startPosition(startPosition), labelColor(255.f), model(1.f) {
 
 		}
 
 		Label::Label(const std::string& text, unsigned short fontSize, const Math::Vec2& startPosition, const Math::Vec3& labelColor) :
-			text(text), fontSize(fontSize), startPosition(startPosition), labelColor(labelColor) {
+			text(text), fontSize(fontSize), startPosition(startPosition), labelColor(labelColor), model(1.f) {
 
 		}
 
-		Label::Label() : text(), fontSize(), startPosition(), labelColor(1.f) {
+		Label::Label() : text(), fontSize(), startPosition(), labelColor(255.f), model(1.f) {
 
 		}
 
@@ -39,6 +39,10 @@ namespace Engine {
 
 		void Label::setLabelColor(const Math::Vec3& labelColor) {
 			this->labelColor = labelColor;
+		}
+
+		void Label::setModelMatrix(const Math::Mat4& model) {
+			this->model = model;
 		}
 	}
 }

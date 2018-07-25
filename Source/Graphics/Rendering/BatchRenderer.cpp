@@ -11,6 +11,7 @@ namespace Engine {
 		
 		using namespace Math;
 		const std::string BatchRenderer::FONT_ATLAS_PATH = "FontAtlas.png";
+		const std::string BatchRenderer::FONT_PATH = "Times New Roman.ttf";
 
 		// The vbo data for a Renderable2DTexture object, used for data mapping
 		struct RenderableVertex {
@@ -18,7 +19,7 @@ namespace Engine {
 			Math::Vec2 uv;
 		};
 
-		BatchRenderer::BatchRenderer() : amountOfIndices(0U) {
+		BatchRenderer::BatchRenderer() : amountOfObjects(0) {
 			init();
 		}
 
@@ -29,13 +30,15 @@ namespace Engine {
 
 		void BatchRenderer::init() {
 			vbo = new VertexBuffer(VBO_SIZE, GL_DYNAMIC_DRAW);
+			modelMatricesBuffer = new VertexBuffer(MATRICES_BUFFER_SIZE, GL_DYNAMIC_DRAW);
 			VBLayout layout;
 			layout.addElement(2, GL_FLOAT);
 			layout.addElement(2, GL_FLOAT);
 			layout.addElement(1, GL_INT);
 			layout.addElement(1, GL_INT);
-			layout.addElement(4, GL_FLOAT);
+			layout.addElement(3, GL_FLOAT);
 			vao.addBuffer(*vbo, layout);
+			vao.addMatrixBuffer(*modelMatricesBuffer);
 			GLushort* indices = new GLushort[IBO_SIZE];
 			int offset = 0;
 			for (int i = 0; i < IBO_SIZE; i += 6) {
@@ -50,7 +53,7 @@ namespace Engine {
 			}
 			ibo = new IndexBuffer(indices, IBO_SIZE);
 			delete[] indices;
-			Tg::FontDescription fontDescription("arial.ttf", FONT_SIZE);
+			Tg::FontDescription fontDescription(FONT_PATH, FONT_SIZE);
 			Tg::FontGlyphRange glyphRange((char) 32, (char) 127);
 			font = Tg::BuildFont(fontDescription, glyphRange, 4U);
 			Tg::Image img = font.image;
@@ -63,17 +66,16 @@ namespace Engine {
 			textureSlots.fill(0);
 			addTexture(*fontAtlas);
 			data = (BatchVertex*) vbo->map(GL_WRITE_ONLY);
+			modelMatrices = (Math::Mat4*) modelMatricesBuffer->map(GL_WRITE_ONLY);
 		}
 
 		void BatchRenderer::end() {
 			vbo->unMap();
+			modelMatricesBuffer->unMap();
 		}
 
-		void BatchRenderer::addText(const std::string& text, const Math::Vec2& startPosition, unsigned int fontSize) {
-			addText(text, startPosition, fontSize, Vec4(255.f));
-		}
 
-		void BatchRenderer::addText(const std::string& text, Vec2 position, unsigned int fontSize, const Math::Vec3& textColor) {
+		void BatchRenderer::addText(const std::string& text, Vec2 position, unsigned int fontSize, const Math::Vec3& textColor, const Math::Mat4& model) {
 			float imageHeight = float(font.image.GetSize().height);
 			float imageWidth = float(font.image.GetSize().width);
 			Vec3 normalizedColor(textColor);
@@ -86,37 +88,56 @@ namespace Engine {
 				float yOffset = (glyph.height - glyph.yOffset) / ratio;
 				float width = glyph.width / ratio;
 				float height = glyph.height / ratio;
+
 				data->position = Vec2(position.x + width, position.y + height - yOffset);
 				data->uvCoords = Vec2(topRightUV.x, topRightUV.y);
 				data->textureSlot = 0;
 				data->isText = 1;
 				data->textColor = normalizedColor;
+				*modelMatrices = model;
+
+				modelMatrices++;
 				data++;
+
 				data->position = Vec2(position.x, position.y + height - yOffset);
 				data->uvCoords = Vec2(bottomLeftUV.x, topRightUV.y);
 				data->textureSlot = 0;
 				data->isText = 1;
 				data->textColor = normalizedColor;
+				*modelMatrices = model;
+
+				modelMatrices++;
 				data++;
+
 				data->position = Vec2(position.x, position.y - yOffset);
 				data->uvCoords = Vec2(bottomLeftUV.x, bottomLeftUV.y);
 				data->textureSlot = 0;
 				data->isText = 1;
 				data->textColor = normalizedColor;
+				*modelMatrices = model;
+
+				modelMatrices++;
 				data++;
+
 				data->position = Vec2(position.x + width,  position.y - yOffset);
 				data->uvCoords = Vec2(topRightUV.x, bottomLeftUV.y);
 				data->textureSlot = 0;
 				data->isText = 1;
 				data->textColor = normalizedColor;
+				*modelMatrices = model;
+
+				modelMatrices++;
 				data++;
+
+
 				position.x += glyph.advance / ratio;
+				\
 			}
-			amountOfIndices += 6 * text.length();
+			amountOfObjects += text.length();
 		}
 
 		void BatchRenderer::addText(const Label& label) {
-			addText(label.getText(), label.getStartPosition(), label.getFontSize(), label.getLabelColor());
+			addText(label.getText(), label.getStartPosition(), label.getFontSize(), label.getLabelColor(), label.getModelMatrix());
 		}
 
 		void BatchRenderer::add(const Renderable2DTexture& object) {
@@ -128,11 +149,14 @@ namespace Engine {
 				data->textureSlot = texSlot;
 				data->isText = 0;
 				data->textColor = Vec4(0);
+				*modelMatrices = object.getModelMatrix();
+				
+				modelMatrices++;
 				data++;
 				objData++;
 			}
 			object.getVBO()->unMap();
-			amountOfIndices += 6;
+			amountOfObjects++;
 		}
 
 		GLint BatchRenderer::addTexture(const Texture& texture) {
@@ -162,8 +186,8 @@ namespace Engine {
 				glActiveTexture(GL_TEXTURE0 + i);
 				glBindTexture(GL_TEXTURE_2D, texID);
 			}
-			glDrawElements(GL_TRIANGLES, amountOfIndices, GL_UNSIGNED_SHORT, nullptr);
-			amountOfIndices = 0U;
+			glDrawElements(GL_TRIANGLES, amountOfObjects * 6, GL_UNSIGNED_SHORT, nullptr);
+			amountOfObjects = 0U;
 			vbo->unBind();
 			vao.unBind();
 			ibo->unBind();
