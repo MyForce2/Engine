@@ -4,6 +4,7 @@
 #include "Math\Vec3.h"
 #include "Graphics/Window.h"
 
+
 namespace Engine {
 	namespace Graphics {
 
@@ -30,8 +31,16 @@ namespace Engine {
 			Math::Vec2 windowSize;
 			// Projection matrix data
 			float near, far;
+			// A cap for the pitch value
+			static const float MAX_PITCH_ANGLE;
 			// The mouse sensitivity (How much does the camera move for a certain mouse movement)
-			static const float sensitivity;
+			static const float SENSITIVITY;
+			// The fov (Field of view) angle for the perspective matrix
+			static const float FIELD_OF_VIEW;
+			// Movement speed for WASD movement
+			static const float MOVEMENT_SPEED;
+			// Speed boost for movement 
+			static const float SPEED_BOOST;
 
 		public:
 			Camera(const Window& window, float near, float far);
@@ -46,7 +55,8 @@ namespace Engine {
 			inline const Math::Mat4& getViewMatrix() const { return view; }
 			inline const Math::Mat4& getProjectionMatrix() const { return projection; }
 
-			void update(const Window& window);
+			// Updates the view matrix, the view direction, and the camera position according to input
+			void update(const Window& window, float time);
 
 		private:
 			// Generates the view matrix, according to the position and viewDirection

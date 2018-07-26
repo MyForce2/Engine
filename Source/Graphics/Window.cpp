@@ -2,6 +2,7 @@
 
 #include "Buffers/FrameBuffer.h"
 #include <GLFW\glfw3.h>
+#include <Windows.h>
 
 #include "Window.h"
 #include "Utils\Log.h"
@@ -38,6 +39,10 @@ namespace Engine {
 
 		bool Window::isKeyReleased(int key) const {
 			return glfwGetKey(windowHandle, key) == GLFW_RELEASE;
+		}
+
+		bool Window::isCapsLockOn() const {
+			return GetKeyState(VK_CAPITAL) & 1;
 		}
 
 		bool Window::isMouseButtonPressed(int button) const {

@@ -25,6 +25,7 @@ namespace Engine {
 
 			bool isMouseButtonPressed(int button) const;
 			bool isMouseButtonReleased(int button) const;
+			bool isCapsLockOn() const;
 
 			
 

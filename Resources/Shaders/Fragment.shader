@@ -2,17 +2,11 @@
 
 layout(location = 0) out vec4 color;
 
-in vec4 fragColor;
-in vec2 texCoord;
+in vec2 v_TexCoord;
 
-uniform sampler2D texSlot;
-uniform vec3 lightColor;
+uniform sampler2D u_TexSlot;
 
 void main() {
-	vec4 texColor = texture(texSlot, texCoord);
-	float ambientStrength = 0.4f;
-	vec3 ambient = ambientStrength * lightColor;
-	vec3 result = ambient * fragColor.xyz;
-	color = fragColor;
+	vec4 texColor = texture(u_TexSlot, v_TexCoord);
 	color = texColor;
 }

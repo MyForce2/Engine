@@ -5,7 +5,11 @@ namespace Engine {
 	namespace Graphics {
 
 		using namespace Math;
-		const float Camera::sensitivity = 0.05f;
+		const float Camera::MAX_PITCH_ANGLE = 89.f;
+		const float Camera::SENSITIVITY = 0.05f;
+		const float Camera::FIELD_OF_VIEW = 45.f;
+		const float Camera::MOVEMENT_SPEED = 10.f;
+		const float Camera::SPEED_BOOST = 5.f;
 
 		Camera::Camera(const Window& window, float near, float far) : upDirection(0, 1, 0), yaw(0.f), pitch(0.f), windowSize(window.getSize()), near(near), far(far) {
 			projection = Mat4::perspective(windowSize.x / windowSize.y, 45.f, near, far);
@@ -24,16 +28,28 @@ namespace Engine {
 			this->viewingDirection = direction;
 		}
 
-		void Camera::update(const Window& window) {
+		void Camera::update(const Window& window, float time) {
 			view = generateViewMatrix();
 			viewingDirection = generateViewDirection(window);
 			if (windowSize != window.getSize()) {
 				std::cout << "Change" << std::endl;
 				windowSize = window.getSize();
 				projection = Mat4::perspective(windowSize.x / windowSize.y, 45.f, near, far);
-				glViewport(0, 0, windowSize.x, windowSize.y);
-				
+				glViewport(0, 0, int(windowSize.x), int(windowSize.y));
 			}
+			float distance = time * MOVEMENT_SPEED;
+			Vec3 strafeAxis = viewingDirection.cross(upDirection);
+			strafeAxis.normalize();
+			if (window.isKeyPressed(GLFW_KEY_SPACE))
+				distance *= SPEED_BOOST;
+			if (window.isKeyPressed(GLFW_KEY_W))
+				position += viewingDirection * distance;
+			if (window.isKeyPressed(GLFW_KEY_S))
+				position -= viewingDirection * distance;
+			if (window.isKeyPressed(GLFW_KEY_A))
+				position -= strafeAxis * distance;
+			if (window.isKeyPressed(GLFW_KEY_D))
+				position += strafeAxis * distance;
 		}
 
 		Mat4 Camera::generateViewMatrix() const {
@@ -68,13 +84,13 @@ namespace Engine {
 			Vec2 offset(mousePos.x - center.x, center.y - mousePos.y);
 			if (offset == Vec2(0, 0))
 				return viewingDirection;
-			offset *= sensitivity;
+			offset *= SENSITIVITY;
 			yaw += offset.x;
 			pitch += offset.y;
-			if (pitch > 89.f)
-				pitch = 89.f;
-			if (pitch < -89.f)
-				pitch = -89.f;
+			if (pitch > MAX_PITCH_ANGLE)
+				pitch = MAX_PITCH_ANGLE;
+			if (pitch < -MAX_PITCH_ANGLE)
+				pitch = -MAX_PITCH_ANGLE;
 			Vec3 newView;
 			float yawRad = toRadians(yaw);
 			float pitchRad = toRadians(pitch);
