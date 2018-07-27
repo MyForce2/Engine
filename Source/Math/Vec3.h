@@ -21,6 +21,7 @@ namespace Engine {
 			Vec3(const Vec2& vec);
 			Vec3(const Vec4& vec);
 			Vec3(const Vec3& vec);
+			Vec3(const Vec2& vec, float z);
 			~Vec3();
 
 			// Returns the length of this vector

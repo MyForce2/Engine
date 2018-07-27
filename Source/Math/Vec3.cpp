@@ -32,6 +32,10 @@ namespace Engine {
 		Vec3::Vec3(const Vec3& vec) : x(vec.x), y(vec.y), z(vec.z) {
 		
 		}
+		
+		Vec3::Vec3(const Vec2& vec, float z) : x(vec.x), y(vec.y), z(z) {
+
+		}
 
 		Vec3::~Vec3() {
 

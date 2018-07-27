@@ -33,6 +33,7 @@ namespace Engine {
 			void setUniform1i(const std::string& name, int val) const;
 			void setUniform2f(const std::string& name, const Math::Vec2& vec) const;
 			void setUniform3f(const std::string& name, const Math::Vec3& vec) const;
+			void setUniform4f(const std::string& name, const Math::Vec4& vec) const;
 
 			// Binds a uniform buffer to the specified index (blockBinding = index)
 			void bindUniformBuffer(const UniformBuffer& ubo, const std::string& name, GLuint blockBinding) const;

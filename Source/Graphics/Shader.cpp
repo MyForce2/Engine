@@ -98,6 +98,13 @@ namespace Engine {
 			unBind();
 		}
 
+		void Shader::setUniform4f(const std::string& name, const Math::Vec4& vec) const {
+			bind();
+			GLint location = getUniformLocation(name);
+			glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+			unBind();
+		}
+
 		void Shader::bindUniformBuffer(const UniformBuffer& ubo, const std::string& name, GLuint blockBinding) const {
 			GLuint blockIndex = glGetUniformBlockIndex(id, name.c_str());
 			glBindBufferBase(GL_UNIFORM_BUFFER, blockBinding, ubo.getID());

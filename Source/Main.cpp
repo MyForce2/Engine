@@ -45,6 +45,11 @@ struct Timer {
 };
 
 
+struct LightingConstants {
+	Vec4 ambientColor;
+	Vec3 lightPosition;
+};
+
 
 
 int main() {
@@ -58,58 +63,61 @@ int main() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glClearColor(0.5, 0.5, 0, 1);
-
+	Vec3 color(136, 206, 250);
+	color /= 255;
+	glClearColor(color.x, color.y, color.z, 1);
+	glClearColor(0, 0, 0, 1);
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
 	float xMin = 0.f, xMax = 1.f;
 	float yMin = 0.f, yMax = 1.f;
 
-
-	float positionsTex[] = {
-		-1.f, -1.f, -1.f,  xMin, yMin, // Bottom-left
-		1.f,  1.f, -1.f,  xMax, yMax, // top-right
-		1.f, -1.f, -1.f,  xMax, yMin, // bottom-right         
-		1.f,  1.f, -1.f,  xMax, yMax, // top-right
-		-1.f, -1.f, -1.f,  xMin, yMin, // bottom-left
-		-1.f,  1.f, -1.f,  xMin, yMax, // top-left
-
-		// Front face
-		-1.f, -1.f,  1.f,   xMin, yMin, // bottom-left
-		1.f, -1.f,  1.f,   xMax, yMin,  // bottom-right
-		1.f,  1.f,  1.f,   xMax, yMax,  // top-right
-		1.f,  1.f,  1.f,   xMax, yMax,  // top-right
-		-1.f,  1.f,  1.f,   xMin, yMax, // top-left
-		-1.f, -1.f,  1.f,   xMin, yMin, // bottom-left
-		// Left face
-		-1.f,  1.f,  1.f,  xMax, yMax, // top-right
-		-1.f,  1.f, -1.f,  xMin, yMax, // top-left
-		-1.f, -1.f, -1.f,  xMin, yMin, // bottom-left
-		-1.f, -1.f, -1.f,  xMin, yMin, // bottom-left
-		-1.f, -1.f,  1.f,  xMax, yMin, // bottom-right
-		-1.f,  1.f,  1.f,  xMax, yMax, // top-right
-		// Right face
-		1.f,  1.f,  1.f,  xMin, yMax, // top-left
-		1.f, -1.f, -1.f,  xMax, yMin, // bottom-right
-		1.f,  1.f, -1.f,  xMax, yMax, // top-right         
-		1.f, -1.f, -1.f,  xMax, yMin, // bottom-right
-		1.f,  1.f,  1.f,  xMin, yMax, // top-left
-		1.f, -1.f,  1.f,  xMin, yMin, // bottom-left     
-		// Bottom face
-		-1.f, -1.f, -1.f,  xMax, yMax, // top-right
-		1.f, -1.f, -1.f,  xMin, yMax, // top-left
-		1.f, -1.f,  1.f,  xMin, yMin, // bottom-left
-		1.f, -1.f,  1.f,  xMin, yMin, // bottom-left
-		-1.f, -1.f,  1.f,  xMax, yMin, // bottom-right
-		-1.f, -1.f, -1.f,  xMax, yMax, // top-right
-		// Top face
-		-1.f,  1.f, -1.f,  xMin, yMax, // top-left
-		1.f,  1.f,  1.f,  xMax, yMin, // bottom-right
-		1.f,  1.f, -1.f,  xMax, yMax, // top-right     
-		1.f,  1.f,  1.f,  xMax, yMin, // bottom-right
-		-1.f,  1.f, -1.f,  xMin, yMax, // top-left
-		-1.f,  1.f,  1.f,  xMin, yMin  // bottom-left
+	float cubeVertices[] = {
+    // Back face
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, // Bottom-left
+     0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, // top-right
+     0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, // bottom-right         
+     0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, // top-right
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, // bottom-left
+    -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, // top-left
+    // Front face
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, // bottom-left
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, // bottom-right
+     0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f, // top-right
+     0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f, // top-right
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f, // top-left
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, // bottom-left
+    // Left face
+    -0.5f,  0.5f,  0.5f,  -1.0f, 0.0f, 0.0f, // top-right
+    -0.5f,  0.5f, -0.5f,  -1.0f, 0.0f, 0.0f, // top-left
+    -0.5f, -0.5f, -0.5f,  -1.0f, 0.0f, 0.0f, // bottom-left
+    -0.5f, -0.5f, -0.5f,  -1.0f, 0.0f, 0.0f, // bottom-left
+    -0.5f, -0.5f,  0.5f,  -1.0f, 0.0f, 0.0f, // bottom-right
+    -0.5f,  0.5f,  0.5f,  -1.0f, 0.0f, 0.0f, // top-right
+    // Right face
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, // top-left
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f, // bottom-right
+     0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f, // top-right         
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f, // bottom-right
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, // top-left
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, // bottom-left     
+    // Bottom face
+    -0.5f, -0.5f, -0.5f,   0.0f, -1.0f, 0.0f, // top-right
+     0.5f, -0.5f, -0.5f,   0.0f, -1.0f, 0.0f, // top-left
+     0.5f, -0.5f,  0.5f,   0.0f, -1.0f, 0.0f, // bottom-left
+     0.5f, -0.5f,  0.5f,   0.0f, -1.0f, 0.0f, // bottom-left
+    -0.5f, -0.5f,  0.5f,   0.0f, -1.0f, 0.0f, // bottom-right
+    -0.5f, -0.5f, -0.5f,   0.0f, -1.0f, 0.0f, // top-right
+    // Top face
+    -0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f, // top-left
+     0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 0.0f, // bottom-right
+     0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f, // top-right     
+     0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 0.0f, // bottom-right
+    -0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f, // top-left
+    -0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 0.0f // bottom-left        
 	};
+
+
 
 	const int amount = 10;
 	Math::Mat4* translationBuffer = new Math::Mat4[amount];
@@ -118,28 +126,38 @@ int main() {
 		translationBuffer[i] = Mat4::translation(Vec3(v));
 	}
 
+	Vec3 cubeColor(50, 0, 0);
+	cubeColor /= 255;
 
+	LightingConstants c;
+	c.ambientColor = Vec4(color, 0.2f);
+	c.lightPosition = Vec3(-2, 0, -2);
+	UniformBuffer ubo = UniformBuffer(&c, sizeof(LightingConstants));
+	
 
 	std::string prefix = "Resources/Shaders/";
 	Shader shader(prefix + "Vertex.shader", prefix + "Fragment.shader");
-	Camera camera = Camera(window, 0.1f, 100.f);
+	Camera camera = Camera(window, 0.1f, 200.f);
+	camera.setPosition(Vec3(-2, 0, -2));
 	shader.setUniformMatrix4fv("u_Projection", camera.getProjectionMatrix());
 	shader.setUniformMatrix4fv("u_View", camera.getViewMatrix());
 	shader.setUniformMatrix4fv("u_TexSlot", 0);
+	shader.setUniform3f("u_ViewingPosition", camera.getPosition());
+	shader.setUniform3f("u_Color", cubeColor);
+	shader.bindUniformBuffer(ubo, "LightConstants", 0);
 	Texture texture("Resources/Textures/Texture.png");
 	texture.setSlot();
-	VertexBuffer vbo(positionsTex, sizeof(positionsTex));
+	VertexBuffer vbo(cubeVertices, sizeof(cubeVertices));
 	VertexBuffer tr(translationBuffer, sizeof(Mat4) * amount);
 	VertexArray vao;
 	VBLayout layout;
 	layout.addElement(3, GL_FLOAT);
-	layout.addElement(2, GL_FLOAT);
+	layout.addElement(3, GL_FLOAT);
 	vao.addBuffer(vbo, layout);
 	vao.addInstancedMatrixBuffer(tr);
 	
 	BasicRenderer r;
-	//Layer2D l = Layer2D(prefix + "QuadVertex.shader", prefix + "QuadFragment.shader");
-	//Label label = Label("Label", 22, Vec2(100, 100), Vec3(100, 100, 0));
+
 	
 
 	Utils::Clock clock;
@@ -148,6 +166,7 @@ int main() {
 		r.renderArraysInstanced(vao, shader, 0, 36, amount);
 		camera.update(window, clock.getTimePassed());
 		clock.reset();
+		shader.setUniform3f("u_ViewingPosition", camera.getPosition());
 		shader.setUniformMatrix4fv("u_View", camera.getViewMatrix());
 		shader.setUniformMatrix4fv("u_Projection", camera.getProjectionMatrix());
 		window.update();

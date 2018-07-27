@@ -22,6 +22,8 @@ namespace Engine {
 			Vec4(const Vec2& vec);
 			Vec4(const Vec3& vec);
 			Vec4(const Vec4& vec);
+			Vec4(const Vec2& vec, float z, float w);
+			Vec4(const Vec3& vec, float w);
 			~Vec4();
 
 			float length() const;

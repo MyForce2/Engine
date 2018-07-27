@@ -32,6 +32,14 @@ namespace Engine {
 
 		}
 
+		Vec4::Vec4(const Vec2& vec, float z, float w) : x(vec.x), y(vec.y), z(z), w(w) {
+
+		}
+
+		Vec4::Vec4(const Vec3& vec, float w) : x(vec.x), y(vec.y), z(vec.z), w(w) {
+
+		}
+
 		Vec4::~Vec4() {
 
 		}
