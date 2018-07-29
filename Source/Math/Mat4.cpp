@@ -12,19 +12,19 @@ namespace Engine {
 	namespace Math {
 
 		Mat4::Mat4() {
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				data[i] = 0.f;
 		}
 
 		Mat4::Mat4(float mainDiagonal) {
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				data[i] = 0.f;
-			for (int i = 0; i < 16; i += 5)
+			for (int i = 0; i < DATA_SIZE; i += 5)
 				data[i] = mainDiagonal;
 		}
 
 		Mat4::Mat4(const Mat4& mat) {
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				data[i] = mat.data[i];
 		}
 
@@ -34,13 +34,13 @@ namespace Engine {
 
 		Mat4 Mat4::operator*(const Mat4& mat) const {
 			Mat4 result;
-			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < MATRIX_DIMENSIONS; i++) {
+				for (int j = 0; j < MATRIX_DIMENSIONS; j++) {
 					float sum = 0.f;
-					for (int k = 0; k < 4; k++) {
-						sum += data[j + k * 4] * mat.data[k + i * 4];
+					for (int k = 0; k < MATRIX_DIMENSIONS; k++) {
+						sum += data[j + k * MATRIX_DIMENSIONS] * mat.data[k + i * MATRIX_DIMENSIONS];
 					}
-					result.data[j + i * 4] = sum;
+					result.data[j + i * MATRIX_DIMENSIONS] = sum;
 				}
 			}
 			return result;
@@ -48,28 +48,28 @@ namespace Engine {
 
 		Mat4 Mat4::operator*(float value) const {
 			Mat4 result((*this));
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				result.data[i] *= value;
 			return result;
 		}
 
 		Mat4 Mat4::operator/(float value) const {
 			Mat4 result((*this));
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				result.data[i] /= value;
 			return result;
 		}
 
 		Mat4 Mat4::operator+(float value) const {
 			Mat4 result((*this));
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				result.data[i] += value;
 			return result;
 		}
 
 		Mat4 Mat4::operator-(float value) const {
 			Mat4 result((*this));
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				result.data[i] -= value;
 			return result;
 		}
@@ -78,10 +78,10 @@ namespace Engine {
 			Vec4 result;
 			float* vecData = (float*) (&vec);
 			float* resultData = (float*) (&result);
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < MATRIX_DIMENSIONS; i++) {
 				float sum = 0.f;
-				for (int j = 0; j < 4; j++) {
-					sum += data[j * 4 + i] * vecData[j];
+				for (int j = 0; j < MATRIX_DIMENSIONS; j++) {
+					sum += data[j * MATRIX_DIMENSIONS + i] * vecData[j];
 				}
 				resultData[i] = sum;
 			}
@@ -90,27 +90,27 @@ namespace Engine {
 
 		void Mat4::operator*=(const Mat4& mat) {
 			Mat4 result = (*this) * mat;
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				data[i] = result.data[i];
 		}
 
 		void Mat4::operator*=(float value) {
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				data[i] *= value;
 		}
 
 		void Mat4::operator/=(float value) {
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				data[i] /= value;
 		}
 
 		void Mat4::operator+=(float value) {
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				data[i] += value;
 		}
 
 		void Mat4::operator-=(float value) {
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < DATA_SIZE; i++)
 				data[i] -= value;
 		}
 
@@ -123,7 +123,7 @@ namespace Engine {
 		}
 
 		bool Mat4::operator==(const Mat4& mat) const {
-			for (int i = 0; i < 16; i++) {
+			for (int i = 0; i < DATA_SIZE; i++) {
 				if (data[i] != mat.data[i])
 					return false;
 			}
@@ -230,7 +230,7 @@ namespace Engine {
 		
 
 		float toRadians(float angle) {
-			return angle * M_PI / 180.f;
+			return float(angle * M_PI / 180.f);
 		}
 
 		Mat4 operator*(float value, const Mat4& mat) {
@@ -239,15 +239,15 @@ namespace Engine {
 
 		Mat4 operator-(const Mat4& mat) {
 			Mat4 result;
-			for (int i = 0; i < 16; i++)
+			for (int i = 0; i < Mat4::DATA_SIZE; i++)
 				result.data[i] = -mat.data[i];
 			return result;
 		}
 
 		std::ostream& operator<<(std::ostream& os, const Mat4& mat) {
-			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
-					os << mat.data[j * 4 + i] << ' ';
+			for (int i = 0; i < Mat4::MATRIX_DIMENSIONS; i++) {
+				for (int j = 0; j < Mat4::MATRIX_DIMENSIONS; j++) {
+					os << mat.data[j * Mat4::MATRIX_DIMENSIONS + i] << ' ';
 				}
 				os << '\n';
 			}

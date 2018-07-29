@@ -10,10 +10,14 @@ namespace Engine {
 		A struct used to represent any type of matrix which is a 4x4 matrix
 		*/
 		struct Mat4 {
+		private:
+
+			static const unsigned int DATA_SIZE = 16U;
+			static const unsigned int MATRIX_DIMENSIONS = 4U;
 		public:
 			union {
-				float data[16];
-				Vec4 columns[4];
+				float data[DATA_SIZE];
+				Vec4 columns[MATRIX_DIMENSIONS];
 			};
 
 			Mat4();
@@ -28,7 +32,7 @@ namespace Engine {
 			Mat4 operator/(float value) const;
 			Mat4 operator+(float value) const;
 			Mat4 operator-(float value) const;
-			Vec4 operator*(const Vec4& mat) const;
+			Vec4 operator*(const Vec4& vec) const;
 
 			void operator*=(const Mat4& mat);
 			void operator*=(float value);
