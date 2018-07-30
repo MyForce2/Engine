@@ -18,7 +18,7 @@ namespace Engine {
 				return "";
 			}
 			reader.seekg(0, ios::end);
-			int size = reader.tellg();
+			int size = int(reader.tellg());
 			char* buffer = new char[size + 1]();
 			reader.seekg(ios::beg);
 			reader.read(buffer, size);

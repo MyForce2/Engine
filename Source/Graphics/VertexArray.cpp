@@ -27,7 +27,7 @@ namespace Engine {
 			vbo.bind();
 			std::vector<VBElement> elements = layout.getElements();
 			unsigned int off = 0U;
-			for (int i = 0; i < elements.size(); i++) {
+			for (unsigned int i = 0; i < elements.size(); i++) {
 				glEnableVertexAttribArray(i + amountOfAttributes);
 				const VBElement& element = elements[i];
 				GLint elementSize = VBElement::getSizeOfElement(element.type);
@@ -47,7 +47,7 @@ namespace Engine {
 			bind();
 			vbo.bind();
 			unsigned int offset = 0U;
-			for (int i = 0; i < 4; i++) {
+			for (unsigned int i = 0; i < 4; i++) {
 				glEnableVertexAttribArray(i + amountOfAttributes);
 				glVertexAttribPointer(i + amountOfAttributes, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 16, (const void*) offset);
 				offset += sizeof(GLfloat) * 4;
@@ -60,7 +60,7 @@ namespace Engine {
 			vbo.bind();
 			std::vector<VBElement> elements = layout.getElements();
 			unsigned int off = 0U;
-			for (int i = 0; i < elements.size(); i++) {
+			for (unsigned int i = 0; i < elements.size(); i++) {
 				glEnableVertexAttribArray(i + amountOfAttributes);
 				const VBElement& element = elements[i];
 				GLint elementSize = VBElement::getSizeOfElement(element.type);
@@ -81,7 +81,7 @@ namespace Engine {
 			bind();
 			vbo.bind();
 			unsigned int offset = 0U;
-			for (int i = 0; i < 4; i++) {
+			for (unsigned int i = 0; i < 4; i++) {
 				glEnableVertexAttribArray(i + amountOfAttributes);
 				glVertexAttribPointer(i + amountOfAttributes, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 16, (const void*) offset);
 				glVertexAttribDivisor(i + amountOfAttributes, 1);

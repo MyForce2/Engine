@@ -16,11 +16,19 @@ namespace Engine {
 		private:
 			GLuint id;
 
+			struct TextureData {
+				GLsizei width, height;
+				const unsigned char* data;
+			};
+
 		public:
 			Texture(const std::string& path);
 			Texture(const char* path);
 			Texture(const std::string& path, GLint filterParam);
 			Texture(const char* path, GLint filterParam);
+			Texture(const unsigned char* buffer, GLsizei width, GLsizei height);
+			Texture(const unsigned char* buffer, GLsizei width, GLsizei height, GLint filterParam);
+			Texture(const unsigned char* buffer, GLsizei width, GLsizei height, GLint internalFormat, GLenum format, GLint filterParam);
 			~Texture();
 
 			// Binds this texture to the given slot, default slot is 0
@@ -29,6 +37,10 @@ namespace Engine {
 			void unBind() const;
 
 			inline const GLuint getID() const { return id; }
+
+		private:
+			void init(const TextureData& data, GLint filterParam);
+
 		};
 	}
 }

@@ -129,10 +129,7 @@ int main() {
 	Vec3 cubeColor(50, 0, 0);
 	cubeColor /= 255;
 
-	LightingConstants c;
-	c.ambientColor = Vec4(color, 0.2f);
-	c.lightPosition = Vec3(-2, 0, -2);
-	UniformBuffer ubo = UniformBuffer(&c, sizeof(LightingConstants));
+	Vec3 lightPosition(0, 0.25f, -2);
 	
 
 	std::string prefix = "Resources/Shaders/";
@@ -144,7 +141,8 @@ int main() {
 	shader.setUniformMatrix4fv("u_TexSlot", 0);
 	shader.setUniform3f("u_ViewingPosition", camera.getPosition());
 	shader.setUniform3f("u_Color", cubeColor);
-	shader.bindUniformBuffer(ubo, "LightConstants", 0);
+	shader.setUniform4f("u_AmbientLight", Vec4(color, 0.2));
+	shader.setUniform3f("u_LightPosition", lightPosition);
 	Texture texture("Resources/Textures/Texture.png");
 	texture.setSlot();
 	VertexBuffer vbo(cubeVertices, sizeof(cubeVertices));
@@ -161,14 +159,36 @@ int main() {
 	
 
 	Utils::Clock clock;
+	Layer2D layer = Layer2D(800.f, 600.f, "Resources/Shaders/QuadVertex.shader", "Resources/Shaders/QuadFragment.shader");
+	Label l;
+	l.setFontSize(36);
+	l.setStartPosition(Vec2(100, 400));
+	l.setText("Hello");
+	l.setLabelColor(Vec3(100, 0, 0));
+
+	GLfloat objData[] = {
+		200.f, 200.f, 1.f, 1.f,
+		100.f, 200.f, 0.f, 1.f,
+		100.f, 100.f, 0.f, 0.f,
+		200.f, 100.f, 1.f, 0.f
+	};
+
+	Renderable2DTexture obj = Renderable2DTexture(objData, sizeof(objData), "Resources/Textures/Texture.png");
+
+
 
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
+		layer.startFrame();
 		r.renderArraysInstanced(vao, shader, 0, 36, amount);
+		layer.add(l);
+		layer.add(obj);
+		layer.render();
 		camera.update(window, clock.getTimePassed());
 		clock.reset();
 		shader.setUniform3f("u_ViewingPosition", camera.getPosition());
 		shader.setUniformMatrix4fv("u_View", camera.getViewMatrix());
 		shader.setUniformMatrix4fv("u_Projection", camera.getProjectionMatrix());
+		shader.setUniform3f("u_LightPosition", lightPosition);
 		window.update();
 	}
 

@@ -15,6 +15,8 @@ namespace Engine {
 			// The amount of enabled attributes
 			unsigned int amountOfAttributes;
 
+			static const unsigned int MATRIX_AMOUNT_OF_ATTRIBUTES = 4U;
+
 		public:
 			VertexArray();
 			~VertexArray();

@@ -11,7 +11,7 @@ namespace Engine {
 		
 		using namespace Math;
 		const std::string BatchRenderer::FONT_ATLAS_PATH = "FontAtlas.png";
-		const std::string BatchRenderer::FONT_PATH = "Times New Roman.ttf";
+		const std::string BatchRenderer::FONT_PATH = "arial.ttf";
 
 		// The vbo data for a Renderable2DTexture object, used for data mapping
 		struct RenderableVertex {
@@ -59,7 +59,8 @@ namespace Engine {
 			Tg::Image img = font.image;
 			stbi_flip_vertically_on_write(1);
 			stbi_write_png(FONT_ATLAS_PATH.c_str(), img.GetSize().width, img.GetSize().height, 1, img.GetImageBuffer().data(), img.GetSize().width);
-			fontAtlas = new Texture(FONT_ATLAS_PATH, GL_LINEAR);
+			fontAtlas = new Texture(img.GetImageBuffer().data(), img.GetSize().width, img.GetSize().height, GL_RED, GL_RED, GL_LINEAR);
+			//fontAtlas = new Texture(FONT_ATLAS_PATH, GL_LINEAR);
 		}
 		
 		void BatchRenderer::start() {

@@ -7,15 +7,12 @@ in vec3 v_FragmentPosition;
 
 uniform sampler2D u_TexSlot;
 uniform vec3 u_Color;
-// RGB for color, A for intensity
 
-layout (std140) uniform LightConstants {
-	vec4 u_AmbientLight;
-	vec3 u_LightPosition;
-};
 
 
 uniform vec3 u_ViewingPosition;
+uniform vec4 u_AmbientLight;
+uniform vec3 u_LightPosition;
 const float specularStrength = 0.5f;
 
 

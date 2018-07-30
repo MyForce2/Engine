@@ -46,7 +46,9 @@ namespace Engine {
 		void Layer2D::render() {
 			renderer.end();
 			shader.bind();
+			glDisable(GL_DEPTH_TEST);
 			renderer.flush();
+			glEnable(GL_DEPTH_TEST);
 		}
 
 		void Layer2D::initShader() {
