@@ -159,29 +159,19 @@ int main() {
 	
 
 	Utils::Clock clock;
-	Layer2D layer = Layer2D(800.f, 600.f, "Resources/Shaders/QuadVertex.shader", "Resources/Shaders/QuadFragment.shader");
+	Font f = Font("Times New Roman.ttf", 192U * 2);
+	Layer2D layer = Layer2D(800.f, 600.f, "Resources/Shaders/QuadVertex.shader", "Resources/Shaders/QuadFragment.shader", f);
 	Label l;
-	l.setFontSize(36);
+	l.setFontSize(36U);
 	l.setStartPosition(Vec2(100, 400));
-	l.setText("Hello");
+	l.setText("Hello I am testing this super long text");
 	l.setLabelColor(Vec3(100, 0, 0));
-
-	GLfloat objData[] = {
-		200.f, 200.f, 1.f, 1.f,
-		100.f, 200.f, 0.f, 1.f,
-		100.f, 100.f, 0.f, 0.f,
-		200.f, 100.f, 1.f, 0.f
-	};
-
-	Renderable2DTexture obj = Renderable2DTexture(objData, sizeof(objData), "Resources/Textures/Texture.png");
-
-
 
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
 		layer.startFrame();
 		r.renderArraysInstanced(vao, shader, 0, 36, amount);
-		layer.add(l);
-		layer.add(obj);
+		for(int i = 0; i < 100; i++)
+			layer.add(l);
 		layer.render();
 		camera.update(window, clock.getTimePassed());
 		clock.reset();

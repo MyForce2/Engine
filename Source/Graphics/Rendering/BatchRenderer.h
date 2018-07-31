@@ -6,6 +6,7 @@
 #include "Graphics/Renderable2D.h"
 #include "Graphics/Renderable2DTexture.h"
 #include "Graphics/Label.h"
+#include "Graphics/Font/Font.h"
 #include "Math/Vec2.h"
 #include <Typo/Typo.h>
 
@@ -46,12 +47,10 @@ namespace Engine {
 			Math::Mat4* modelMatrices;
 			// The amount of vertices to render in the next draw call
 			GLsizei amountOfObjects;
-			// The actual font atlas texture
-			Texture* fontAtlas;
-			// The font atlas data
-			Tg::FontModel font;
 			// 10 Texture slots dedicated for the batch renderer
 			std::array<GLuint, 10> textureSlots;
+			// The font for text rendering
+			Font font;
 
 			
 			static const unsigned int FONT_SIZE = 192;
@@ -60,11 +59,9 @@ namespace Engine {
 			static const unsigned short IBO_SIZE = INDICES_PER_OBJECT * MAX_OBJECTS;
 			static const unsigned int VBO_SIZE = sizeof(BatchVertex) * 4 * MAX_OBJECTS;
 			static const unsigned int MATRICES_BUFFER_SIZE = 16 * 4 * sizeof(float) * MAX_OBJECTS;
-			static const std::string FONT_ATLAS_PATH;
-			static const std::string FONT_PATH;
 
 		public:
-			BatchRenderer();
+			BatchRenderer(const Font& font);
 			~BatchRenderer();
 
 			// Clears all past data, maps the buffer to the begining, must call before adding objects
@@ -81,7 +78,8 @@ namespace Engine {
 			// Adds this object
 			void add(const Renderable2DTexture& object);
 
-			inline GLsizei getAmountOfObjets() const { return amountOfObjects; }
+			inline GLsizei getAmountOfObjects() const { return amountOfObjects; }
+			inline const Font& getFont() const { return font; }
 
 		private:
 			// Inits all of the renderer members

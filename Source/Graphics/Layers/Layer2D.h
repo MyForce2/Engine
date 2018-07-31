@@ -18,9 +18,9 @@ namespace Engine {
 			static const float PROJECTION_LEFT;
 			
 		public:
-			Layer2D(float top, float right, const std::string& vertex, const std::string& fragment);
-			Layer2D(const std::string& vertex, const std::string& fragment);
-			Layer2D(const Math::Mat4& projection, const std::string& vertex, const std::string& fragment);
+			Layer2D(float top, float right, const std::string& vertex, const std::string& fragment, const Font& font);
+			Layer2D(const std::string& vertex, const std::string& fragment, const Font& font);
+			Layer2D(const Math::Mat4& projection, const std::string& vertex, const std::string& fragment, const Font& font);
 
 			void add(const Label& label);
 			void add(const Renderable2DTexture& renderable);

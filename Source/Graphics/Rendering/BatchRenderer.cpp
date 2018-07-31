@@ -10,8 +10,6 @@ namespace Engine {
 
 		
 		using namespace Math;
-		const std::string BatchRenderer::FONT_ATLAS_PATH = "FontAtlas.png";
-		const std::string BatchRenderer::FONT_PATH = "arial.ttf";
 
 		// The vbo data for a Renderable2DTexture object, used for data mapping
 		struct RenderableVertex {
@@ -19,7 +17,7 @@ namespace Engine {
 			Math::Vec2 uv;
 		};
 
-		BatchRenderer::BatchRenderer() : amountOfObjects(0) {
+		BatchRenderer::BatchRenderer(const Font& font) : amountOfObjects(0), font(font) {
 			init();
 		}
 
@@ -53,19 +51,11 @@ namespace Engine {
 			}
 			ibo = new IndexBuffer(indices, IBO_SIZE);
 			delete[] indices;
-			Tg::FontDescription fontDescription(FONT_PATH, FONT_SIZE);
-			Tg::FontGlyphRange glyphRange((char) 32, (char) 127);
-			font = Tg::BuildFont(fontDescription, glyphRange, 4U);
-			Tg::Image img = font.image;
-			stbi_flip_vertically_on_write(1);
-			stbi_write_png(FONT_ATLAS_PATH.c_str(), img.GetSize().width, img.GetSize().height, 1, img.GetImageBuffer().data(), img.GetSize().width);
-			fontAtlas = new Texture(img.GetImageBuffer().data(), img.GetSize().width, img.GetSize().height, GL_RED, GL_RED, GL_LINEAR);
-			//fontAtlas = new Texture(FONT_ATLAS_PATH, GL_LINEAR);
 		}
 		
 		void BatchRenderer::start() {
 			textureSlots.fill(0);
-			addTexture(*fontAtlas);
+			addTexture(font.getFontAtlas());
 			data = (BatchVertex*) vbo->map(GL_WRITE_ONLY);
 			modelMatrices = (Math::Mat4*) modelMatricesBuffer->map(GL_WRITE_ONLY);
 		}
@@ -77,13 +67,14 @@ namespace Engine {
 
 
 		void BatchRenderer::addText(const std::string& text, Vec2 position, unsigned int fontSize, const Math::Vec3& textColor, const Math::Mat4& model) {
+			const Tg::FontModel& font = this->font.getFont();
 			float imageHeight = float(font.image.GetSize().height);
 			float imageWidth = float(font.image.GetSize().width);
 			Vec3 normalizedColor(textColor);
 			normalizedColor /= 255;
 			for (unsigned int i = 0; i < text.length(); i++) {
 				Tg::FontGlyph glyph = font.glyphSet[text[i]];
-				float ratio = ((float) FONT_SIZE) / fontSize;
+				float ratio = ((float) this->font.getFontSize()) / fontSize;
 				Vec2 topRightUV = Vec2(glyph.rect.right / imageWidth, glyph.rect.top / imageHeight);
 				Vec2 bottomLeftUV = Vec2(glyph.rect.left / imageWidth, glyph.rect.bottom / imageHeight);
 				float yOffset = (glyph.height - glyph.yOffset) / ratio;

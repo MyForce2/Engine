@@ -20,7 +20,15 @@ namespace Engine {
 
 		public:
 			Font(const std::string& fileName, unsigned int fontSize);
+			Font(const Font& font);
 			~Font();
+
+			inline const Texture& getFontAtlas() const { return *fontAtlas; }
+			inline const Tg::FontModel& getFont() const { return font; }
+			inline unsigned int getFontSize() const { return fontSize; }
+
+		private:
+			void init();
 		};
 	}
 }
