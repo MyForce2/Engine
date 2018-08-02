@@ -3,7 +3,7 @@
 #include <string>
 #include <GLFW\glfw3.h>
 
-#include "Math\Vec2.h"
+#include "Math\Vectors\Vec2.h"
 
 namespace Engine {
 	namespace Graphics {
@@ -27,6 +27,7 @@ namespace Engine {
 			bool isMouseButtonReleased(int button) const;
 			bool isCapsLockOn() const;
 
+			void setSize(const Math::Vec2& v);
 			
 
 			void update();

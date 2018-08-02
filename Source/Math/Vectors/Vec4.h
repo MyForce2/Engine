@@ -9,12 +9,18 @@ namespace Engine {
 
 		struct Vec2;
 		struct Vec3;
+		struct IVec2;
+		struct IVec3;
+		struct IVec4;
+
 
 		/*
-		A struct used to hold and wrap four values
+		A glsl style vector struct used to hold and wrap four floating point values
 		*/
 		struct Vec4 {
 			float x, y, z, w;
+
+			// Constructors
 
 			Vec4();
 			Vec4(float value);
@@ -24,11 +30,23 @@ namespace Engine {
 			Vec4(const Vec4& vec);
 			Vec4(const Vec2& vec, float z, float w);
 			Vec4(const Vec3& vec, float w);
+			Vec4(const IVec2& vec);
+			Vec4(const IVec2& vec, float z, float w);
+			Vec4(const IVec3& vec);
+			Vec4(const IVec3& vec, float w);
+			Vec4(const IVec4& vec);
 			~Vec4();
 
+			// Functions
+
+			// Returns the length of this vector
 			float length() const;
+			// Normalizes this vector
 			void normalize();
+			// Returns a normalized version of this vector
 			Vec4 normalized() const;
+
+			// Operators
 
 			Vec4 operator+(float value) const;
 			Vec4 operator-(float value) const;

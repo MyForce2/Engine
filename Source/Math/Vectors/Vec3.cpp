@@ -5,6 +5,9 @@
 
 #include "Vec2.h"
 #include "Vec4.h"
+#include "IVec2.h"
+#include "IVec3.h"
+#include "IVec4.h"
 
 namespace Engine {
 	namespace Math {
@@ -34,6 +37,22 @@ namespace Engine {
 		}
 		
 		Vec3::Vec3(const Vec2& vec, float z) : x(vec.x), y(vec.y), z(z) {
+
+		}
+
+		Vec3::Vec3(const IVec2& vec) : x(vec.x), y(vec.y), z() {
+
+		}
+
+		Vec3::Vec3(const IVec2& vec, float z) : x(vec.x), y(vec.y), z(z) {
+
+		}
+
+		Vec3::Vec3(const IVec3& vec) : x(vec.x), y(vec.y), z(vec.z) {
+
+		}
+
+		Vec3::Vec3(const IVec4& vec) : x(vec.x), y(vec.y), z(vec.z) {
 
 		}
 

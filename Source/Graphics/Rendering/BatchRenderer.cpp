@@ -16,6 +16,7 @@ namespace Engine {
 		};
 
 		BatchRenderer::BatchRenderer(const Font& font) : amountOfObjects(0), font(font) {
+
 			init();
 		}
 
@@ -147,6 +148,10 @@ namespace Engine {
 			}
 			object.getVBO()->unMap();
 			amountOfObjects++;
+		}
+
+		void BatchRenderer::setFont(const Font& font) {
+			
 		}
 
 		GLint BatchRenderer::addTexture(const Texture& texture) {

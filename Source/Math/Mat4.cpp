@@ -6,7 +6,7 @@
 
 
 #include "Mat4.h"
-#include "Vec2.h"
+#include "Vectors/Vec2.h"
 
 namespace Engine {
 	namespace Math {

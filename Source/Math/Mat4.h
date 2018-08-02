@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Vec3.h"
-#include "Vec4.h"
+#include "Vectors/Vec3.h"
+#include "Vectors/Vec4.h"
 
 namespace Engine {
 	namespace Math {

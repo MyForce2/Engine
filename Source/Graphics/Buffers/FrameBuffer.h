@@ -1,7 +1,7 @@
 #pragma once
 
 #include <GL/glew.h>
-#include "Math/Vec2.h"
+#include "Math/Vectors/Vec2.h"
 
 namespace Engine {
 	namespace Graphics {

@@ -7,7 +7,7 @@
 #include "Graphics/Renderable2DTexture.h"
 #include "Graphics/Label.h"
 #include "Graphics/Font/Font.h"
-#include "Math/Vec2.h"
+#include "Math\Vectors\Vec2.h"
 #include <Typo/Typo.h>
 
 #include <array>
@@ -50,7 +50,7 @@ namespace Engine {
 			// 10 Texture slots dedicated for the batch renderer
 			std::array<GLuint, 10> textureSlots;
 			// The font for text rendering
-			Font font;
+			const Font& font;
 
 			
 			static const unsigned int FONT_SIZE = 192;
@@ -80,6 +80,8 @@ namespace Engine {
 
 			inline GLsizei getAmountOfObjects() const { return amountOfObjects; }
 			inline const Font& getFont() const { return font; }
+
+			void setFont(const Font& font);
 
 		private:
 			// Inits all of the renderer members

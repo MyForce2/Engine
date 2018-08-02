@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Math\Mat4.h"
-#include "Math\Vec3.h"
+#include "Math\Vectors\Vec3.h"
 #include "Graphics/Window.h"
 
 

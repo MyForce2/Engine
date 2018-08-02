@@ -3,7 +3,7 @@
 #include <GL\glew.h>
 #include <string>
 
-#include "Math\Vec2.h"
+#include "Math\Vectors\Vec2.h"
 #include "Math\Mat4.h"
 #include "Buffers/UniformBuffer.h"
 

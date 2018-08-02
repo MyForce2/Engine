@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vec3.h"
+#include "Vectors/Vec3.h"
 
 namespace Engine {
 	namespace Math {

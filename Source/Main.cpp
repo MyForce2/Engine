@@ -159,19 +159,22 @@ int main() {
 	
 
 	Utils::Clock clock;
-	Font f = Font("Times New Roman.ttf", 192U * 2);
+	Font f = Font("arial.ttf", 192U * 2);
 	Layer2D layer = Layer2D(800.f, 600.f, "Resources/Shaders/QuadVertex.shader", "Resources/Shaders/QuadFragment.shader", f);
 	Label l;
 	l.setFontSize(36U);
 	l.setStartPosition(Vec2(100, 400));
 	l.setText("Hello I am testing this super long text");
 	l.setLabelColor(Vec3(100, 0, 0));
+	Mat4 model = Mat4::translation(Vec2(-l.getStartPosition()));
+	model = Mat4::scale(Vec2(0.5, 0.5)) * model;
+	model = Mat4::translation(Vec2(l.getStartPosition())) * model;
+	l.setModelMatrix(model);
 
 	while (!window.isClosed() && window.isKeyReleased(GLFW_KEY_ESCAPE)) {
 		layer.startFrame();
 		r.renderArraysInstanced(vao, shader, 0, 36, amount);
-		for(int i = 0; i < 100; i++)
-			layer.add(l);
+		layer.add(l);
 		layer.render();
 		camera.update(window, clock.getTimePassed());
 		clock.reset();

@@ -8,13 +8,18 @@ namespace Engine {
 
 		struct Vec3;
 		struct Vec4;
+		struct IVec2;
+		struct IVec3;
+		struct IVec4;
 
 		/*
-		A struct used to hold and wrap two values
+		A glsl style vector struct used to hold and wrap two floating point values
 		*/
 		struct Vec2 {
 		public:
 			float x, y;
+
+			// // Constructors
 
 			Vec2();
 			Vec2(float value);
@@ -22,6 +27,9 @@ namespace Engine {
 			Vec2(const Vec3& vec);
 			Vec2(const Vec4& vec);
 			Vec2(const Vec2& vec);
+			Vec2(const IVec2& vec);
+			Vec2(const IVec3& vec);
+			Vec2(const IVec4& vec);
 			~Vec2();
 
 			// Returns the length of this vector

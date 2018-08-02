@@ -3,7 +3,7 @@
 #include "Texture.h"
 
 #include <array>
-#include "Math/Vec2.h"
+#include "Math\Vectors\Vec2.h"
 
 namespace Engine {
 	namespace Graphics {

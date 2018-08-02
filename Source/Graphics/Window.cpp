@@ -15,6 +15,7 @@ namespace Engine {
 			if (!glfwInit())
 				Utils::Log::getLog()->logError("Failed to init glfw");
 			glfwWindowHint(GLFW_SAMPLES, 4);
+			glfwWindowHint(GLFW_RESIZABLE, false);
 			windowHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 			if (!windowHandle)
 				Utils::Log::getLog()->logError("Failed to create window");
@@ -58,6 +59,10 @@ namespace Engine {
 			glfwSwapBuffers(windowHandle);
 			glfwPollEvents();
 			FrameBuffer::clearBuffer(clearMask);
+		}
+
+		void Window::setSize(const Math::Vec2& vec) {
+			glfwSetWindowSize(windowHandle, vec.x, vec.y);
 		}
 
 		Math::Vec2 Window::getMousePosition() const {
