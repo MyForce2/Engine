@@ -35,16 +35,7 @@ namespace Engine {
 
 		VertexBuffer::VertexBuffer(const VertexBuffer& vbo) {
 			glGenBuffers(1, &id);
-			GLint size, usage;
-			vbo.bind();
-			glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-			glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_USAGE, &usage);
-			GLvoid* data = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
-			bind();
-			glBufferData(GL_ARRAY_BUFFER, size, data, usage);
-			vbo.bind();
-			glUnmapBuffer(GL_ARRAY_BUFFER);
-			vbo.unBind();
+			copyBuffer(vbo);
 		}
 
 		VertexBuffer::VertexBuffer(VertexBuffer&& vbo) : id(vbo.id) {
@@ -77,7 +68,30 @@ namespace Engine {
 			unBind();
 		}
 
+		void VertexBuffer::operator=(VertexBuffer&& vbo) {
+			glDeleteBuffers(1, &id);
+			id = vbo.id;
+			vbo.id = 0;
+		}
 
+		void VertexBuffer::operator=(const VertexBuffer& vbo) {
+			glDeleteBuffers(1, &id);
+			glGenBuffers(1, &id);
+			copyBuffer(vbo);
+		}
+
+		void VertexBuffer::copyBuffer(const VertexBuffer& vbo) {
+			GLint size, usage;
+			vbo.bind();
+			glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+			glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_USAGE, &usage);
+			GLvoid* data = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
+			bind();
+			glBufferData(GL_ARRAY_BUFFER, size, data, usage);
+			vbo.bind();
+			glUnmapBuffer(GL_ARRAY_BUFFER);
+			vbo.unBind();
+		}
 
 
 	}

@@ -33,6 +33,11 @@ namespace Engine {
 				
 
 			inline GLuint getID() const { return id; }
+
+			void operator=(UniformBuffer&& ubo);
+			void operator=(const UniformBuffer& ubo);
+		private:
+			void copyBuffer(const UniformBuffer& ubo);
 			
 		};
 	}

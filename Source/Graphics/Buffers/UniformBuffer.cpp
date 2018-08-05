@@ -27,16 +27,7 @@ namespace Engine {
 
 		UniformBuffer::UniformBuffer(const UniformBuffer& ubo) {
 			glGenBuffers(1, &id);
-			GLint size, usage;
-			ubo.bind();
-			glGetBufferParameteriv(GL_UNIFORM_BUFFER, GL_BUFFER_SIZE, &size);
-			glGetBufferParameteriv(GL_UNIFORM_BUFFER, GL_BUFFER_USAGE , &usage);
-			GLvoid* data = glMapBuffer(GL_UNIFORM_BUFFER, GL_READ_ONLY);
-			bind();
-			glBufferData(GL_UNIFORM_BUFFER, size, data, usage);
-			ubo.bind();
-			glUnmapBuffer(GL_UNIFORM_BUFFER);
-			ubo.unBind();
+			copyBuffer(ubo);
 		}
 
 		UniformBuffer::UniformBuffer(UniformBuffer&& ubo) : id(ubo.id) {
@@ -67,6 +58,31 @@ namespace Engine {
 			bind();
 			glUnmapBuffer(GL_UNIFORM_BUFFER);
 			unBind();
+		}
+
+		void UniformBuffer::operator=(UniformBuffer&& ubo) {
+			glDeleteBuffers(1, &id);
+			id = ubo.id;
+			ubo.id = 0;
+		}
+
+		void UniformBuffer::operator=(const UniformBuffer& ubo) {
+			glDeleteBuffers(1, &id);
+			glGenBuffers(1, &id);
+			copyBuffer(ubo);
+		}
+
+		void UniformBuffer::copyBuffer(const UniformBuffer& ubo) {
+			GLint size, usage;
+			ubo.bind();
+			glGetBufferParameteriv(GL_UNIFORM_BUFFER, GL_BUFFER_SIZE, &size);
+			glGetBufferParameteriv(GL_UNIFORM_BUFFER, GL_BUFFER_USAGE, &usage);
+			GLvoid* data = glMapBuffer(GL_UNIFORM_BUFFER, GL_READ_ONLY);
+			bind();
+			glBufferData(GL_UNIFORM_BUFFER, size, data, usage);
+			ubo.bind();
+			glUnmapBuffer(GL_UNIFORM_BUFFER);
+			ubo.unBind();
 		}
 	}
 }

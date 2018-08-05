@@ -25,15 +25,7 @@ namespace Engine {
 
 		IndexBuffer::IndexBuffer(const IndexBuffer& ibo) : count(ibo.count) {
 			glGenBuffers(1, &id);
-			GLint usage;
-			ibo.bind();
-			glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_USAGE, &usage);
-			GLvoid* data = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_READ_ONLY);
-			bind();
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLushort), data, usage);
-			ibo.bind();
-			glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
-			ibo.unBind();
+			copyBuffer(ibo);
 		}
 
 		IndexBuffer::IndexBuffer(IndexBuffer&& ibo) : id(ibo.id), count(ibo.count) {
@@ -64,6 +56,30 @@ namespace Engine {
 			bind();
 			glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
 			unBind();
+		}
+
+		void IndexBuffer::operator=(IndexBuffer&& ibo) {
+			glDeleteBuffers(1, &id);
+			id = ibo.id;
+			ibo.id = 0;
+		}
+
+		void IndexBuffer::operator=(const IndexBuffer& ibo) {
+			glDeleteBuffers(1, &id);
+			glGenBuffers(1, &id);
+			copyBuffer(ibo);
+		}
+
+		void IndexBuffer::copyBuffer(const IndexBuffer& ibo) {
+			GLint usage;
+			ibo.bind();
+			glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_USAGE, &usage);
+			GLvoid* data = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_READ_ONLY);
+			bind();
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLushort), data, usage);
+			ibo.bind();
+			glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+			ibo.unBind();
 		}
 	}
 }

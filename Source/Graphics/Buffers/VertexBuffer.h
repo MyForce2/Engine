@@ -37,6 +37,12 @@ namespace Engine {
 			void unMap() const ;
 
 			inline GLuint getID() const { return id; }
+		
+			void operator=(VertexBuffer&& vbo);
+			void operator=(const VertexBuffer& vbo);
+
+		private:
+			void copyBuffer(const VertexBuffer& vbo);
 		};
 	}
 }

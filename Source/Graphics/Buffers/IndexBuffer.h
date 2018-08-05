@@ -22,8 +22,6 @@ namespace Engine {
 			IndexBuffer(IndexBuffer&& ibo);
 			~IndexBuffer();
 
-			IndexBuffer(IndexBuffer&&) = delete;
-
 			// Binds this buffer
 			void bind() const;
 			// Unbinds this buffer
@@ -35,6 +33,11 @@ namespace Engine {
 
 			inline GLuint getID() const { return id; };
 			inline GLushort getCount() const { return count; };
+
+			void operator=(IndexBuffer&& ibo);
+			void operator=(const IndexBuffer& ibo);
+		private:
+			void copyBuffer(const IndexBuffer& ibo);
 		};
 	}
 }
