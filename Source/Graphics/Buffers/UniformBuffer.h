@@ -19,6 +19,7 @@ namespace Engine {
 			UniformBuffer(GLvoid* data, GLsizeiptr size);
 			UniformBuffer(GLvoid* data, GLsizeiptr size, GLenum usage);
 			UniformBuffer(const UniformBuffer& ubo);
+			UniformBuffer(UniformBuffer&& ubo);
 			~UniformBuffer();
 
 			// Binds this buffer

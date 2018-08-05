@@ -50,7 +50,7 @@ namespace Engine {
 			// 10 Texture slots dedicated for the batch renderer
 			std::array<GLuint, 10> textureSlots;
 			// The font for text rendering
-			const Font& font;
+			const Font* font;
 
 			
 			static const unsigned int FONT_SIZE = 192;
@@ -72,14 +72,14 @@ namespace Engine {
 			void flush();
 
 			// Adds the requested text, at the given position
-			void addText(const std::string& text, Math::Vec2 startPosition, unsigned int fontSize, const Math::Vec3& textColor, const Math::Mat4& model);
+			void addText(const std::string& text, Math::Vec2 startPosition, const Math::Vec3& textColor, const Math::Mat4& model);
 			// Adds the request label
 			void addText(const Label& label);
 			// Adds this object
 			void add(const Renderable2DTexture& object);
 
 			inline GLsizei getAmountOfObjects() const { return amountOfObjects; }
-			inline const Font& getFont() const { return font; }
+			inline const Font& getFont() const { return *font; }
 
 			void setFont(const Font& font);
 

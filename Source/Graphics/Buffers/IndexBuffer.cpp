@@ -34,7 +34,10 @@ namespace Engine {
 			ibo.bind();
 			glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
 			ibo.unBind();
+		}
 
+		IndexBuffer::IndexBuffer(IndexBuffer&& ibo) : id(ibo.id), count(ibo.count) {
+			ibo.id = 0;
 		}
 
 		IndexBuffer::~IndexBuffer() {

@@ -17,7 +17,8 @@ uniform mat4 projection;
 uniform mat4 view;
 
 void main() {
-	gl_Position = projection * view * model * position;
+	mat4 mvp = projection * view * model;
+	gl_Position = mvp * position;
 	v_UV = uv;
 	v_TextColor = textColor;
 	v_IsText = isText;

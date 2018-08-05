@@ -15,8 +15,8 @@ namespace Engine {
 			Math::Vec2 uv;
 		};
 
-		BatchRenderer::BatchRenderer(const Font& font) : amountOfObjects(0), font(font) {
-
+		BatchRenderer::BatchRenderer(const Font& font) : amountOfObjects(0), font(nullptr) {
+			this->font = &font;
 			init();
 		}
 
@@ -54,7 +54,7 @@ namespace Engine {
 		
 		void BatchRenderer::start() {
 			textureSlots.fill(0);
-			addTexture(font.getFontAtlas());
+			addTexture(font->getFontAtlas());
 			data = (BatchVertex*) vbo->map(GL_WRITE_ONLY);
 			modelMatrices = (Math::Mat4*) modelMatricesBuffer->map(GL_WRITE_ONLY);
 		}
@@ -65,20 +65,19 @@ namespace Engine {
 		}
 
 
-		void BatchRenderer::addText(const std::string& text, Vec2 position, unsigned int fontSize, const Math::Vec3& textColor, const Math::Mat4& model) {
-			const Tg::FontModel& font = this->font.getFont();
+		void BatchRenderer::addText(const std::string& text, Vec2 position, const Math::Vec3& textColor, const Math::Mat4& model) {
+			const Tg::FontModel& font = this->font->getFont();
 			float imageHeight = float(font.image.GetSize().height);
 			float imageWidth = float(font.image.GetSize().width);
 			Vec3 normalizedColor(textColor);
 			normalizedColor /= 255;
 			for (unsigned int i = 0; i < text.length(); i++) {
 				Tg::FontGlyph glyph = font.glyphSet[text[i]];
-				float ratio = ((float) this->font.getFontSize()) / fontSize;
 				Vec2 topRightUV = Vec2(glyph.rect.right / imageWidth, glyph.rect.top / imageHeight);
 				Vec2 bottomLeftUV = Vec2(glyph.rect.left / imageWidth, glyph.rect.bottom / imageHeight);
-				float yOffset = (glyph.height - glyph.yOffset) / ratio;
-				float width = glyph.width / ratio;
-				float height = glyph.height / ratio;
+				float yOffset = (glyph.height - glyph.yOffset);
+				float width = glyph.width;
+				float height = glyph.height;
 
 				data->position = Vec2(position.x + width, position.y + height - yOffset);
 				data->uvCoords = Vec2(topRightUV.x, topRightUV.y);
@@ -121,14 +120,14 @@ namespace Engine {
 				data++;
 
 
-				position.x += glyph.advance / ratio;
+				position.x += glyph.advance;
 				\
 			}
 			amountOfObjects += text.length();
 		}
 
 		void BatchRenderer::addText(const Label& label) {
-			addText(label.getText(), label.getStartPosition(), label.getFontSize(), label.getLabelColor(), label.getModelMatrix());
+			addText(label.getText(), label.getStartPosition(), label.getLabelColor(), label.getModelMatrix());
 		}
 
 		void BatchRenderer::add(const Renderable2DTexture& object) {
@@ -151,7 +150,7 @@ namespace Engine {
 		}
 
 		void BatchRenderer::setFont(const Font& font) {
-			
+			this->font = &font;
 		}
 
 		GLint BatchRenderer::addTexture(const Texture& texture) {

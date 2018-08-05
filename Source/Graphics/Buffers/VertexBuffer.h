@@ -16,12 +16,13 @@ namespace Engine {
 			VertexBuffer(GLsizeiptr size);
 			VertexBuffer(GLsizeiptr size, GLenum usage);
 			VertexBuffer(const VertexBuffer& vbo);
+			VertexBuffer(VertexBuffer&& vbo);
 
 			// Size in bytes
 			VertexBuffer(const GLvoid* data, GLsizeiptr size);
 			VertexBuffer(const GLvoid* data, GLsizeiptr size, GLenum usage);
 
-			VertexBuffer(VertexBuffer&& vbo) = delete;
+			
 
 			~VertexBuffer();
 

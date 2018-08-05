@@ -4,7 +4,7 @@
 namespace Engine {
 	namespace Graphics {
 
-		TextureAtlas::TextureAtlas(const std::string& path, unsigned int atlasSize, unsigned int textureSize) : atlas(path), 
+		TextureAtlas::TextureAtlas(const std::string& path, unsigned int atlasSize, unsigned int textureSize) : atlas(path, GL_NEAREST), 
 			atlasSize(atlasSize), textureSize(float(textureSize) / atlasSize) {
 
 		}

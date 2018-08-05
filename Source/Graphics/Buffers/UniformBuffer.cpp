@@ -38,6 +38,10 @@ namespace Engine {
 			glUnmapBuffer(GL_UNIFORM_BUFFER);
 			ubo.unBind();
 		}
+
+		UniformBuffer::UniformBuffer(UniformBuffer&& ubo) : id(ubo.id) {
+			ubo.id = 0;
+		}
 		
 		UniformBuffer::~UniformBuffer() {
 			glDeleteBuffers(1, &id);

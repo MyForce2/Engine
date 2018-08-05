@@ -3,21 +3,23 @@
 namespace Engine {
 	namespace Graphics {
 
-		Label::Label(const std::string& text, unsigned short fontSize) : text(text), fontSize(fontSize), startPosition(), labelColor(255.f), model(1.f) {
+		using namespace Math;
+
+		Label::Label(const std::string& text) : text(text), startPosition(), labelColor(255.f), model(1.f) {
 
 		}
 
-		Label::Label(const std::string& text, unsigned short fontSize, const Math::Vec2& startPosition) : text(text), fontSize(fontSize),
-			startPosition(startPosition), labelColor(255.f), model(1.f) {
+		Label::Label(const std::string& text, const Vec2& startPosition) : text(text), startPosition(startPosition), 
+			labelColor(255.f), model(1.f) {
 
 		}
 
-		Label::Label(const std::string& text, unsigned short fontSize, const Math::Vec2& startPosition, const Math::Vec3& labelColor) :
-			text(text), fontSize(fontSize), startPosition(startPosition), labelColor(labelColor), model(1.f) {
+		Label::Label(const std::string& text, const Vec2& startPosition, const Vec3& labelColor) :text(text), 
+			startPosition(startPosition), labelColor(labelColor), model(1.f) {
 
 		}
 
-		Label::Label() : text(), fontSize(), startPosition(), labelColor(255.f), model(1.f) {
+		Label::Label() : text(), startPosition(), labelColor(255.f), model(1.f) {
 
 		}
 
@@ -29,20 +31,29 @@ namespace Engine {
 			this->text = text;
 		}
 
-		void Label::setFontSize(unsigned short fontSize) {
-			this->fontSize = fontSize;
-		}
-
-		void Label::setStartPosition(const Math::Vec2& startPosition) {
+		void Label::setStartPosition(const Vec2& startPosition) {
 			this->startPosition = startPosition;
 		}
 
-		void Label::setLabelColor(const Math::Vec3& labelColor) {
+		void Label::setLabelColor(const Vec3& labelColor) {
 			this->labelColor = labelColor;
 		}
 
-		void Label::setModelMatrix(const Math::Mat4& model) {
+		void Label::setModelMatrix(const Mat4& model) {
 			this->model = model;
+		}
+
+		void Label::scale(const Vec2& scale) {
+			model = Mat4::translation(-startPosition) * model;
+			model = Mat4::scale(scale) * model;
+			model = Mat4::translation(startPosition) * model;
+		}
+
+		void Label::rotate(float angle) {
+			float rad = toRadians(angle);
+			model = Mat4::translation(-startPosition) * model;
+			model = Mat4::rotationZ(rad) * model;
+			model = Mat4::translation(startPosition) * model;
 		}
 	}
 }

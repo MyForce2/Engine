@@ -19,6 +19,7 @@ namespace Engine {
 			IndexBuffer(const GLushort* data, unsigned short size);
 			IndexBuffer(const GLushort* data, unsigned short size, GLenum usage);
 			IndexBuffer(const IndexBuffer& ibo);
+			IndexBuffer(IndexBuffer&& ibo);
 			~IndexBuffer();
 
 			IndexBuffer(IndexBuffer&&) = delete;

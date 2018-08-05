@@ -47,6 +47,10 @@ namespace Engine {
 			vbo.unBind();
 		}
 
+		VertexBuffer::VertexBuffer(VertexBuffer&& vbo) : id(vbo.id) {
+			vbo.id = 0;
+		}
+
 		VertexBuffer::~VertexBuffer() {
 			glDeleteBuffers(1, &id);
 			unBind();
