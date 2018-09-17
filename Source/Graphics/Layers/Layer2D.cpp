@@ -55,7 +55,7 @@ namespace Engine {
 			shader.setUniformMatrix4fv("projection", projection);
 			shader.setUniformMatrix4fv("view", view);
 			for (int i = 0; i < 10; i++) {
-				shader.setUniform1i("u_TexSlots[" + std::to_string(i) + "]", i);
+				shader.setInt("u_TexSlots[" + std::to_string(i) + "]", i);
 			}
 		}
 	}

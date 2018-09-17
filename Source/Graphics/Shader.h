@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Math\Vectors\Vec2.h"
+
 #include "Math\Mat4.h"
 #include "Buffers/UniformBuffer.h"
 
@@ -30,10 +31,16 @@ namespace Engine {
 			// All methods to set uniforms
 
 			void setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) const;
-			void setUniform1i(const std::string& name, int val) const;
-			void setUniform2f(const std::string& name, const Math::Vec2& vec) const;
-			void setUniform3f(const std::string& name, const Math::Vec3& vec) const;
-			void setUniform4f(const std::string& name, const Math::Vec4& vec) const;
+
+			void setInt(const std::string& name, int value) const;
+			void setIVec2(const std::string& name, const Math::IVec2& vec) const;
+			void setIVec3(const std::string& name, const Math::IVec3& vec) const;
+			void setIVec4(const std::string& name, const Math::IVec4& vec) const;
+
+			void setFloat(const std::string& name, float value) const;
+			void setVec2(const std::string& name, const Math::Vec2& vec) const;
+			void setVec3(const std::string& name, const Math::Vec3& vec) const;
+			void setVec4(const std::string& name, const Math::Vec4& vec) const;
 
 			// Binds a uniform buffer to the specified index (blockBinding = index)
 			void bindUniformBuffer(const UniformBuffer& ubo, const std::string& name, GLuint blockBinding) const;

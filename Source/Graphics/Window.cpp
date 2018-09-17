@@ -11,11 +11,13 @@
 namespace Engine {
 	namespace Graphics {
 
+		
+
 		Window::Window(const std::string& title, int height, int width, GLbitfield clearMask) : title(title), height(height), width(width), clearMask(clearMask) {
 			if (!glfwInit())
 				Utils::Log::getLog()->logError("Failed to init glfw");
 			glfwWindowHint(GLFW_SAMPLES, 4);
-			glfwWindowHint(GLFW_RESIZABLE, false);
+			glfwWindowHint(GLFW_RESIZABLE, false);			
 			windowHandle = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 			if (!windowHandle)
 				Utils::Log::getLog()->logError("Failed to create window");
@@ -62,7 +64,16 @@ namespace Engine {
 		}
 
 		void Window::setSize(const Math::Vec2& vec) {
+			height = vec.y;
+			width = vec.x;
 			glfwSetWindowSize(windowHandle, vec.x, vec.y);
+		}
+
+		void Window::setFullScreen(bool fullScreen) {
+			if (fullScreen)
+				glfwSetWindowMonitor(windowHandle, glfwGetPrimaryMonitor(), 0, 0, width, height, REFRESH_RATE);
+			else
+				glfwSetWindowMonitor(windowHandle, glfwGetPrimaryMonitor(), NO_MONITOR_OFFSET, NO_MONITOR_OFFSET, width, height, REFRESH_RATE);
 		}
 
 		Math::Vec2 Window::getMousePosition() const {

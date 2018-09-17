@@ -5,7 +5,7 @@
 #include "Graphics/VertexArray.h"
 #include "Graphics/Renderable2D.h"
 #include "Graphics/Renderable2DTexture.h"
-#include "Graphics/Label.h"
+#include "Graphics/Font/Label.h
 #include "Graphics/Font/Font.h"
 #include "Math\Vectors\Vec2.h"
 #include <Typo/Typo.h>

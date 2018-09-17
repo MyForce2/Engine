@@ -15,6 +15,9 @@ namespace Engine {
 			GLFWwindow* windowHandle;
 			GLbitfield clearMask;
 
+			static const int NO_MONITOR_OFFSET = 100;
+			static const int REFRESH_RATE = 60;
+
 		public:
 			Window(const std::string& title, int height, int width, GLbitfield clearMask);
 			~Window();
@@ -28,6 +31,7 @@ namespace Engine {
 			bool isCapsLockOn() const;
 
 			void setSize(const Math::Vec2& v);
+			void setFullScreen(bool fullScreen);
 			
 
 			void update();

@@ -1,9 +1,10 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "Math\Vectors\Vec2.h"
 #include "Math\Vectors\Vec3.h"
-#include "Math/Mat4.h"
+#include "Font.h"
 
 namespace Engine {
 	namespace Graphics {
@@ -16,12 +17,13 @@ namespace Engine {
 			std::string text;
 			Math::Vec2 startPosition;
 			Math::Vec3 labelColor;
-			Math::Mat4 model;
+			std::vector<Math::Vec2> vertices;
+			const Font* font;
 
 		public:
-			Label(const std::string& text);
-			Label(const std::string& text, const Math::Vec2& startPosition);
-			Label(const std::string& text, const Math::Vec2& startPosition, const Math::Vec3& labelColor);
+			Label(const std::string& text, const Font* font);
+			Label(const std::string& text, const Math::Vec2& startPosition, const Font* font);
+			Label(const std::string& text, const Math::Vec2& startPosition, const Math::Vec3& labelColor, const Font* font);
 			Label();
 
 			~Label();
@@ -29,16 +31,16 @@ namespace Engine {
 			inline const std::string& getText() const { return text; }
 			inline const Math::Vec2& getStartPosition() const { return startPosition; }
 			inline const Math::Vec3& getLabelColor() const { return labelColor; }
-			inline const Math::Mat4& getModelMatrix() const { return model; }
+			inline const Font* getFont() const { return font; }
 
 			void setText(const std::string& text);
 			void setStartPosition(const Math::Vec2& startPosition);
 			void setLabelColor(const Math::Vec3& labelColor);
-			void setModelMatrix(const Math::Mat4& model);
 
-			void scale(const Math::Vec2& scale);
-			void rotate(float angle);
 
+		private:
+			// Generates the actual data for this label (Faster for batch renderer usage)
+			void generateVerticesData();
 		};
 	}
 }

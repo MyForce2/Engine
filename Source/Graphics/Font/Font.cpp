@@ -8,10 +8,6 @@ namespace Engine {
 			init();
 		}
 
-		Font::Font(const Font& font) : fileName(font.fileName), fontSize(font.fontSize) {
-			init();
-		}
-
 		Font::~Font() {
 			delete fontAtlas;
 		}

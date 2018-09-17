@@ -4,6 +4,8 @@
 #include "Utils\FileUtils.h"
 #include "Utils\Log.h"
 
+#include "Math/Vectors/Vectors.h"
+
 namespace Engine {
 	namespace Graphics {
 
@@ -71,34 +73,48 @@ namespace Engine {
 		}
 
 		void Shader::setUniformMatrix4fv(const std::string& name, const Math::Mat4& matrix) const {
-			bind();
 			GLint location = getUniformLocation(name);
 			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix.data[0]);
-			unBind();
 		}
 
-		void Shader::setUniform1i(const std::string& name, int val) const {
-			bind();
+		void Shader::setInt(const std::string& name, int value) const {
 			GLint location = getUniformLocation(name);
 			glUniform1i(location, val);
-			unBind();
 		}
 
-		void Shader::setUniform2f(const std::string& name, const Math::Vec2& vec) const {
-			bind();
+		void Shader::setIVec2(const std::string& name, const Math::IVec2& vec) const {
+			GLint location = getUniformLocation(name);
+			glUniform2i(location, vec.x, vec.y);
+		}
+
+		void Shader::setIVec3(const std::string& name, const Math::IVec3& vec) const {
+			GLint location = getUniformLocation(name);
+			glUniform3i(location, vec.x, vec.y, vec.z);
+		}
+
+		void Shader::setIVec4(const std::string& name, const Math::IVec4& vec) const {
+			GLint location = getUniformLocation(name);
+			glUniform4i(location, vec.x, vec.y, vec.z, vec.w);
+		}
+
+		void Shader::setFloat(const std::string& name, float value) const {
+			GLint location = getUniformLocation(name);
+			glUniform1f(location, value);
+		}
+
+		void Shader::setVec2(const std::string& name, const Math::Vec2& vec) const {
 			GLint location = getUniformLocation(name);
 			glUniform2f(location, vec.x, vec.y);
-			unBind();
 		}
 
-		void Shader::setUniform3f(const std::string& name, const Math::Vec3& vec) const {
+		void Shader::setVec3(const std::string& name, const Math::Vec3& vec) const {
 			bind();
 			GLint location = getUniformLocation(name);
 			glUniform3f(location, vec.x, vec.y, vec.z);
 			unBind();
 		}
 
-		void Shader::setUniform4f(const std::string& name, const Math::Vec4& vec) const {
+		void Shader::setVec4(const std::string& name, const Math::Vec4& vec) const {
 			bind();
 			GLint location = getUniformLocation(name);
 			glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
