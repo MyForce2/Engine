@@ -79,6 +79,8 @@ namespace Engine {
 				vertices.push_back(Vec2(position.x + width, position.y - yOffset));
 				vertices.push_back(Vec2(topRightUV.x, bottomLeftUV.y));
 				vertices.push_back(normalizedColor);
+
+				position.x += glyph.advance;
 			}
 		}
 
