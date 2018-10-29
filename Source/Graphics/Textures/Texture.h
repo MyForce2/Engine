@@ -39,7 +39,7 @@ namespace Engine {
 			inline const GLuint getID() const { return id; }
 
 		private:
-			void init(const TextureData& data, GLint filterParam);
+			void init(const TextureData& data, GLint filterParam, const std::string& path);
 
 		};
 	}

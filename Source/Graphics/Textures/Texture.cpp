@@ -3,6 +3,7 @@
 #include "Texture.h"
 
 #include "Utils\ImageUtils.h"
+#include "Utils\Log.h"
 
 namespace Engine {
 	namespace Graphics {
@@ -13,7 +14,7 @@ namespace Engine {
 			unsigned char* buffer = nullptr;
 			buffer = stbi_load(path.c_str(), &width, &height, &bitsPerPixel, 4);
 			TextureData data = { GLsizei(width), GLsizei(height), buffer };
-			init(data, GL_LINEAR);
+			init(data, GL_LINEAR, path);
 			if (buffer)
 				stbi_image_free(buffer);
 		}
@@ -24,7 +25,7 @@ namespace Engine {
 			unsigned char* buffer = nullptr;
 			buffer = stbi_load(path, &width, &height, &bitsPerPixel, 4);
 			TextureData data = { GLsizei(width), GLsizei(height), buffer };
-			init(data, GL_LINEAR);
+			init(data, GL_LINEAR, std::string(path));
 			if (buffer) 
 				stbi_image_free(buffer);
 		}
@@ -35,7 +36,7 @@ namespace Engine {
 			unsigned char* buffer = nullptr;
 			buffer = stbi_load(path, &width, &height, &bitsPerPixel, 4);
 			TextureData data = { GLsizei(width), GLsizei(height), buffer };
-			init(data, filterParam);
+			init(data, filterParam, std::string(path));
 			if (buffer)
 				stbi_image_free(buffer);
 		}
@@ -46,19 +47,19 @@ namespace Engine {
 			unsigned char* buffer = nullptr;
 			buffer = stbi_load(path.c_str(), &width, &height, &bitsPerPixel, 4);
 			TextureData data = { GLsizei(width), GLsizei(height), buffer };
-			init(data, filterParam);
+			init(data, filterParam, std::string(path));
 			if (buffer)
 				stbi_image_free(buffer);
 		}
 
 		Texture::Texture(const unsigned char* buffer, GLsizei width, GLsizei height) {
 			TextureData data = { width, height, buffer };
-			init(data, GL_LINEAR);
+			init(data, GL_LINEAR, "Texture loaded from memory");
 		}
 
 		Texture::Texture(const unsigned char* buffer, GLsizei width, GLsizei height, GLint filterParam) {
 			TextureData data = { width, height, buffer };
-			init(data, filterParam);
+			init(data, filterParam, "Texture loaded from memory");
 		}
 
 		Texture::Texture(const unsigned char* buffer, GLsizei width, GLsizei height, GLint internalFormat, GLenum format, GLint filterParam) {
@@ -86,16 +87,15 @@ namespace Engine {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
-		void Texture::init(const TextureData& data, GLint filterParam) {
+		void Texture::init(const TextureData& data, GLint filterParam, const std::string& path) {
+			Utils::Log::getLog()->logInfo("Created texture : (" + std::string(path) + ")");
 			glGenTextures(1, &id);
 			glBindTexture(GL_TEXTURE_2D, id);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterParam);
-			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterParam);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, data.width, data.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data.data);
-			//glGenerateMipmap(GL_TEXTURE_2D);
 			unBind();
 		}
 	}
