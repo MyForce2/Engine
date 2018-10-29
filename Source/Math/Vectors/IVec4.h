@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <boost/functional/hash_fwd.hpp>
 
 namespace Engine {
 	namespace Math {
@@ -36,4 +38,21 @@ namespace Engine {
 			~IVec4();
 		};
 	}
+}
+
+namespace std {
+
+	/* A hash specialization for the IVec4 class
+	Must include the boost hash.hpp header before
+	using */
+	template<> struct hash<Engine::Math::IVec4> {
+		size_t operator()(const Engine::Math::IVec4& vec) const noexcept {
+			size_t seed = 0;
+			boost::hash_combine(seed, vec.x);
+			boost::hash_combine(seed, vec.y);
+			boost::hash_combine(seed, vec.z);
+			boost::hash_combine(seed, vec.w);
+			return seed;
+		}
+	};
 }

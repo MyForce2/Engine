@@ -1,10 +1,14 @@
 #pragma once
 
-#include "Vectors/Vec3.h"
 #include "Vectors/Vec4.h"
 
 namespace Engine {
 	namespace Math {
+
+		// Forward declaration
+
+		struct Vec3;
+		struct Vec2;
 
 		/*
 		A struct used to represent any type of matrix which is a 4x4 matrix
@@ -81,4 +85,15 @@ namespace Engine {
 		// Converts an angle in degrees to radians
 		float toRadians(float angle);
 	}
+}
+
+namespace std {
+	/* A hash specialization for the Mat3 class
+	Must include the boost hash.hpp header before
+	using */
+	template<> struct hash<Engine::Math::Mat4> {
+		size_t operator()(const Engine::Math::Mat4& mat) const noexcept {
+			return boost::hash_range(mat.data, &mat.data[16]);
+		}
+	};
 }

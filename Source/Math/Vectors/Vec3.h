@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <functional>
+#include <boost/functional/hash_fwd.hpp>
 
 namespace Engine {
 	namespace Math {
@@ -81,4 +83,19 @@ namespace Engine {
 			friend std::ostream& operator<<(std::ostream& os, const Vec3& vec);
 		};
 	}
+}
+
+namespace std {
+	/* A hash specialization for the Vec3 class
+	Must include the boost hash.hpp header before
+	using */
+	template<> struct hash<Engine::Math::Vec3> {
+		size_t operator()(const Engine::Math::Vec3& vec) const noexcept {
+			size_t seed = 0;
+			boost::hash_combine(seed, vec.x);
+			boost::hash_combine(seed, vec.y);
+			boost::hash_combine(seed, vec.z);
+			return seed;
+		}
+	};
 }

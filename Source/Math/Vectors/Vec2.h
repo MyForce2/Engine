@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <functional>
+#include <boost/functional/hash_fwd.hpp>
 
 
 namespace Engine {
@@ -19,7 +21,7 @@ namespace Engine {
 		public:
 			float x, y;
 
-			// // Constructors
+			// Constructors
 
 			Vec2();
 			Vec2(float value);
@@ -78,7 +80,19 @@ namespace Engine {
 
 			friend std::ostream& operator<<(std::ostream& os, const Vec2& vec);
 		};
-
-
 	}
+}
+
+namespace std {
+	/* A hash specialization for the Vec2 class
+	Must include the boost hash.hpp header before
+	using */
+	template<> struct hash<Engine::Math::Vec2> {
+		size_t operator()(const Engine::Math::Vec2& vec) const noexcept {
+			size_t seed = 0;
+			boost::hash_combine(seed, vec.x);
+			boost::hash_combine(seed, vec.y);
+			return seed;
+		}
+	};
 }

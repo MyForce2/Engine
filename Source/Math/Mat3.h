@@ -1,10 +1,14 @@
 #pragma once
 
 #include "Vectors/Vec3.h"
-#include "Mat4.h"
+
 
 namespace Engine {
 	namespace Math {
+
+		// Forward declaration
+
+		struct Mat4;
 
 		struct Mat3 {
 
@@ -51,4 +55,16 @@ namespace Engine {
 			friend Mat3 operator-(const Mat3& mat);
 		};
 	}
+}
+
+
+namespace std {
+	/* A hash specialization for the Mat3 class
+	Must include the boost hash.hpp header before
+	using */
+	template<> struct hash<Engine::Math::Mat3> {
+		size_t operator()(const Engine::Math::Mat3& mat) const noexcept {
+			return boost::hash_range(mat.data, &mat.data[9]);
+		}
+	};
 }
