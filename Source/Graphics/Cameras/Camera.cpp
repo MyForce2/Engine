@@ -103,9 +103,5 @@ namespace Engine {
 			window.setMousePosition(center);
 			return newView;
 		}
-
-		void Camera::updateViewFrustum() {
-			viewFrustum.generatePlanes(position, xAxis, yAxis, zAxis, near, far);
-		}
 	}
 }
