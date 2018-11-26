@@ -18,7 +18,20 @@ namespace Engine {
 			font = Tg::BuildFont(fontDescription, glyphRange, FONT_BORDER);
 			Tg::Image image = font.image;
 			Tg::Size imageSize = image.GetSize();
-			fontAtlas = new Texture(image.GetImageBuffer().data(), imageSize.width, imageSize.height, GL_RED, GL_RED, GL_LINEAR);
+			std::vector<unsigned char> RGBAData;
+			convertToRGBA(image.GetImageBuffer(), RGBAData);
+			fontAtlas = new Texture(RGBAData.data(), imageSize.width, imageSize.height, GL_RGBA8, GL_RGBA, GL_LINEAR);
+		}
+
+		void Font::convertToRGBA(const std::vector<unsigned char>& sourceData, std::vector<unsigned char>& outData) {
+			for (const unsigned char& colorData : sourceData) {
+				if (colorData == 255)
+					for (int i = 0; i < 4; i++)
+						outData.push_back(255);
+				else
+					for (int i = 0; i < 4; i++)
+						outData.push_back(0);
+			}
 		}
 	}
 }

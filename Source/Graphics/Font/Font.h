@@ -45,6 +45,8 @@ namespace Engine {
 		private:
 			// Inits all of the members and data
 			void init();
+			// Takes the source font atlas image data (Grayscale), and converts it to a RGBA formatted image
+			static void convertToRGBA(const std::vector<unsigned char>& sourceData, std::vector<unsigned char>& outData);
 		};
 	}
 }

@@ -22,6 +22,10 @@ namespace Engine {
 
 			inline const Vec3& getNormal() const { return normal; }
 			inline float getD() const { return d; }
+			// Returns the signed distance between a point and this plane
+			float distance(const Vec3& point) const;
+			// Returns whether the given point exists on this plane
+			bool exists(const Vec3& point) const;
 
 		private:
 			friend std::ostream& operator<<(std::ostream& os, const Plane& plane);

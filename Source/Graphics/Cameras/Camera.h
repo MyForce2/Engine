@@ -3,7 +3,7 @@
 #include "Math\Mat4.h"
 #include "Math\Vectors\Vec3.h"
 #include "Graphics/Window.h"
-
+#include "Math/ViewFrustum.h"
 
 namespace Engine {
 	namespace Graphics {
@@ -31,6 +31,8 @@ namespace Engine {
 			Math::Vec2 windowSize;
 			// Projection matrix data
 			float near, far;
+			// The cameras view frustum
+			Math::ViewFrustum viewFrustum;
 			// A cap for the pitch value
 			static const float MAX_PITCH_ANGLE;
 			// The mouse sensitivity (How much does the camera move for a certain mouse movement)
@@ -50,18 +52,20 @@ namespace Engine {
 			void setPosition(const Math::Vec3& position);
 			// Sets the viewing direction in world space
 			void setViewingDirection(const Math::Vec3& direction);
+
 			inline const Math::Vec3& getPosition() const { return position; }
 			inline const Math::Vec3& getViewingDirection() const { return viewingDirection; }
 			inline const Math::Mat4& getViewMatrix() const { return view; }
 			inline const Math::Mat4& getProjectionMatrix() const { return projection; }
+			inline const Math::ViewFrustum& getViewFrustum() const { return viewFrustum; }
 
 			// Updates the view matrix, the view direction, and the camera position according to input
 			void update(const Window& window, float time);
 
 		private:
 			// Generates the view matrix, according to the position and viewDirection
-			Math::Mat4 generateViewMatrix() const;
-			// Updates the viewingDirection vector, (recalculates it according to mouse movement)
+			Math::Mat4 generateViewMatrix();
+			// Generates the viewing direction vector, (recalculates it according to mouse movement)
 			Math::Vec3 generateViewDirection(const Window& window);
 		};
 	}
