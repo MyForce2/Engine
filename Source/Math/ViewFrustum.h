@@ -18,6 +18,9 @@ namespace Engine {
 			std::vector<Plane> planes;
 			// Data used for calculating the planes
 			float nearPlaneWidth, nearPlaneHeight, farPlaneWidth, farPlaneHeight;
+			// Debugging data
+			Vec3 nearPoints[4];
+			Vec3 farPoints[4];
 
 		public:
 			ViewFrustum();
@@ -27,6 +30,8 @@ namespace Engine {
 
 			inline const std::vector<Plane>& getPlanes() const { return planes; }
 			inline const Plane& getPlane(PLANES plane) const { return planes[plane]; }
+			inline const Vec3* getNearPoints() const { return nearPoints; }
+			inline const Vec3* getFarPoints() const { return farPoints; }
 
 			bool pointInFrustum(const Vec3& point) const;
 			bool boxInFrustum(const AABB& box) const;

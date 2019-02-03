@@ -25,11 +25,23 @@ namespace Engine {
 			Vec3 nearTopRight = nearPlaneCenter + y * nearPlaneHeight + x * nearPlaneWidth;
 			Vec3 nearBotLeft = nearPlaneCenter - y * nearPlaneHeight - x * nearPlaneWidth;
 			Vec3 nearBotRight = nearPlaneCenter - y * nearPlaneHeight + x * nearPlaneWidth;
+
+			nearPoints[0] = nearTopRight;
+			nearPoints[1] = nearTopLeft;
+			nearPoints[2] = nearBotLeft;
+			nearPoints[3] = nearBotRight;
+
 			// Calculating the far plane vertices
 			Vec3 farTopLeft = farPlaneCenter + y * farPlaneHeight - x * farPlaneWidth;
 			Vec3 farTopRight = farPlaneCenter + y * farPlaneHeight + x * farPlaneWidth;
 			Vec3 farBotLeft = farPlaneCenter - y * farPlaneHeight - x * farPlaneWidth;
 			Vec3 farBotRight = farPlaneCenter - y * farPlaneHeight + x * farPlaneWidth;
+
+			farPoints[0] = farTopRight;
+			farPoints[1] = farTopLeft;
+			farPoints[2] = farBotLeft;
+			farPoints[3] = farBotRight;
+
 			// Set the frustum's planes
 			planes.push_back(Plane(nearTopRight, nearTopLeft, farTopLeft));
 			planes.push_back(Plane(nearBotLeft, nearBotRight, farBotRight));
