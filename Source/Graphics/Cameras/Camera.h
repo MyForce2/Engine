@@ -5,6 +5,7 @@
 #include "Graphics/Window.h"
 #include "Math/ViewFrustum.h"
 
+
 namespace Engine {
 	namespace Graphics {
 
@@ -31,8 +32,6 @@ namespace Engine {
 			Math::Vec2 windowSize;
 			// Projection matrix data
 			float near, far;
-			// The cameras view frustum
-			Math::ViewFrustum viewFrustum;
 			// A cap for the pitch value
 			static const float MAX_PITCH_ANGLE;
 			// The mouse sensitivity (How much does the camera move for a certain mouse movement)
@@ -57,7 +56,6 @@ namespace Engine {
 			inline const Math::Vec3& getViewingDirection() const { return viewingDirection; }
 			inline const Math::Mat4& getViewMatrix() const { return view; }
 			inline const Math::Mat4& getProjectionMatrix() const { return projection; }
-			inline const Math::ViewFrustum& getViewFrustum() const { return viewFrustum; }
 
 			// Updates the view matrix, the view direction, and the camera position according to input
 			void update(const Window& window, float time);

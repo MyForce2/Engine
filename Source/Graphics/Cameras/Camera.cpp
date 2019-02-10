@@ -14,7 +14,6 @@ namespace Engine {
 		Camera::Camera(const Window& window, float near, float far) : upDirection(0, 1, 0), yaw(0.f), pitch(0.f), windowSize(window.getSize()), near(near), far(far) {
 			projection = Mat4::perspective(windowSize.x / windowSize.y, FIELD_OF_VIEW, near, far);
 			view = generateViewMatrix();
-			viewFrustum.setNearFarData(FIELD_OF_VIEW, 16.0f / 9.0f, near, far);
 		}
 
 		Camera::~Camera() {
@@ -64,7 +63,6 @@ namespace Engine {
 			y = z.cross(x);
 			x.normalize();
 			y.normalize();
-			viewFrustum.generatePlanes(position, x, y, z, near, far);
 			view[0].x = x.x;
 			view[1].x = x.y;
 			view[2].x = x.z;
