@@ -25,6 +25,13 @@ namespace Engine {
 			bind();
 		}
 
+		Shader::Shader(const std::string& vertexPath, const std::string& geometryPath, const std::string& fragmentPath) {
+			std::string vertexSource, geometrySource, fragmentSource;
+			Utils::readFile(vertexPath, vertexSource);
+			Utils::readFile(geometryPath, geometrySource);
+			Utils::readFile(fragmentPath, fragmentSource);
+		}
+
 		Shader::~Shader() {
 			glDeleteProgram(id);
 			unBind();
@@ -76,6 +83,47 @@ namespace Engine {
 			return program;
 		}
 
+		GLuint Shader::createProgram(const std::string& vertexSource, const std::string& geometrySource, const std::string& fragmentSource) {
+			GLuint program = glCreateProgram();
+			GLuint vertex = compileShader(GL_VERTEX_SHADER, vertexSource);
+			GLuint geometry = compileShader(GL_GEOMETRY_SHADER, geometrySource);
+			GLuint fragment = compileShader(GL_FRAGMENT_SHADER, fragmentSource);
+			GLint linkingStatus, validationStatus;
+			glAttachShader(program, vertex);
+			glAttachShader(program, geometry);
+			glAttachShader(program, fragment);
+			glLinkProgram(program);
+			glGetProgramiv(program, GL_LINK_STATUS, &linkingStatus);
+			if (linkingStatus == GL_FALSE) {
+				GLint length;
+				glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
+				GLchar* error = new char[length + 1]();
+				glGetProgramInfoLog(program, length + 1, &length, error);
+				Log::getLog()->logError("Shader program (ID = " + std::to_string(program) + ") linking failed");
+				Log::getLog()->logError("Shader linking errors : " + std::string(error));
+				std::cout << "Shader linking error : " << '\n' << error << std::endl;
+				delete[] error;
+				return 0;
+			}
+			glValidateProgram(program);
+			glGetProgramiv(program, GL_VALIDATE_STATUS, &validationStatus);
+			if (validationStatus == GL_FALSE) {
+				GLint length;
+				glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
+				GLchar* error = new char[length + 1]();
+				glGetProgramInfoLog(program, length + 1, &length, error);
+				Log::getLog()->logError("Shader program (ID = " + std::to_string(program) + ") validation failed");
+				Log::getLog()->logError("Shader validation errors : " + std::string(error));
+				std::cout << "Shader validation error : " << '\n' << error << std::endl;
+				delete[] error;
+				return 0;
+			}
+			glDeleteShader(vertex);
+			glDeleteShader(fragment);
+			glDeleteShader(geometry);
+			return program;
+		}
+
 		GLuint Shader::compileShader(GLuint type, const std::string& source) {
 			GLuint shaderID = glCreateShader(type);
 			const char* src = source.c_str();
@@ -88,7 +136,7 @@ namespace Engine {
 				glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &length);
 				GLchar* error = new char[length + 1]();
 				glGetShaderInfoLog(shaderID, length + 1, &length, error);
-				std::string typeString = type == GL_FRAGMENT_SHADER ? "Fragment " : "Vertex ";
+				std::string typeString = type == GL_FRAGMENT_SHADER ? "Fragment " : type == GL_GEOMETRY_SHADER ? "Geometry " : "Vertex ";
 				Log::getLog()->logError("Compilation failed : " + typeString + "shader");
 				Log::getLog()->logError("Compilation error : " + std::string(error));
 				std::cout << error << std::endl;
